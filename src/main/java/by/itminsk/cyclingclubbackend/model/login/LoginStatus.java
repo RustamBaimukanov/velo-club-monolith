@@ -1,0 +1,17 @@
+package by.itminsk.cyclingclubbackend.model.login;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginStatus {
+
+    private String message;
+
+    private Boolean status;
+}
