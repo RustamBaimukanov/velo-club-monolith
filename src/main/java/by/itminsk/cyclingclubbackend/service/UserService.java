@@ -21,6 +21,8 @@ public interface UserService {
 
     void registration(UserDTO userDTO);
 
+    void createAdmin();
+
     LoginStatus authorize(LoginDTO loginDTO);
 
 }

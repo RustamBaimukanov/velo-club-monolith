@@ -4,6 +4,7 @@ import by.itminsk.cyclingclubbackend.model.login.LoginDTO;
 import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
+import by.itminsk.cyclingclubbackend.repository.RoleRepository;
 import by.itminsk.cyclingclubbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -53,12 +57,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registration(UserDTO userDTO) {
 
-        User user = new User(
-                userDTO.getId(),
-                userDTO.getEmail(),
-                this.passwordEncoder.encode(userDTO.getPassword())
-        );
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
+        userRepository.save(user);
+    }
 
+    @Override
+    public void createAdmin() {
+        User user = new User();
+        user.setEmail("Ruler");
+        user.setPassword(this.passwordEncoder.encode("1111"));
+        user.addRole(roleRepository.findRoleByName("admin"));
         userRepository.save(user);
     }
 
