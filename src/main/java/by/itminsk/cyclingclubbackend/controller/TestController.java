@@ -20,12 +20,12 @@ public class TestController {
 
     @GetMapping("test")
     public List<String> test() {
-        return List.of("test","hello","world");
+        return List.of("test", "hello", "world");
     }
 
-    @GetMapping("create_admin")
-    public void createAdmin() {
-        userService.createAdmin();
-    }
+//    @GetMapping("create_admin")
+//    public void createAdmin() {
+//        userService.createAdmin();
+//    }
 
 }
