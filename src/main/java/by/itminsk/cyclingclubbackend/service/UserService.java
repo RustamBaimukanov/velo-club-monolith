@@ -1,9 +1,12 @@
 package by.itminsk.cyclingclubbackend.service;
 
-import by.itminsk.cyclingclubbackend.model.login.LoginDTO;
+import by.itminsk.cyclingclubbackend.dto.LoginDto;
+import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
+import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -23,7 +26,13 @@ public interface UserService {
 
     void createAdmin();
 
-    LoginStatus authorize(LoginDTO loginDTO);
+    //LoginStatus authorize(LoginDTO loginDTO);
+
+    String authenticate(LoginDto loginDto);
+    ResponseEntity<?> register (RegisterDto registerDto);
+    Role saveRole(Role role);
+
+    User saverUser (User user) ;
 
 
 

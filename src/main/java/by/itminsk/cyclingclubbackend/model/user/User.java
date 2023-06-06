@@ -1,14 +1,17 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Serializable, UserDetails {
 
     @Id
     @Column(name = "id")
@@ -26,7 +29,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number", nullable = false, length = 20)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
     @Column(name = "birth_date")
@@ -45,7 +48,11 @@ public class User {
     private String address;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
+
+    @Transient
+    private String confirmPassword;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -70,5 +77,44 @@ public class User {
 
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
+    public User(String email, String password, Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 }

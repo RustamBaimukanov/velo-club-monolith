@@ -1,10 +1,11 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "roles")
@@ -12,7 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Role implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -22,4 +24,7 @@ public class Role {
     @Column(name = "name")
     private String name;
 
+    public Role(String name) {
+        this.name = name;
+    }
 }
