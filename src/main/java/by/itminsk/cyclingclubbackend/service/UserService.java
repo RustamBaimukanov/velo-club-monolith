@@ -30,6 +30,10 @@ public interface UserService {
 
     String authenticate(LoginDto loginDto);
     ResponseEntity<?> register (RegisterDto registerDto);
+
+    Boolean confirmPassword (String password, String confirmPassword);
+
+
     Role saveRole(Role role);
 
     User saverUser (User user) ;

@@ -1,5 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller.auth;
 
+import by.itminsk.cyclingclubbackend.dto.LoginDto;
+import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,25 +17,13 @@ public class AuthController {
     private UserService userService;
 
 
-    @GetMapping("sign-up")
-    public String signUpPost(){
-        return "SSSA";
-    }
+    @PostMapping("/register")
+    public ResponseEntity<?> register (@RequestBody RegisterDto registerDto)
+    { return  userService.register(registerDto);}
 
-    @PostMapping("sign-up")
-    public void signUp(UserDTO userDTO){
-        userService.registration(userDTO);
-    }
-
-//    @PostMapping("login")
-//    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
-//        return ResponseEntity.ok(userService.authorize(loginDTO));
-//    }
-
-//    @GetMapping("login")
-//    public String login1(){
-//        return "ok";
-//    }
+    @PostMapping("/authenticate")
+    public String authenticate(@RequestBody LoginDto loginDto)
+    { return  userService.authenticate(loginDto);}
 
 
 

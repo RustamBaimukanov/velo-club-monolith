@@ -23,10 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -110,33 +107,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        if(iUserRepository.existsByEmail(registerDto.getEmail()))
-        { return  new ResponseEntity<>("email is already taken !", HttpStatus.SEE_OTHER); }
+        if(iUserRepository.existsByPhoneNumber(registerDto.getPhoneNumber()))
+        { return  new ResponseEntity<>("Номер телефона уже зарегистрирован на портале!", HttpStatus.SEE_OTHER); }
         else
-        { User user = new User();
-            user.setEmail(registerDto.getEmail());
+        {
+            if (confirmPassword(registerDto.getPassword(), registerDto.getConfirmPassword())){
+                User user = new User();
+                user.setPhoneNumber(registerDto.getPhoneNumber());
+                user.setEmail(registerDto.getEmail());
+                user.setFirstName(registerDto.getFirstName());
+                user.setLastName(registerDto.getLastName());
+                user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+                Role role = iRoleRepository.findRoleByName("USER");
+                user.addRole(role);
+                iUserRepository.save(user);
+                String token = jwtUtilities.generateToken(registerDto.getEmail(),Collections.singletonList(role.getName()));
+                return new ResponseEntity<>(new BearerToken(token , "Bearer "),HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
 
-            user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-            //By Default , he/she is a simple user
-            Role role = iRoleRepository.findRoleByName("USER");
-            user.addRole(role);
-            iUserRepository.save(user);
-            String token = jwtUtilities.generateToken(registerDto.getEmail(),Collections.singletonList(role.getName()));
-            return new ResponseEntity<>(new BearerToken(token , "Bearer "),HttpStatus.OK);
 
         }
+    }
+
+    @Override
+    public Boolean confirmPassword(String password, String confirmPassword) {
+        return (Objects.equals(password, confirmPassword));
     }
 
     @Override
     public String authenticate(LoginDto loginDto) {
         Authentication authentication= authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getEmail(),
+                        loginDto.getPhoneNumber(),
                         loginDto.getPassword()
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = iUserRepository.findUserByEmail(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         user.getRoles().forEach(r-> rolesNames.add(r.getName()));
         String token = jwtUtilities.generateToken(user.getUsername(),rolesNames);

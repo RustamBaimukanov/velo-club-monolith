@@ -32,6 +32,12 @@ public class User implements Serializable, UserDetails {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -50,6 +56,10 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     @JsonIgnore
     private String password;
+
+    @Lob
+    @Column(name = "photo", length = 1000)
+    private byte[] photo;
 
     @Transient
     private String confirmPassword;
