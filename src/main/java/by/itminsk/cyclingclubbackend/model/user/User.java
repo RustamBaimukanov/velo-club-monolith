@@ -84,6 +84,10 @@ public class User implements Serializable, UserDetails {
     )
     private Set<Trophy> trophies = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Team team;
+
 
     public void addRole(Role role) {
         this.roles.add(role);
