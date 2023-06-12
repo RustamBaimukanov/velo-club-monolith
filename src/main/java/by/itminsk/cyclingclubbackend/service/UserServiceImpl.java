@@ -106,13 +106,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        if(iUserRepository.existsByTel(registerDto.getTel()))
+        if(iUserRepository.existsByPhoneNumber(registerDto.getPhoneNumber()))
         { return  new ResponseEntity<>("Номер телефона уже зарегистрирован на портале!", HttpStatus.SEE_OTHER); }
         else
         {
             if (confirmPassword(registerDto.getPassword(), registerDto.getConfirmPassword())){
                 User user = new User();
-                user.setTel(registerDto.getTel());
+                user.setPhoneNumber(registerDto.getPhoneNumber());
                 user.setEmail(registerDto.getEmail());
                 user.setFirstName(registerDto.getFirstName());
                 user.setLastName(registerDto.getLastName());
@@ -138,8 +138,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> changePhoneNumber(String oldPhoneNumber, String newPhoneNumber)  throws UsernameNotFoundException{
-        User user = userRepository.findUserByTel(oldPhoneNumber).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        user.setTel(newPhoneNumber);
+        User user = userRepository.findUserByPhoneNumber(oldPhoneNumber).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        user.setPhoneNumber(newPhoneNumber);
         userRepository.save(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = iUserRepository.findUserByTel(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         user.getRoles().forEach(r-> rolesNames.add(r.getName()));
         String token = jwtUtilities.generateToken(user.getUsername(),rolesNames);

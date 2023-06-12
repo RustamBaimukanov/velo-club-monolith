@@ -30,7 +30,7 @@ public class User implements Serializable, UserDetails {
     private String email;
 
     @Column(name = "phone_number", length = 20)
-    private String tel;
+    private String phoneNumber;
 
     @Column(name = "first_name")
     private String firstName;
