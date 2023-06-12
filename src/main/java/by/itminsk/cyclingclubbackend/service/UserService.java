@@ -33,6 +33,8 @@ public interface UserService {
 
     Boolean confirmPassword (String password, String confirmPassword);
 
+    ResponseEntity<?> changePhoneNumber(String oldPhoneNumber, String newPhoneNumber);
+
 
     Role saveRole(Role role);
 

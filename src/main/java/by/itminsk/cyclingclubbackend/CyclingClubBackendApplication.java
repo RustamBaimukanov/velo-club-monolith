@@ -23,26 +23,26 @@ public class CyclingClubBackendApplication {
     }
 
 
-//    @Bean
-//    CommandLineRunner run (UserService iUserService , RoleRepository iRoleRepository , UserRepository iUserRepository , PasswordEncoder passwordEncoder)
-//    {return  args ->
-//    {   iUserService.saveRole(new Role("USER"));
-//        iUserService.saveRole(new Role("ADMIN"));
-//        iUserService.saveRole(new Role("SUPERADMIN"));
-//        iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("adminPassword"), new HashSet<>()));
-//        iUserService.saverUser(new User("superadminadmin@gmail.com", passwordEncoder.encode("superadminPassword"), new HashSet<>()));
-//
-//        Role role = iRoleRepository.findRoleByName("ADMIN");
-//        User user = iUserRepository.findUserByEmail("admin@gmail.com").orElse(null);
-//        user.getRoles().add(role);
-//        iUserService.saverUser(user);
-//
-//        User userr = iUserRepository.findUserByEmail("superadminadmin@gmail.com").orElse(null);
-//        Role rolee = iRoleRepository.findRoleByName("SUPERADMIN");
-//        userr.getRoles().add(rolee);
-//        iUserService.saverUser(userr);
-//
-//    };
-//    }
+    @Bean
+    CommandLineRunner run (UserService iUserService , RoleRepository iRoleRepository , UserRepository iUserRepository , PasswordEncoder passwordEncoder)
+    {return  args ->
+    {   iUserService.saveRole(new Role("USER"));
+        iUserService.saveRole(new Role("ADMIN"));
+        iUserService.saveRole(new Role("SUPERADMIN"));
+        iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("adminPassword"), new HashSet<>()));
+        iUserService.saverUser(new User("superadminadmin@gmail.com", passwordEncoder.encode("superadminPassword"), new HashSet<>()));
+
+        Role role = iRoleRepository.findRoleByName("ADMIN");
+        User user = iUserRepository.findUserByEmail("admin@gmail.com").orElse(null);
+        user.getRoles().add(role);
+        iUserService.saverUser(user);
+
+        User userr = iUserRepository.findUserByEmail("superadminadmin@gmail.com").orElse(null);
+        Role rolee = iRoleRepository.findRoleByName("SUPERADMIN");
+        userr.getRoles().add(rolee);
+        iUserService.saverUser(userr);
+
+    };
+    }
 
 }

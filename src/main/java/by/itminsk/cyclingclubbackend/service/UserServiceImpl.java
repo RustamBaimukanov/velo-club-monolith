@@ -3,7 +3,6 @@ package by.itminsk.cyclingclubbackend.service;
 import by.itminsk.cyclingclubbackend.dto.BearerToken;
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
-import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
 import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
@@ -107,13 +106,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        if(iUserRepository.existsByPhoneNumber(registerDto.getPhoneNumber()))
+        if(iUserRepository.existsByTel(registerDto.getTel()))
         { return  new ResponseEntity<>("Номер телефона уже зарегистрирован на портале!", HttpStatus.SEE_OTHER); }
         else
         {
             if (confirmPassword(registerDto.getPassword(), registerDto.getConfirmPassword())){
                 User user = new User();
-                user.setPhoneNumber(registerDto.getPhoneNumber());
+                user.setTel(registerDto.getTel());
                 user.setEmail(registerDto.getEmail());
                 user.setFirstName(registerDto.getFirstName());
                 user.setLastName(registerDto.getLastName());
@@ -138,6 +137,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> changePhoneNumber(String oldPhoneNumber, String newPhoneNumber)  throws UsernameNotFoundException{
+        User user = userRepository.findUserByTel(oldPhoneNumber).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        user.setTel(newPhoneNumber);
+        userRepository.save(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Override
     public String authenticate(LoginDto loginDto) {
         Authentication authentication= authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -146,7 +153,7 @@ public class UserServiceImpl implements UserService {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = iUserRepository.findUserByTel(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         user.getRoles().forEach(r-> rolesNames.add(r.getName()));
         String token = jwtUtilities.generateToken(user.getUsername(),rolesNames);

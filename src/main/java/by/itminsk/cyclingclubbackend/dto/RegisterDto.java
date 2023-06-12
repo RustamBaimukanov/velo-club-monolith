@@ -13,7 +13,7 @@ public class RegisterDto implements Serializable {
 
     String firstName ;
     String lastName ;
-    String phoneNumber;
+    String tel;
     String email;
     String password ;
     String confirmPassword;
