@@ -29,7 +29,10 @@ public interface UserService {
     //LoginStatus authorize(LoginDTO loginDTO);
 
     String authenticate(LoginDto loginDto);
+
     ResponseEntity<?> register (RegisterDto registerDto);
+
+    ResponseEntity<?> registerByAdmin();
 
     Boolean confirmPassword (String password, String confirmPassword);
 

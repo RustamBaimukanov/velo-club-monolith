@@ -132,6 +132,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> registerByAdmin() {
+        return null;
+    }
+
+    @Override
     public Boolean confirmPassword(String password, String confirmPassword) {
         return (Objects.equals(password, confirmPassword));
     }
