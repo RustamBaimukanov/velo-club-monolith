@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.service;
 
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
+import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
 import by.itminsk.cyclingclubbackend.model.user.Role;
@@ -32,7 +33,7 @@ public interface UserService {
 
     ResponseEntity<?> register (RegisterDto registerDto);
 
-    ResponseEntity<?> registerByAdmin();
+    ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto);
 
     Boolean confirmPassword (String password, String confirmPassword);
 
