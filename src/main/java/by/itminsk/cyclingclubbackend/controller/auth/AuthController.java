@@ -28,6 +28,11 @@ public class AuthController {
     public String authenticate(@RequestBody LoginDto loginDto)
     { return  userService.authenticate(loginDto);}
 
+    @GetMapping("/")
+    public String main(){
+        return "IS Authenticated";
+    }
+
 
 
 }

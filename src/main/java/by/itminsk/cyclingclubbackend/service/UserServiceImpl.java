@@ -184,6 +184,7 @@ public class UserServiceImpl implements UserService {
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         user.getRoles().forEach(r -> rolesNames.add(r.getName()));
+        System.out.println(user.getEmail());
         String token = jwtUtilities.generateToken(user.getUsername(), rolesNames);
         return token;
     }

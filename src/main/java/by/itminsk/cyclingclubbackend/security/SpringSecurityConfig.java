@@ -32,7 +32,10 @@ public class SpringSecurityConfig {
             .authorizeHttpRequests()
             .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup").permitAll()
             .requestMatchers("/api/hi").hasAuthority("ADMIN")
-            .requestMatchers("/api/hello/").hasAuthority("SUPERADMIN") ;
+            .requestMatchers("/api/hello/").hasAuthority("SUPERADMIN")
+            .requestMatchers("/api/").hasAnyAuthority()
+
+    ;
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return  http.build();

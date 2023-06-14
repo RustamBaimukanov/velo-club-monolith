@@ -40,8 +40,8 @@ public class JwtUtilities{
     public Date extractExpiration(String token) { return extractClaim(token, Claims::getExpiration); }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractUsername(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String phoneNumber = extractUsername(token);
+        return (phoneNumber.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
     public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

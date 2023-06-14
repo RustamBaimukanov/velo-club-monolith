@@ -29,7 +29,7 @@ public class CyclingClubBackendApplication {
     {   iUserService.saveRole(new Role("USER"));
         iUserService.saveRole(new Role("ADMIN"));
         iUserService.saveRole(new Role("SUPERADMIN"));
-        iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("adminPassword"), new HashSet<>()));
+        iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("1111"), new HashSet<>()));
         iUserService.saverUser(new User("superadminadmin@gmail.com", passwordEncoder.encode("superadminPassword"), new HashSet<>()));
 
         Role role = iRoleRepository.findRoleByName("ADMIN");

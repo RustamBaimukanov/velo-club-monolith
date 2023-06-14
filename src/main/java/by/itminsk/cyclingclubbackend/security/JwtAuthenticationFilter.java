@@ -34,13 +34,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token!=null && jwtUtilities.validateToken(token))
         {
-            String email = jwtUtilities.extractUsername(token);
+            String phoneNumber = jwtUtilities.extractUsername(token);
 
-            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
-                log.info("authenticated user with email :{}", email);
+                log.info("authenticated user with phoneNumber :{}", phoneNumber);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }
