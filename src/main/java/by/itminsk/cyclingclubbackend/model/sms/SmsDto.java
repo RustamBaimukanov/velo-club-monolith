@@ -11,5 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SmsDto {
 
+    Long phoneNumber;
+
     Integer code;
 }

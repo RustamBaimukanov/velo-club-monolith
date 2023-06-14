@@ -16,8 +16,8 @@ public class SmsController {
     @Autowired
     private SmsService smsService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup (@RequestBody SmsDto smsDto)
+    @PostMapping("/verify-user")
+    public ResponseEntity<?> verifyUser (@RequestBody SmsDto smsDto)
     {
         return  smsService.verifySmsCode(smsDto);
     }
