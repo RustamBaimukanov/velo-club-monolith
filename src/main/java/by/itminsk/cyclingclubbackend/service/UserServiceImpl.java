@@ -5,10 +5,12 @@ import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.model.user.Role;
+import by.itminsk.cyclingclubbackend.model.user.Trophy;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
 import by.itminsk.cyclingclubbackend.repository.RoleRepository;
 import by.itminsk.cyclingclubbackend.repository.TeamRepository;
+import by.itminsk.cyclingclubbackend.repository.TrophyRepository;
 import by.itminsk.cyclingclubbackend.repository.UserRepository;
 import by.itminsk.cyclingclubbackend.security.JwtUtilities;
 import jakarta.transaction.Transactional;
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private TrophyRepository trophyRepository;
 
 
 
@@ -132,6 +137,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User registerAuto(RegisterDto registerDto) {
+        if (iUserRepository.existsByPhoneNumber(registerDto.getPhoneNumber())) {
+            return null;
+        } else {
+            if (confirmPassword(registerDto.getPassword(), registerDto.getConfirmPassword())) {
+                User user = new User();
+                user.setPhoneNumber(registerDto.getPhoneNumber());
+                user.setEmail(registerDto.getEmail());
+                user.setFirstName(registerDto.getFirstName());
+                user.setLastName(registerDto.getLastName());
+                user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+                Role role = roleRepository.findRoleByName("USER");
+                Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+                user.addRole(role);
+                user.addTrophy(trophy);
+                return iUserRepository.saveAndFlush(user);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) {
         if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getPhoneNumber())) {
             return new ResponseEntity<>("Номер телефона уже зарегистрирован на портале!", HttpStatus.SEE_OTHER);
@@ -183,7 +211,7 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
-        user.getRoles().forEach(r -> rolesNames.add(r.getName()));
+        //user.getRoles().forEach(r -> rolesNames.add(r.getName()));
         System.out.println(user.getEmail());
         String token = jwtUtilities.generateToken(user.getUsername(), rolesNames);
         return token;

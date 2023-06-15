@@ -93,6 +93,11 @@ public class User implements Serializable, UserDetails {
         this.roles.add(role);
     }
 
+    public void addTrophy(Trophy trophy) {
+        this.trophies.add(trophy);
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -102,7 +107,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.phoneNumber;
     }
 
     @Override

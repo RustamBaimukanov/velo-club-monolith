@@ -11,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -30,10 +29,10 @@ public class SpringSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup").permitAll()
+            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup", "test/**").permitAll()
             .requestMatchers("/api/hi").hasAuthority("ADMIN")
             .requestMatchers("/api/hello/").hasAuthority("SUPERADMIN")
-            .requestMatchers("/api/").hasAnyAuthority()
+//            .requestMatchers("/api/").authenticated()
 
     ;
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
