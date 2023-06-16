@@ -47,9 +47,9 @@ public class JwtUtilities{
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email , List<String> roles) {
+    public String generateToken(String phoneNumber , List<String> roles) {
 
-        return Jwts.builder().setSubject(email).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.MILLIS)))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
