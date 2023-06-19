@@ -125,6 +125,8 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName("USER");
             user.addRole(role);
+            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+            user.addTrophy(trophy);
             iUserRepository.save(user);
             String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName()));
             return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
@@ -169,7 +171,8 @@ public class UserServiceImpl implements UserService {
         user.setWeight(registerByAdminDto.getWeight());
         user.setAddress(registerByAdminDto.getAddress());
         user.setTeam(teamRepository.findTeamById(registerByAdminDto.getTeamId()));
-
+        Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+        user.addTrophy(trophy);
 
         Role role = roleRepository.findRoleByName("USER");
         user.addRole(role);
