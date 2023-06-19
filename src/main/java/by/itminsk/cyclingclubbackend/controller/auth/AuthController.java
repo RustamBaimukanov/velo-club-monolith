@@ -28,7 +28,7 @@ public class AuthController {
     public String authenticate(@RequestBody LoginDto loginDto)
     { return  userService.authenticate(loginDto);}
 
-    @GetMapping("/")
+    @GetMapping("/xxx")
     public String main(){
         return "IS Authenticated";
     }

@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,17 +26,19 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception
     { http
+        // ...
+		.cors(cors -> cors.disable())
             .csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup", "test/**").permitAll()
-            .requestMatchers("/api/hi").hasAuthority("ADMIN")
-            .requestMatchers("/api/hello/").hasAuthority("SUPERADMIN")
+            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup").permitAll()
+            //.requestMatchers( "test/**").authenticated()
+            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/test/**","/api/xxx").permitAll()
 //            .requestMatchers("/api/").authenticated()
-
-    ;
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .anyRequest().authenticated()
+            .and()
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return  http.build();
     }
