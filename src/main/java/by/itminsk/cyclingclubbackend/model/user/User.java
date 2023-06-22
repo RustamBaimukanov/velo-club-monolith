@@ -70,6 +70,14 @@ public class User implements Serializable, UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_news",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "news_id")
+    )
+    private Set<News> news = new HashSet<>();
+
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<SocialNetwork> socialNetworks = new HashSet<>();
