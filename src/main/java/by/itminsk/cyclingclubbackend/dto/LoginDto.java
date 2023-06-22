@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginDto {
 
-    private String phoneNumber;
+    private String tel;
 
     private String password;
 }

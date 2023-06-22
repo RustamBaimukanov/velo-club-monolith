@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
     public String authenticate(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getPhoneNumber(),
+                        loginDto.getTel(),
                         loginDto.getPassword()
                 )
         );
