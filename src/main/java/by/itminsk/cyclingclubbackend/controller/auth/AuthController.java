@@ -25,7 +25,7 @@ public class AuthController {
     { return  userService.register(registerDto);}
 
     @PostMapping("/authenticate")
-    public String authenticate(@RequestBody LoginDto loginDto)
+    public ResponseEntity<?> authenticate(@RequestBody LoginDto loginDto)
     { return  userService.authenticate(loginDto);}
 
     @GetMapping("/xxx")

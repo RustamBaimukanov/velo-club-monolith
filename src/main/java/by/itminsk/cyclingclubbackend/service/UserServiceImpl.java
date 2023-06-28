@@ -196,18 +196,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String authenticate(LoginDto loginDto) {
+    public ResponseEntity<?> authenticate(LoginDto loginDto) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getTel(),
                         loginDto.getPassword()
                 )
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         //user.getRoles().forEach(r -> rolesNames.add(r.getName()));
-        System.out.println(authentication.getPrincipal().toString());
-        return jwtUtilities.generateToken(user.getUsername(), rolesNames);
+        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), "Bearer "), HttpStatus.OK);
+
     }
 }

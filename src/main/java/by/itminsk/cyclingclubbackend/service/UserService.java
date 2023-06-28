@@ -29,7 +29,7 @@ public interface UserService {
 
     //LoginStatus authorize(LoginDTO loginDTO);
 
-    String authenticate(LoginDto loginDto);
+    ResponseEntity<?> authenticate(LoginDto loginDto);
 
     ResponseEntity<?> register (RegisterDto registerDto);
 
