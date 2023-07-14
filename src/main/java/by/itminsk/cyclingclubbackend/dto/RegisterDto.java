@@ -24,4 +24,5 @@ public class RegisterDto implements Serializable {
     String confirmPassword;
     Boolean acceptTerms;
     Date birth;
+    String gender;
 }
