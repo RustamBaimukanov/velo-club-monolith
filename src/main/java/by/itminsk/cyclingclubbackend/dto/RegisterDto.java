@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Data
@@ -22,4 +23,5 @@ public class RegisterDto implements Serializable {
     String password ;
     String confirmPassword;
     Boolean acceptTerms;
+    Date birth;
 }

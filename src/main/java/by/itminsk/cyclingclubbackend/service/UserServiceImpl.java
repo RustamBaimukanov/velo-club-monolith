@@ -122,6 +122,7 @@ public class UserServiceImpl implements UserService {
             user.setEmail(registerDto.getEmail());
             user.setFirstName(registerDto.getFirstName());
             user.setLastName(registerDto.getLastName());
+            user.setBirthDate(registerDto.getBirth());
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName("USER");
             user.addRole(role);
