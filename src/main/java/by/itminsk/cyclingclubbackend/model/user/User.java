@@ -94,6 +94,9 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private Team team;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private City city;
+
 
     public void addRole(Role role) {
         this.roles.add(role);

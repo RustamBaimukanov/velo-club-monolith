@@ -25,4 +25,6 @@ public class RegisterDto implements Serializable {
     Boolean acceptTerms;
     Date birth;
     String gender;
+    String city;
+
 }

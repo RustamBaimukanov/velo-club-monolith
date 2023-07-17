@@ -13,6 +13,7 @@ import by.itminsk.cyclingclubbackend.repository.TeamRepository;
 import by.itminsk.cyclingclubbackend.repository.TrophyRepository;
 import by.itminsk.cyclingclubbackend.repository.UserRepository;
 import by.itminsk.cyclingclubbackend.security.JwtUtilities;
+import by.itminsk.cyclingclubbackend.service.city.CityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TrophyRepository trophyRepository;
+
+    @Autowired
+    private CityService cityService;
 
 
     private final AuthenticationManager authenticationManager;
@@ -124,6 +128,7 @@ public class UserServiceImpl implements UserService {
             user.setLastName(registerDto.getLastName());
             user.setBirthDate(registerDto.getBirth());
             user.setSex(registerDto.getGender());
+            user.setCity(cityService.getCity(registerDto.getCity()));
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName("USER");
             user.addRole(role);
@@ -168,11 +173,11 @@ public class UserServiceImpl implements UserService {
         user.setLastName(registerByAdminDto.getLastName());
         user.setPassword(passwordEncoder.encode(registerByAdminDto.getPassword()));
         user.setBirthDate(registerByAdminDto.getBirthDate());
-        user.setSex(registerByAdminDto.getSex());
+        user.setSex(registerByAdminDto.getGender());
         user.setHeight(registerByAdminDto.getHeight());
         user.setWeight(registerByAdminDto.getWeight());
         user.setAddress(registerByAdminDto.getAddress());
-        user.setTeam(teamRepository.findTeamById(registerByAdminDto.getTeamId()));
+        user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
         Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
         user.addTrophy(trophy);
 
@@ -211,7 +216,7 @@ public class UserServiceImpl implements UserService {
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         //user.getRoles().forEach(r -> rolesNames.add(r.getName()));
-        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), "Bearer "), HttpStatus.OK);
+        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames, loginDto.isRememberUser()), "Bearer "), HttpStatus.OK);
 
     }
 }

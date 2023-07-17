@@ -18,9 +18,11 @@ public class RegisterByAdminDto implements Serializable {
     String email;
     String password;
     Date birthDate;
-    String sex;
     Double height;
     Date weight;
     String address;
-    Long teamId; //Предполагается выбор команды из списка
+    Date birth;
+    String gender;
+    String city;
+    String club;
 }

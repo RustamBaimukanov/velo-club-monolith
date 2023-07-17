@@ -54,7 +54,20 @@ public class JwtUtilities{
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
+    public String generateToken(String phoneNumber , List<String> roles, boolean isRememberUser) {
+
+        if (isRememberUser) return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(Date.from(Instant.now().plus(2629800000L, ChronoUnit.MILLIS)))
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
+        else {
+            return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.MILLIS)))
+                    .signWith(SignatureAlgorithm.HS256, secret).compact();
+        }
+    }
+
     public boolean validateToken(String token) {
+        System.out.println(token);
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;

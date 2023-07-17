@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
 
 
 @Slf4j
@@ -32,9 +34,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = jwtUtilities.getToken(request) ;
 
-        if (token!=null && jwtUtilities.validateToken(token))
+        if (token!=null && jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token))))
         {
-            String phoneNumber = jwtUtilities.extractUsername(token);
+            String phoneNumber = jwtUtilities.extractUsername(new String(Base64.getMimeDecoder().decode(token)));
 
             UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
             if (userDetails != null) {
