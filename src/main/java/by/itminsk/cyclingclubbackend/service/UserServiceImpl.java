@@ -117,9 +117,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        if (iUserRepository.existsByPhoneNumber(registerDto.getTel())) {
-            return new ResponseEntity<>("Номер телефона уже зарегистрирован на портале!", HttpStatus.SEE_OTHER);
-        } else {
+        if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && iUserRepository.existsByEmail(registerDto.getEmail())) {
+            return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else if (iUserRepository.existsByEmail(registerDto.getEmail())) {
+            return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else if (iUserRepository.existsByPhoneNumber(registerDto.getTel())){
+            return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else {
             User user = new User();
             user.setPhoneNumber(registerDto.getTel());
             user.setEmail(registerDto.getEmail());
@@ -165,28 +172,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) {
-        User user = new User();
-        user.setPhoneNumber(registerByAdminDto.getPhoneNumber());
-        user.setEmail(registerByAdminDto.getEmail());
-        user.setFirstName(registerByAdminDto.getFirstName());
-        user.setLastName(registerByAdminDto.getLastName());
-        user.setPassword(passwordEncoder.encode(registerByAdminDto.getPassword()));
-        user.setBirthDate(registerByAdminDto.getBirthDate());
-        user.setSex(registerByAdminDto.getGender());
-        user.setHeight(registerByAdminDto.getHeight());
-        user.setWeight(registerByAdminDto.getWeight());
-        user.setAddress(registerByAdminDto.getAddress());
-        user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
-        user.setCity(cityService.getCity(registerByAdminDto.getCity()));
-        Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-        user.addTrophy(trophy);
+        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && iUserRepository.existsByEmail(registerByAdminDto.getEmail())) {
+            return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) {
+            return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel())){
+            return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        }
+        else {
+            User user = new User();
+            user.setPhoneNumber(registerByAdminDto.getTel());
+            user.setEmail(registerByAdminDto.getEmail());
+            user.setFirstName(registerByAdminDto.getFirstName());
+            user.setLastName(registerByAdminDto.getLastName());
+            user.setPassword(passwordEncoder.encode(registerByAdminDto.getPassword()));
+            user.setBirthDate(registerByAdminDto.getBirthDate());
+            user.setSex(registerByAdminDto.getGender());
+            user.setHeight(registerByAdminDto.getHeight());
+            user.setWeight(registerByAdminDto.getWeight());
+            user.setAddress(registerByAdminDto.getAddress());
+            user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
+            user.setCity(cityService.getCity(registerByAdminDto.getCity()));
+            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+            user.addTrophy(trophy);
 
-        Role role = roleRepository.findRoleByName("Велолюбитель");
-        user.addRole(role);
-        iUserRepository.save(user);
-        return new ResponseEntity<>(HttpStatus.OK);
-
-
+            Role role = roleRepository.findRoleByName("Велолюбитель");
+            user.addRole(role);
+            iUserRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@ public class RegisterByAdminDto implements Serializable {
 
     String firstName ;
     String lastName ;
-    String phoneNumber;
+    String tel;
     String email;
     String password;
     Date birthDate;
