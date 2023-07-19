@@ -94,7 +94,8 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private Team team;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
     private City city;
 
 

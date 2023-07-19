@@ -55,8 +55,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtilities jwtUtilities;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public void create(User user) {
@@ -216,7 +215,17 @@ public class UserServiceImpl implements UserService {
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
         //user.getRoles().forEach(r -> rolesNames.add(r.getName()));
-        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames, loginDto.isRememberUser()), "Bearer "), HttpStatus.OK);
+        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), "Bearer "), HttpStatus.OK);
+
+    }
+
+    @Override
+    public ResponseEntity<?> restorePassword(LoginDto loginDto) {
+        User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+        iUserRepository.save(user);
+
+        return new ResponseEntity<>("Пароль изменен.", HttpStatus.OK);
 
     }
 }

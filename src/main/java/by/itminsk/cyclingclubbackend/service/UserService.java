@@ -31,6 +31,9 @@ public interface UserService {
 
     ResponseEntity<?> authenticate(LoginDto loginDto);
 
+    ResponseEntity<?> restorePassword(LoginDto loginDto);
+
+
     ResponseEntity<?> register (RegisterDto registerDto);
 
     User registerAuto (RegisterDto registerDto);
