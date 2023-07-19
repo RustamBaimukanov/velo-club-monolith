@@ -78,6 +78,7 @@ public class User implements Serializable, UserDetails {
     )
     private Set<News> news = new HashSet<>();
 
+
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<SocialNetwork> socialNetworks = new HashSet<>();

@@ -4,10 +4,12 @@ import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.model.user.City;
+import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.Team;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
+import by.itminsk.cyclingclubbackend.service.role.RoleService;
 import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,9 @@ public class AuthController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private RoleService roleService;
 
     @PostMapping("/signup-complete")
     public ResponseEntity<?> register (@RequestBody RegisterByAdminDto registerDto)
@@ -63,6 +68,11 @@ public class AuthController {
     @GetMapping("/get/teams")
     public List<Team> getTeams(){
         return teamService.getTeams();
+    }
+
+    @GetMapping("/get/qualifications")
+    public List<Role> getQualifications(){
+        return roleService.getQualifications();
     }
 
 

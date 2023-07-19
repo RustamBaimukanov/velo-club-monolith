@@ -1,3 +1,4 @@
+/* Cities*/
 insert into city(id, name) values (1, 'Антополь');
 insert into city(id, name) values (2, 'Барановичи');
 insert into city(id, name) values (3, 'Белоозерск');
@@ -149,3 +150,11 @@ insert into city(id, name) values (148, 'Хотимск');
 insert into city(id, name) values (149, 'Чаусы');
 insert into city(id, name) values (150, 'Чериков');
 insert into city(id, name) values (151, 'Шклов');
+
+/* Teams*/
+insert into team(id, name) values (1, 'Звездный экспресс');
+insert into team(id, name) values (2, 'Космическая станция "Герта"');
+insert into team(id, name) values (3, 'Белобог');
+insert into team(id, name) values (4, 'Камнеград');
+insert into team(id, name) values (5, 'Лофу Сяньчжоу');
+

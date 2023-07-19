@@ -30,9 +30,11 @@ public class CyclingClubBackendApplication {
     @Bean
     CommandLineRunner run (UserService iUserService , RoleRepository iRoleRepository , UserRepository iUserRepository , PasswordEncoder passwordEncoder, TrophyRepository trophyRepository, TrophyService trophyService)
     {return  args ->
-    {   iUserService.saveRole(new Role("USER"));
+    {
         iUserService.saveRole(new Role("ADMIN"));
-        iUserService.saveRole(new Role("SUPERADMIN"));
+        iUserService.saveRole(new Role("Велоспортсмен"));
+        iUserService.saveRole(new Role("Велолюбитель"));
+
         iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("1111"), new HashSet<>()));
         iUserService.saverUser(new User("superadminadmin@gmail.com", passwordEncoder.encode("superadminPassword"), new HashSet<>()));
 

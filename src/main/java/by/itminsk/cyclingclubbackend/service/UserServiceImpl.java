@@ -177,6 +177,7 @@ public class UserServiceImpl implements UserService {
         user.setWeight(registerByAdminDto.getWeight());
         user.setAddress(registerByAdminDto.getAddress());
         user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
+        user.setCity(cityService.getCity(registerByAdminDto.getCity()));
         Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
         user.addTrophy(trophy);
 
