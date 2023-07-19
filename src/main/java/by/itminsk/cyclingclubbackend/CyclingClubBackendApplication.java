@@ -36,7 +36,6 @@ public class CyclingClubBackendApplication {
         iUserService.saveRole(new Role("Велолюбитель"));
 
         iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("1111"), new HashSet<>()));
-        iUserService.saverUser(new User("superadminadmin@gmail.com", passwordEncoder.encode("superadminPassword"), new HashSet<>()));
 
 
         Trophy trophy = new Trophy();
@@ -49,15 +48,13 @@ public class CyclingClubBackendApplication {
         iUserService.saverUser(user);
 
 
-        User regularUser = iUserService.registerAuto(new RegisterDto("Имя", "Фамилия", "+375251111111", "test@mail.ru", "111111", "111111", true, null, null, null));
+        iUserService.registerAuto(new RegisterDto("Имя", "Фамилия", "+375251111111", "test@mail.ru", "111111", "111111", true, null, null, null));
 
 
 
 
 
-        System.out.println(regularUser.getEmail());
-        System.out.println(regularUser.getRoles().toString());
-        System.out.println(regularUser.getTrophies().toString());
+
 
 
 
