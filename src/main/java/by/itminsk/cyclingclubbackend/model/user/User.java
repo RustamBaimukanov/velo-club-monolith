@@ -59,6 +59,9 @@ public class User implements Serializable, UserDetails {
     @Column(name = "photo", length = 1000)
     private byte[] photo;
 
+    @Column(name = "photo-format")
+    private String photoFormat;
+
     @Transient
     private String confirmPassword;
 

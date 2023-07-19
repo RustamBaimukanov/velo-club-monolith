@@ -10,6 +10,6 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity<?> verifySmsCode(SmsDto smsDto) {
         if (smsDto.getCode() == 1111) return new ResponseEntity<>(HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>("Неверный КОД   ", HttpStatus.NOT_ACCEPTABLE);
     }
 }
