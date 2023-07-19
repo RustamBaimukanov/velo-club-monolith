@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
             user.setSex(registerDto.getGender());
             user.setCity(cityService.getCity(registerDto.getCity()));
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-            Role role = roleRepository.findRoleByName("USER");
+            Role role = roleRepository.findRoleByName("Велолюбитель");
             user.addRole(role);
             Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
             user.addTrophy(trophy);
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
                 user.setFirstName(registerDto.getFirstName());
                 user.setLastName(registerDto.getLastName());
                 user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-                Role role = roleRepository.findRoleByName("USER");
+                Role role = roleRepository.findRoleByName("Велолюбитель");
                 Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
                 user.addRole(role);
                 user.addTrophy(trophy);
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
         Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
         user.addTrophy(trophy);
 
-        Role role = roleRepository.findRoleByName("USER");
+        Role role = roleRepository.findRoleByName("Велолюбитель");
         user.addRole(role);
         iUserRepository.save(user);
         return new ResponseEntity<>(HttpStatus.OK);

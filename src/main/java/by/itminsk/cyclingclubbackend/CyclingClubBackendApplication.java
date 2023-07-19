@@ -48,10 +48,7 @@ public class CyclingClubBackendApplication {
         user.getRoles().add(role);
         iUserService.saverUser(user);
 
-        User userr = iUserRepository.findUserByEmail("superadminadmin@gmail.com").orElse(null);
-        Role rolee = iRoleRepository.findRoleByName("SUPERADMIN");
-        userr.getRoles().add(rolee);
-        iUserService.saverUser(userr);
+
         User regularUser = iUserService.registerAuto(new RegisterDto("Имя", "Фамилия", "+375251111111", "test@mail.ru", "111111", "111111", true, null, null, null));
 
 
