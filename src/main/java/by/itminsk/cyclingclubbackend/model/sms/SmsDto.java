@@ -13,5 +13,5 @@ public class SmsDto {
 
     Long tel;
 
-    Integer code;
+    Integer code = 0;
 }
