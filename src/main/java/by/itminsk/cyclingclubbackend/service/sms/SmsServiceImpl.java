@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 public class SmsServiceImpl implements SmsService {
     @Override
     public ResponseEntity<?> verifySmsCode(SmsDto smsDto) {
-        if (smsDto.getCode() == 1111) return new ResponseEntity<>(HttpStatus.OK);
+        if (smsDto.getCode() == null){
+            return new ResponseEntity<>("Код не введен   ", HttpStatus.NOT_ACCEPTABLE);
+        }
+        else if (smsDto.getCode() == 1111) return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>("Неверный КОД   ", HttpStatus.NOT_ACCEPTABLE);
     }
 }

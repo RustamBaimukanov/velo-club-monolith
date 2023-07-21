@@ -116,6 +116,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean existByPhoneNumber(String phoneNumber) {
+        return iUserRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && iUserRepository.existsByEmail(registerDto.getEmail())) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);

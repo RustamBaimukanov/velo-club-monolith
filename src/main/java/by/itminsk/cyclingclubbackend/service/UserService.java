@@ -50,6 +50,8 @@ public interface UserService {
 
     User saverUser (User user) ;
 
+    Boolean existByPhoneNumber(String phoneNumber);
+
 
 
 }

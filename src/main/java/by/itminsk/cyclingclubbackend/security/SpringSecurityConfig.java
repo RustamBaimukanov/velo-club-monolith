@@ -32,7 +32,7 @@ public class SpringSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup", "api/restore-password", "api/signup-complete",  "api/verify", "api/get/**").permitAll()
+            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup", "api/restore-password", "api/signup-complete",  "api/verify", "api/get/**", "api/check-tel").permitAll()
             //.requestMatchers( "test/**").authenticated()
             .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/test/**","/api/xxx", "api/get/**").permitAll()
 //            .requestMatchers("/api/").authenticated()
