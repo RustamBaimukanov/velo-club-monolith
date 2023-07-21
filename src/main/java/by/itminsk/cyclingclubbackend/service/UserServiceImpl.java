@@ -193,13 +193,13 @@ public class UserServiceImpl implements UserService {
             user.setFirstName(registerByAdminDto.getFirstName());
             user.setLastName(registerByAdminDto.getLastName());
             user.setPassword(passwordEncoder.encode(registerByAdminDto.getPassword()));
-            user.setBirthDate(registerByAdminDto.getBirthDate());
+            user.setBirthDate(registerByAdminDto.getBirth());
             user.setSex(registerByAdminDto.getGender());
             user.setHeight(registerByAdminDto.getHeight());
             user.setWeight(registerByAdminDto.getWeight());
             user.setAddress(registerByAdminDto.getAddress());
             user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
-            user.setCity(cityService.getCity(registerByAdminDto.getCity()));
+            user.setCity(cityService.getCity(registerByAdminDto.getRegion()));
             Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
             user.addTrophy(trophy);
 

@@ -36,7 +36,9 @@ public class AuthController {
 
     @PostMapping("/signup-complete")
     public ResponseEntity<?> register (@RequestBody RegisterByAdminDto registerDto)
-    { return  userService.registerByAdmin(registerDto);}
+    {
+        System.out.println(registerDto);
+        return  userService.registerByAdmin(registerDto);}
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup (@RequestBody RegisterDto registerDto)
