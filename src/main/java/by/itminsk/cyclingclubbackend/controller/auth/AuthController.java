@@ -56,12 +56,6 @@ public class AuthController {
         return  userService.authenticate(loginDto);
     }
 
-    @PostMapping("/restore-password")
-    public ResponseEntity<?> restorePassword(@RequestBody LoginDto loginDto)
-    {
-        return  userService.restorePassword(loginDto);
-    }
-
 
     @GetMapping("/xxx")
     public String main(){

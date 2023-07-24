@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.exception_handler;
 
+import by.itminsk.cyclingclubbackend.controller.auth.AuthController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,12 @@ public class CustomExceptionHandler {
     @ExceptionHandler(value = {UsernameNotFoundException.class, AuthenticationException.class})
     protected ResponseEntity<?> handleNotFound(final AuthenticationException ex, final WebRequest request) {
         return new ResponseEntity<>("Некорректный номер телефона или пароль",HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {RestoreUserNotFound.class})
+    protected ResponseEntity<?> restoreUserNotFount(final RestoreUserNotFound ex) {
+        return new ResponseEntity<>("Такой пользователь не существует",HttpStatus.SEE_OTHER);
     }
 
 }

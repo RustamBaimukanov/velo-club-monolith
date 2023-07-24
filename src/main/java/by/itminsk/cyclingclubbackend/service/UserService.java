@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.service;
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
+import by.itminsk.cyclingclubbackend.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
 import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.User;
@@ -32,7 +33,7 @@ public interface UserService {
 
     ResponseEntity<?> authenticate(LoginDto loginDto);
 
-    ResponseEntity<?> restorePassword(LoginDto loginDto);
+    ResponseEntity<?> restorePassword(LoginDto loginDto) throws RestoreUserNotFound;
 
 
     ResponseEntity<?> register (RegisterDto registerDto);

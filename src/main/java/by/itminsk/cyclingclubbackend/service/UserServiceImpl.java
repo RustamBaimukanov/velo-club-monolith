@@ -4,6 +4,7 @@ import by.itminsk.cyclingclubbackend.dto.BearerToken;
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
+import by.itminsk.cyclingclubbackend.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.Trophy;
 import by.itminsk.cyclingclubbackend.model.user.User;
@@ -246,8 +247,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> restorePassword(LoginDto loginDto) {
-        User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    public ResponseEntity<?> restorePassword(LoginDto loginDto) throws RestoreUserNotFound {
+        User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new RestoreUserNotFound("Такой пользователь не существует"));
         user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
         iUserRepository.save(user);
 
