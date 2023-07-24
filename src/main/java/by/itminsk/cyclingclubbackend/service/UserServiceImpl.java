@@ -14,6 +14,7 @@ import by.itminsk.cyclingclubbackend.repository.TrophyRepository;
 import by.itminsk.cyclingclubbackend.repository.UserRepository;
 import by.itminsk.cyclingclubbackend.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
+import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -41,13 +43,13 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private TeamRepository teamRepository;
-
-    @Autowired
     private TrophyRepository trophyRepository;
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private TeamService teamService;
 
 
     private final AuthenticationManager authenticationManager;
@@ -176,7 +178,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) {
+    public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
         if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && iUserRepository.existsByEmail(registerByAdminDto.getEmail())) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
         }
@@ -198,8 +200,10 @@ public class UserServiceImpl implements UserService {
             user.setHeight(registerByAdminDto.getHeight());
             user.setWeight(registerByAdminDto.getWeight());
             user.setAddress(registerByAdminDto.getAddress());
-            user.setTeam(teamRepository.findTeamByName(registerByAdminDto.getClub()));
+            user.setTeam(teamService.getTeam(registerByAdminDto.getClub()));
             user.setCity(cityService.getCity(registerByAdminDto.getRegion()));
+            user.setPhoto(registerByAdminDto.getUserImg().getBytes());
+            user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
             Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
             user.addTrophy(trophy);
 

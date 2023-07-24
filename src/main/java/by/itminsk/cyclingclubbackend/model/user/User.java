@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,8 +56,7 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     private String password;
 
-    @Lob
-    @Column(name = "photo", length = 1000)
+    @Column(name = "photo", columnDefinition = "bytea" ,length = 1000)
     private byte[] photo;
 
     @Column(name = "photo-format")
@@ -95,10 +95,10 @@ public class User implements Serializable, UserDetails {
     private Set<Trophy> trophies = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 

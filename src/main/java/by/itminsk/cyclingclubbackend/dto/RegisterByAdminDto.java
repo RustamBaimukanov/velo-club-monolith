@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,4 +27,5 @@ public class RegisterByAdminDto implements Serializable {
     String gender;
     String region;
     String club;
+    MultipartFile userImg;
 }

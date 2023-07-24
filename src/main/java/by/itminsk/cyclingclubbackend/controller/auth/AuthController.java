@@ -14,7 +14,10 @@ import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -35,10 +38,13 @@ public class AuthController {
     private RoleService roleService;
 
     @PostMapping("/signup-complete")
-    public ResponseEntity<?> register (@RequestBody RegisterByAdminDto registerDto)
-    {
-        System.out.println(registerDto);
-        return  userService.registerByAdmin(registerDto);}
+    public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto) throws IOException {
+
+        System.out.println(registerDto.getUserImg().getOriginalFilename());
+        System.out.println(registerDto.getUserImg().getContentType());
+
+        return  userService.registerByAdmin(registerDto);
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup (@RequestBody RegisterDto registerDto)

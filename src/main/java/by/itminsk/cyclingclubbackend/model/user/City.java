@@ -3,6 +3,9 @@ package by.itminsk.cyclingclubbackend.model.user;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "city")
 @Getter
@@ -19,5 +22,9 @@ public class City {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private Set<User> users = new HashSet<>();
 
 }

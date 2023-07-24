@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface TeamService {
 
+    Team getTeam(String name);
+
     List<Team> getTeams();
 }

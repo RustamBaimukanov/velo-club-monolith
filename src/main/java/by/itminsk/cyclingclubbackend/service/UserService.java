@@ -9,6 +9,7 @@ import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
 import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -39,7 +40,7 @@ public interface UserService {
     User registerAuto (RegisterDto registerDto);
 
 
-    ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto);
+    ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException;
 
     Boolean confirmPassword (String password, String confirmPassword);
 
