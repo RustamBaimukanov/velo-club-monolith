@@ -24,7 +24,7 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {RestoreUserNotFound.class})
     protected ResponseEntity<?> restoreUserNotFount(final RestoreUserNotFound ex) {
-        return new ResponseEntity<>("Такой пользователь не существует",HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>("Такой пользователь не существует",HttpStatus.NOT_ACCEPTABLE);
     }
 
 }
