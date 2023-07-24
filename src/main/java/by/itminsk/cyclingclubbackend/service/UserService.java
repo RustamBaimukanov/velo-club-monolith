@@ -54,6 +54,8 @@ public interface UserService {
 
     Boolean existByPhoneNumber(String phoneNumber);
 
+    User getUser(String phoneNumber);
+
 
 
 }
