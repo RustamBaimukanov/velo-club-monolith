@@ -212,8 +212,7 @@ public class UserServiceImpl implements UserService {
             user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
             Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
             user.addTrophy(trophy);
-
-            Role role = roleRepository.findRoleByName("Велолюбитель");
+            Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
             user.addRole(role);
             iUserRepository.save(user);
             return new ResponseEntity<>(HttpStatus.OK);

@@ -28,4 +28,5 @@ public class RegisterByAdminDto implements Serializable {
     String region;
     String club;
     MultipartFile userImg;
+    String qualification;
 }
