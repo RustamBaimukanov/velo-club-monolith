@@ -27,12 +27,20 @@ public class SmsController {
         return  smsService.verifySmsCode(smsDto);
     }
 
-    @PostMapping("/check-tel")
+    @PostMapping("/check-tel-restore")
     public ResponseEntity<?> checkTelExiting(@RequestBody SmsDto smsDto)
     {
         return userService.existByPhoneNumber(smsDto.getTel()) ?
             new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>("Такой номер телефона не зарегистрирован.", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @PostMapping("/check-tel-signup")
+    public ResponseEntity<?> checkTelExitingSignUp(@RequestBody SmsDto smsDto)
+    {
+        return userService.existByPhoneNumber(smsDto.getTel()) ?
+                new ResponseEntity<>("Такой номер телефона уже зарегистрирован.", HttpStatus.NOT_ACCEPTABLE) :
+                new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
