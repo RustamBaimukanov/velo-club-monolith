@@ -2,6 +2,7 @@ package by.itminsk.cyclingclubbackend.model.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class City {
 
     @Id
@@ -23,8 +25,8 @@ public class City {
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
-    private Set<User> users = new HashSet<>();
+//    @OneToMany
+//    @JoinColumn(name = "city_id")
+//    private Set<User> users = new HashSet<>();
 
 }

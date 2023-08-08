@@ -40,9 +40,6 @@ public class AuthController {
     @PostMapping("/signup-complete")
     public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto) throws IOException {
 
-        System.out.println(registerDto.getUserImg().getOriginalFilename());
-        System.out.println(registerDto.getUserImg().getContentType());
-
         return  userService.registerByAdmin(registerDto);
     }
 
