@@ -56,7 +56,7 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     private String password;
 
-    @Column(name = "photo", columnDefinition = "bytea" ,length = 1000)
+    @Column(name = "photo", columnDefinition = "bytea")
     private byte[] photo;
 
     @Column(name = "photo-format")
