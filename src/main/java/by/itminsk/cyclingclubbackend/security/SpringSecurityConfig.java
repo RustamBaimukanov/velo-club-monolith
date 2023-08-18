@@ -32,12 +32,11 @@ public class SpringSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/register", "/api/authenticate", "/hello", "api/signup", "api/restore-password", "api/signup-complete",  "api/verify", "api/get/**", "api/check-tel-restore", "api/check-tel-signup", "api/restore/restore-password").permitAll()
+            //.requestMatchers("/api/register", "/api/authenticate", "/hello", "/api/signup", "/api/restore-password", "/api/signup-complete",  "/api/verify",  "/api/get/**", "/api/get/qualifications", "/api/get/cities", "/api/get/teams","/api/check-tel-restore", "/api/check-tel-signup", "/api/restore/restore-password").permitAll()
             //.requestMatchers( "test/**").authenticated()
-            .requestMatchers( "api/user/**").authenticated()
-            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/test/**","/api/xxx", "api/get/**").permitAll()
+            //.requestMatchers(HttpMethod.OPTIONS, "/api/**", "/test/**","/api/xxx").permitAll()
 //            .requestMatchers("/api/").authenticated()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
             .and()
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

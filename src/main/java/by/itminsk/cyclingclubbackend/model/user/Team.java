@@ -25,8 +25,8 @@ public class Team {
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "team_id")
-    private Set<User> users = new HashSet<>();
+//    @OneToMany
+//    @JoinColumn(name = "team_id")
+//    private Set<User> users = new HashSet<>();
 
 }
