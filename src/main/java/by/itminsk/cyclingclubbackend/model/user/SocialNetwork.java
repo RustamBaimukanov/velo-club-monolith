@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +20,25 @@ public class SocialNetwork {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "link")
     private String link;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
+
+    public SocialNetwork(String name, String link) {
+        this.name = name;
+        this.link = link;
+    }
+
+    public SocialNetwork(SocialNetworkDTO socialNetworkDTO) {
+        this.name = socialNetworkDTO.getName();
+        this.link = socialNetworkDTO.getLink();
+        this.user = socialNetworkDTO.getUser();
+    }
 }

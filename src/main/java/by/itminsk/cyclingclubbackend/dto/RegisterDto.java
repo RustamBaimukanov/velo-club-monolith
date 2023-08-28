@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Data
@@ -26,5 +28,6 @@ public class RegisterDto implements Serializable {
     Date birth;
     String gender;
     String city;
+    Map<String, String> socialNetwork = new HashMap<>();
 
 }

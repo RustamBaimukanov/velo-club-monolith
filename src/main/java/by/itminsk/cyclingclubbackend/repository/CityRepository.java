@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface CityRepository extends JpaRepository<City, Integer> {
+public interface CityRepository extends JpaRepository<City, Long> {
 
     City findCityByName(String name);
 }

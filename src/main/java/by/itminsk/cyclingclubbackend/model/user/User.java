@@ -111,6 +111,11 @@ public class User implements Serializable, UserDetails {
         this.trophies.add(trophy);
     }
 
+    public void addSocialNetwork(SocialNetwork socialNetwork) {
+        this.socialNetworks.add(socialNetwork);
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

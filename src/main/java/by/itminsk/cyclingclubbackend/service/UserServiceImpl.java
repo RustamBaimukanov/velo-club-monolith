@@ -5,14 +5,8 @@ import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.exception_handler.RestoreUserNotFound;
-import by.itminsk.cyclingclubbackend.model.user.Role;
-import by.itminsk.cyclingclubbackend.model.user.Trophy;
-import by.itminsk.cyclingclubbackend.model.user.User;
-import by.itminsk.cyclingclubbackend.model.user.UserDTO;
-import by.itminsk.cyclingclubbackend.repository.RoleRepository;
-import by.itminsk.cyclingclubbackend.repository.TeamRepository;
-import by.itminsk.cyclingclubbackend.repository.TrophyRepository;
-import by.itminsk.cyclingclubbackend.repository.UserRepository;
+import by.itminsk.cyclingclubbackend.model.user.*;
+import by.itminsk.cyclingclubbackend.repository.*;
 import by.itminsk.cyclingclubbackend.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.team.TeamService;
@@ -45,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TrophyRepository trophyRepository;
+
+    @Autowired
+    private SocialNetworkRepository socialNetworkRepository;
 
     @Autowired
     private CityService cityService;
@@ -192,10 +189,15 @@ public class UserServiceImpl implements UserService {
                 user.setFirstName(registerDto.getFirstName());
                 user.setLastName(registerDto.getLastName());
                 user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+                user.setBirthDate(registerDto.getBirth());
+                user.setSex(registerDto.getGender());
                 Role role = roleRepository.findRoleByName("Велолюбитель");
                 Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
                 user.addRole(role);
                 user.addTrophy(trophy);
+
+                user.setCity(cityService.getCityById(1L));
+                user.setTeam(teamService.getTeamById(1L));
                 return iUserRepository.saveAndFlush(user);
             } else {
                 return null;

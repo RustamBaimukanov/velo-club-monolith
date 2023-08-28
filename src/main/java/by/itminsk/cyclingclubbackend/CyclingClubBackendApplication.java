@@ -1,10 +1,9 @@
 package by.itminsk.cyclingclubbackend;
 
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
-import by.itminsk.cyclingclubbackend.model.user.Role;
-import by.itminsk.cyclingclubbackend.model.user.Trophy;
-import by.itminsk.cyclingclubbackend.model.user.User;
+import by.itminsk.cyclingclubbackend.model.user.*;
 import by.itminsk.cyclingclubbackend.repository.RoleRepository;
+import by.itminsk.cyclingclubbackend.repository.SocialNetworkRepository;
 import by.itminsk.cyclingclubbackend.repository.TrophyRepository;
 import by.itminsk.cyclingclubbackend.repository.UserRepository;
 import by.itminsk.cyclingclubbackend.service.UserService;
@@ -15,8 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 
 @SpringBootApplication
         //(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
@@ -28,7 +26,7 @@ public class CyclingClubBackendApplication {
 
 
     @Bean
-    CommandLineRunner run (UserService iUserService , RoleRepository iRoleRepository , UserRepository iUserRepository , PasswordEncoder passwordEncoder, TrophyRepository trophyRepository, TrophyService trophyService)
+    CommandLineRunner run (UserService iUserService , RoleRepository iRoleRepository , UserRepository iUserRepository , PasswordEncoder passwordEncoder, TrophyRepository trophyRepository, TrophyService trophyService, SocialNetworkRepository socialNetworkRepository)
     {return  args ->
     {
         iUserService.saveRole(new Role("ADMIN"));
@@ -48,8 +46,17 @@ public class CyclingClubBackendApplication {
         iUserService.saverUser(user);
 
 
-        iUserService.registerAuto(new RegisterDto("Имя", "Фамилия", "+375251111111", "test@mail.ru", "111111", "111111", true, null, null, null));
+        Map<String, String> socialNetwork = new HashMap<>();
+        socialNetwork.put("viber", "+375251111111");
+        socialNetwork.put("vk", "id334414521");
 
+        User test = iUserService.registerAuto(new RegisterDto("Имя", "Фамилия", "+375251111111", "test@mail.ru", "111111", "111111", true, new Date(), "male", null, socialNetwork));
+        System.out.println(test.getId());
+        Set<SocialNetwork> socialNetworks = new HashSet<>();
+        socialNetwork.forEach((name, link) ->{
+            socialNetworks.add(new SocialNetwork(new SocialNetworkDTO(name, link, test)));
+        });
+        socialNetworkRepository.saveAll(socialNetworks);
 
 
 

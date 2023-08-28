@@ -8,5 +8,8 @@ public interface TeamService {
 
     Team getTeam(String name);
 
+    Team getTeamById(Long id);
+
+
     List<Team> getTeams();
 }
