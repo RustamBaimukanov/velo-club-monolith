@@ -54,6 +54,8 @@ public interface UserService {
 
     Boolean existByPhoneNumber(String phoneNumber);
 
+    ResponseEntity<?> existByPhoneNumberAndEmail(String phoneNumber, String email);
+
     User getUser(String phoneNumber);
 
 
