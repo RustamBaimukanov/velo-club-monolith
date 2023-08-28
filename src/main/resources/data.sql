@@ -152,9 +152,9 @@ insert into city(id, name) values (150, 'Чериков');
 insert into city(id, name) values (151, 'Шклов');
 
 /* Teams*/
-insert into team(id, name) values (1, 'Звездный экспресс');
-insert into team(id, name) values (2, 'Космическая станция "Герта"');
-insert into team(id, name) values (3, 'Белобог');
-insert into team(id, name) values (4, 'Камнеград');
+insert into team(id, name) values (1, 'Viva Cycling Club');
+insert into team(id, name) values (2, 'Велоклуб Rovar');
+insert into team(id, name) values (3, 'Велосипедный клуб "Минск"');
+insert into team(id, name) values (4, 'Велоклуб eSoligorsk');
 insert into team(id, name) values (5, 'Лофу Сяньчжоу');
 
