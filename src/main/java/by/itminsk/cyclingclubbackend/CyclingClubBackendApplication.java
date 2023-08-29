@@ -33,9 +33,9 @@ public class CyclingClubBackendApplication {
 //        iUserService.saverUser(new User("admin@gmail.com", passwordEncoder.encode("1111"), new HashSet<>()));
 //
 //
-//        Trophy trophy = new Trophy();
-//        trophy.setTrophyType(trophyTypeRepository.findById(6L).orElse(new TrophyType()));
-//        trophyService.addTrophy(trophy);
+////        Trophy trophy = new Trophy();
+////        trophy.setTrophyType(trophyTypeRepository.findById(6L).orElse(new TrophyType()));
+////        trophyService.addTrophy(trophy);
 //
 //        Role role = iRoleRepository.findRoleByName("ADMIN");
 //        User user = iUserRepository.findUserByEmail("admin@gmail.com").orElse(null);
