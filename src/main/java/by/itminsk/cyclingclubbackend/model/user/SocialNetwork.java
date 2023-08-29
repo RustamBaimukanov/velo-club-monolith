@@ -23,8 +23,8 @@ public class SocialNetwork {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "link")
-    private String link;
+    @Column(name = "account")
+    private String account;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -33,12 +33,12 @@ public class SocialNetwork {
 
     public SocialNetwork(String name, String link) {
         this.name = name;
-        this.link = link;
+        this.account = link;
     }
 
     public SocialNetwork(SocialNetworkDTO socialNetworkDTO) {
         this.name = socialNetworkDTO.getName();
-        this.link = socialNetworkDTO.getLink();
+        this.account = socialNetworkDTO.getLink();
         this.user = socialNetworkDTO.getUser();
     }
 }

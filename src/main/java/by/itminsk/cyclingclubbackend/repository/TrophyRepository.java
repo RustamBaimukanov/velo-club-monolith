@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TrophyRepository extends JpaRepository<Trophy, Long> {
 
-    Trophy findTrophyByName(String name);
 }

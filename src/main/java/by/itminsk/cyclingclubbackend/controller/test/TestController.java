@@ -21,11 +21,18 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/test")
+    @GetMapping("/profile")
     public String main(){
+        System.out.println("FSFSFS");
         return "IS jklfjdsklfmjs";
     }
 
+
+    @GetMapping("/")
+    public String xf(){
+        System.out.println("FSFSFS");
+        return "IS jklfjdsklfmjs";
+    }
     @GetMapping("/test/users")
     public List<User> getUsers(){
         return userService.getAll();

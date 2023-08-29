@@ -168,8 +168,8 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName("Велолюбитель");
             user.addRole(role);
-            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-            user.addTrophy(trophy);
+//            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+//            user.addTrophy(trophy);
             iUserRepository.save(user);
             String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName()));
             return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
@@ -192,9 +192,9 @@ public class UserServiceImpl implements UserService {
                 user.setBirthDate(registerDto.getBirth());
                 user.setSex(registerDto.getGender());
                 Role role = roleRepository.findRoleByName("Велолюбитель");
-                Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+                //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
                 user.addRole(role);
-                user.addTrophy(trophy);
+                //user.addTrophy(trophy);
 
                 user.setCity(cityService.getCityById(1L));
                 user.setTeam(teamService.getTeamById(1L));
@@ -233,8 +233,8 @@ public class UserServiceImpl implements UserService {
                 user.setPhoto(registerByAdminDto.getUserImg().getBytes());
                 user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
             }
-            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-            user.addTrophy(trophy);
+            //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
+            //user.addTrophy(trophy);
             Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
             user.addRole(role);
             iUserRepository.save(user);

@@ -3,28 +3,24 @@ package by.itminsk.cyclingclubbackend.model.user;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "trophies")
+@Table(name = "trophy_type")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Trophy {
+public class TrophyType {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "name")
+    private String name;
 
-    @OneToOne
-    @JoinColumn(name = "typeId")
-    private TrophyType trophyType;
+    @Column(name = "svg", length = 4000)
+    private String svg;
 
 }

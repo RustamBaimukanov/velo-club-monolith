@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.controller.user;
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class UserController {
 
 
     @PostMapping("/user/info")
-    public User getCities(@RequestBody LoginDto loginDto){
+    public User getCities(@RequestBody LoginDto loginDto, HttpServletRequest request){
         return userService.getUser(loginDto.getTel());
     }
 }
