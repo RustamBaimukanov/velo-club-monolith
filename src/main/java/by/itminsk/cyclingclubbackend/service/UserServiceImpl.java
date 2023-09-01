@@ -173,11 +173,6 @@ public class UserServiceImpl implements UserService {
                             calendar.setTime(eventResult.getDate());
                             return calendar.get(Calendar.YEAR);
                         })
-                        //Comparator.comparing(o -> o.getItem().getValue())
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.setTime(eventResult.getDate());
-//                    return Comparator.comparingInt(eventResult.getPlace());
-                        //}
                 )
                 .collect(groupingBy(eventResult -> {
                     Calendar calendar = Calendar.getInstance();
