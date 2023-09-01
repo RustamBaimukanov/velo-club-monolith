@@ -24,7 +24,7 @@ public class Trophy {
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "typeId")
+    @JoinColumn(name = "type_id")
     private TrophyType trophyType;
 
 }

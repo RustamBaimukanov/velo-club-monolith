@@ -7,13 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class SocialNetworkDTO {
+
+    private String account;
 
     private String name;
 
-    private String link;
-
-    private User user;
+    public SocialNetworkDTO(String name, String account) {
+        this.account = account;
+        this.name = name;
+    }
 }

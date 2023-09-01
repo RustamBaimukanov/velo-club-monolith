@@ -47,7 +47,7 @@ public class User implements Serializable, UserDetails {
     private Double height;
 
     @Column(name = "weight")
-    private Date weight;
+    private Double weight;
 
     @Column(name = "address")
     private String address;
@@ -85,6 +85,10 @@ public class User implements Serializable, UserDetails {
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<SocialNetwork> socialNetworks = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Set<EventResult> eventResults = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -155,4 +159,7 @@ public class User implements Serializable, UserDetails {
         this.password = password;
         this.roles = roles;
     }
+
+
+
 }

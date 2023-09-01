@@ -2,33 +2,41 @@ package by.itminsk.cyclingclubbackend.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
-@Table(name = "social_networks")
+@Table(name = "event_results")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocialNetwork {
+@ToString
+public class EventResult {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonIgnore
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "place")
+    private Integer place;
 
-    @Column(name = "account")
-    private String account;
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    @JsonIgnore
+    private Event event;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
+    @Transient
+    private Date date;
+
+    @Transient
+    private String name;
 }

@@ -25,6 +25,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @Transactional
@@ -48,6 +54,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private EventResultsRepository eventResultsRepository;
 
 
     private final AuthenticationManager authenticationManager;
@@ -145,6 +154,51 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String phoneNumber) {
         return iUserRepository.findUserByPhoneNumber(phoneNumber).orElse(new User());
+    }
+
+    @Override
+    public UserInfoDTO getUserInfo(String phoneNumber) {
+        UserInfoDTO userInfoDTO = iUserRepository.getUserByPhoneNumber(phoneNumber);
+        userInfoDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setEventResults(eventResultsRepository.findAllByUserId(userInfoDTO.getId()));
+        Map<Integer, List<EventResult>> eventMap = userInfoDTO
+                .getEventResults()
+                .stream()
+                .peek(eventResult -> {
+                    eventResult.setDate(eventResult.getEvent().getDate());
+                    eventResult.setName(eventResult.getEvent().getName());
+                })
+                .sorted(Comparator.comparingInt(eventResult -> {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(eventResult.getDate());
+                            return calendar.get(Calendar.YEAR);
+                        })
+                        //Comparator.comparing(o -> o.getItem().getValue())
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(eventResult.getDate());
+//                    return Comparator.comparingInt(eventResult.getPlace());
+                        //}
+                )
+                .collect(groupingBy(eventResult -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(eventResult.getEvent().getDate());
+                    return calendar.get(Calendar.YEAR);
+                }));
+        userInfoDTO.setEvent(eventMap);
+//                .map(eventResult -> {
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(eventResult.getEvent().getDate());
+//                    return calendar.get(Calendar.YEAR);
+//                })
+        //.filter(distinctByKey(year -> year)).toList();
+        return userInfoDTO;
+    }
+
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     @Override

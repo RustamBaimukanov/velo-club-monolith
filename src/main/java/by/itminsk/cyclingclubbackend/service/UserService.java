@@ -8,6 +8,7 @@ import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
 import by.itminsk.cyclingclubbackend.model.user.Role;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserDTO;
+import by.itminsk.cyclingclubbackend.model.user.UserInfoDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -58,6 +59,6 @@ public interface UserService {
 
     User getUser(String phoneNumber);
 
-
+    UserInfoDTO getUserInfo(String phoneNumber);
 
 }

@@ -21,7 +21,7 @@ public class RegisterByAdminDto implements Serializable {
     String email;
     String password;
     Double height;
-    Date weight;
+    Double weight;
     String address;
     Date birth;
     String gender;
