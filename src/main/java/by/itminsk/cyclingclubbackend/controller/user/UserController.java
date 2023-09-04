@@ -27,7 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/user/event")
-    public Map<Integer, List<EventResult>> getEvent(){
-        return userService.getUserInfo("+375251111111").getEvent();
+    public Map<Integer, List<EventResult>> getEventByUser(@RequestParam(value = "tel", required = false) String tel){
+        if (tel== null) return userService.getUserInfo("+375251111111").getEvent();
+        return userService.getUserInfo(tel).getEvent();
     }
 }

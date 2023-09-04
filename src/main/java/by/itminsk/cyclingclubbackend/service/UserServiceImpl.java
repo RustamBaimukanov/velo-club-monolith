@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
@@ -168,32 +169,20 @@ public class UserServiceImpl implements UserService {
                     eventResult.setDate(eventResult.getEvent().getDate());
                     eventResult.setName(eventResult.getEvent().getName());
                 })
-                .sorted(Comparator.comparingInt(eventResult -> {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(eventResult.getDate());
-                            return calendar.get(Calendar.YEAR);
-                        })
-                )
-                .collect(groupingBy(eventResult -> {
+                .collect(Collectors.groupingBy(eventResult -> {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(eventResult.getEvent().getDate());
                     return calendar.get(Calendar.YEAR);
-                }));
-        userInfoDTO.setEvent(eventMap);
-//                .map(eventResult -> {
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.setTime(eventResult.getEvent().getDate());
-//                    return calendar.get(Calendar.YEAR);
-//                })
-        //.filter(distinctByKey(year -> year)).toList();
+                }, LinkedHashMap::new, Collectors.toList()
+                ) );
+        Map<Integer, List<EventResult>> integerListMap = new LinkedHashMap<>();
+        List<Integer> integerList = eventMap.keySet().stream().sorted(Comparator.comparingInt(Integer::intValue).reversed()).toList();
+        for (Integer year:
+             integerList) {
+            integerListMap.put(year, eventMap.get(year));
+        }
+        userInfoDTO.setEvent(integerListMap);
         return userInfoDTO;
-    }
-
-    public static <T> Predicate<T> distinctByKey(
-            Function<? super T, ?> keyExtractor) {
-
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     @Override
