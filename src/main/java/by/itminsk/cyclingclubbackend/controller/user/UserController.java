@@ -26,9 +26,14 @@ public class UserController {
         return userService.getUserInfo(loginDto.getTel());
     }
 
-    @GetMapping("/user/event")
-    public Map<Integer, List<EventResult>> getEventByUser(@RequestParam(value = "tel", required = false) String tel){
-        if (tel== null) return userService.getUserInfo("+375251111111").getEvent();
-        return userService.getUserInfo(tel).getEvent();
+    @PostMapping("/user/event")
+    public Map<Integer, List<EventResult>> getEventByUser(@RequestBody LoginDto loginDto){
+        if (loginDto.getTel() == null || loginDto.getTel().trim().equals("")) return userService.getUserInfo("+375251111111").getEvent();
+        try {
+            return userService.getUserInfo(loginDto.getTel()).getEvent();
+        }
+        catch (Exception e){
+            return null;
+        }
     }
 }
