@@ -27,8 +27,9 @@ public class UserController {
     }
 
     @PostMapping("/user/event")
-    public Map<Integer, List<EventResult>> getEventByUser(@RequestBody LoginDto loginDto){
-        if (loginDto.getTel() == null || loginDto.getTel().trim().equals("")) return userService.getUserInfo("+375251111111").getEvent();
+    public Map<Integer, List<EventResult>> getEventByUser(@RequestBody(required = false) LoginDto loginDto){
+        if (loginDto == null) return userService.getUserInfo("+375251111111").getEvent();
+        if (loginDto.getTel() == null) return userService.getUserInfo("+375251111111").getEvent();
         try {
             return userService.getUserInfo(loginDto.getTel()).getEvent();
         }
