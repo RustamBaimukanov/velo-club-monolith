@@ -42,6 +42,8 @@ public class UserInfoDTO {
 
     Set<EventResult> eventResults;
 
+    Set<Trophy> trophies;
+
 
     Team team;
 

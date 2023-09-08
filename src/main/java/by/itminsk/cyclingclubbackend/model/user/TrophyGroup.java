@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "trophy_type")
+@Table(name = "trophy_group")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TrophyType {
+public class TrophyGroup {
 
     @Id
     @Column(name = "id")
@@ -20,9 +20,4 @@ public class TrophyType {
     @Column(name = "name")
     private String name;
 
-//    @Column(name = "svg", length = 4000)
-//    private String svg;
-
-
-    
 }

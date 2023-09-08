@@ -61,4 +61,8 @@ public interface UserService {
 
     UserInfoDTO getUserInfo(String phoneNumber);
 
+
+    Long getIdFromPhoneNumber(String phoneNumber);
+
+
 }

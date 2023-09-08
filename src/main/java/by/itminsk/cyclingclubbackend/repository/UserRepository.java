@@ -20,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     UserInfoDTO getUserByPhoneNumber(String phoneNumber);
 
+    @Query(value = "select u.id from User u where u.phoneNumber=?1")
+    Long getIdFromPhoneNumber(String phoneNumber);
+
 
     Boolean existsByPhoneNumber(String phoneNumber);
 

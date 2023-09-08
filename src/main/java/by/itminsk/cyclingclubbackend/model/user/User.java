@@ -17,7 +17,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class User implements Serializable, UserDetails {
 
     @Id
@@ -90,12 +89,8 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "user_id")
     private Set<EventResult> eventResults = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_trophies",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "trophy_id")
-    )
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private Set<Trophy> trophies = new HashSet<>();
 
     @ManyToOne

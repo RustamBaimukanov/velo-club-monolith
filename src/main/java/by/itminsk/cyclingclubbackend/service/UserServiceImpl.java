@@ -10,6 +10,7 @@ import by.itminsk.cyclingclubbackend.repository.*;
 import by.itminsk.cyclingclubbackend.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.team.TeamService;
+import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private TrophyRepository trophyRepository;
+    private TrophyService trophyService;
 
     @Autowired
     private SocialNetworkRepository socialNetworkRepository;
@@ -161,6 +162,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoDTO getUserInfo(String phoneNumber) {
         UserInfoDTO userInfoDTO = iUserRepository.getUserByPhoneNumber(phoneNumber);
         userInfoDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setTrophies(trophyService.findAllByUserId(userInfoDTO.getId()));
         userInfoDTO.setEventResults(eventResultsRepository.findAllByUserId(userInfoDTO.getId()));
         Map<Integer, List<EventResult>> eventMap = userInfoDTO
                 .getEventResults()
@@ -186,6 +188,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Long getIdFromPhoneNumber(String phoneNumber) {
+        return iUserRepository.getIdFromPhoneNumber(phoneNumber);
+    }
+
+    @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
         registerDto.setEmail(registerDto.getEmail().trim());
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail().length() != 0)) {
@@ -206,9 +213,8 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName("Велолюбитель");
             user.addRole(role);
-//            Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-//            user.addTrophy(trophy);
-            iUserRepository.save(user);
+            iUserRepository.saveAndFlush(user);
+            trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
             String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName()));
             return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
 
