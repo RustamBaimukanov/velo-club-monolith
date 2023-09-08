@@ -15,10 +15,7 @@ public class RestoreController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/restore-password")
-    public ResponseEntity<?> restorePassword(@RequestBody LoginDto loginDto) throws RestoreUserNotFound {
-        return  userService.restorePassword(loginDto);
-    }
+
 
 
 }

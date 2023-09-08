@@ -255,7 +255,6 @@ public class UserServiceImpl implements UserService {
         if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0)) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
         } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0) {
-            System.out.println("TEST" + registerByAdminDto.getEmail().length());
             return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
         } else if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel())) {
             return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);

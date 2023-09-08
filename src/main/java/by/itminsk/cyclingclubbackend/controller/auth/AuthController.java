@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.controller.auth;
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
+import by.itminsk.cyclingclubbackend.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.model.user.*;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/auth")
 public class AuthController {
 
     @Autowired
@@ -53,36 +54,9 @@ public class AuthController {
         return  userService.authenticate(loginDto);
     }
 
-
-    @GetMapping("/xxx")
-    public String main(){
-        return "IS Authenticated";
-    }
-
-    @GetMapping("/get/cities")
-    public List<City> getCities(){
-        return cityService.getCities();
-    }
-
-    @GetMapping("/get/teams")
-    public List<Team> getTeams(){
-        return teamService.getTeams();
-    }
-
-    @GetMapping("/get/qualifications")
-    public List<Role> getQualifications(){
-        return roleService.getQualifications();
-    }
-
-    @GetMapping("/get/user-img")
-    public ResponseEntity<byte[]> getFile(@RequestBody LoginDto loginDto) {
-
-        User user = userService.getUser(loginDto.getTel());
-        String filename = "";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(user.getPhotoFormat()));
-        headers.add("content-disposition", "inline;filename=" + filename);
-        return new ResponseEntity<byte[]>(user.getPhoto(), headers, HttpStatus.OK);
+    @PostMapping("/restore-password")
+    public ResponseEntity<?> restorePassword(@RequestBody LoginDto loginDto) throws RestoreUserNotFound {
+        return  userService.restorePassword(loginDto);
     }
 
 

@@ -32,11 +32,13 @@ public class SpringSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/register", "/api/authenticate", "/hello", "/api/signup", "/api/restore-password", "/api/signup-complete",  "/api/verify",  "/api/get/**", "/api/get/qualifications", "/api/get/cities", "/api/get/teams", "/api/get/event","/api/check-tel-restore", "/api/check-tel-signup", "/api/restore/restore-password").permitAll()
-            .requestMatchers( "test/**").authenticated()
-            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/test/**","/api/xxx").permitAll()
-            .requestMatchers("/api/").authenticated()
-            .anyRequest().permitAll()
+            //.requestMatchers("/api/register", "/api/authenticate", "/hello", "/api/signup", "/api/restore-password",
+            // "/api/signup-complete",  "/api/verify",  "/api/get/**", "/api/get/qualifications", "/api/get/cities",
+            // "/api/get/teams", "/api/get/event","/api/check-tel-restore", "/api/check-tel-signup",
+            // "/api/restore/restore-password").permitAll()
+            .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
+            .requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+            .anyRequest().authenticated()
             .and()
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

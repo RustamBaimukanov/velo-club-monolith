@@ -10,6 +10,8 @@ import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
 import com.google.gson.GsonBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api")
 public class UserController {
 
     @Autowired
@@ -30,7 +32,12 @@ public class UserController {
 
     @PostMapping("/user/info")
     public UserInfoDTO getUser(@RequestBody LoginDto loginDto, HttpServletRequest request) {
-        return userService.getUserInfo(loginDto.getTel());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        String authorities = authentication.getAuthorities().toString();
+
+        System.out.println(currentPrincipalName + ":::" + authorities);
+        return userService.getUserInfo(currentPrincipalName);
     }
 
     @PostMapping("/user/event")

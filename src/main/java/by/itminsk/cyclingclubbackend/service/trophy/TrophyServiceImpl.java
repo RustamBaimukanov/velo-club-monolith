@@ -39,7 +39,6 @@ public class TrophyServiceImpl implements TrophyService {
 
     @Override
     public Set<Trophy> findAllByUserId(Long userId) {
-        System.out.println(userId);
         return trophyRepository.findAllByUserId(userId);
     }
 
