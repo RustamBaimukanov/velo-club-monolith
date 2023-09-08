@@ -31,7 +31,7 @@ public class UserController {
 
 
     @PostMapping("/user/info")
-    public UserInfoDTO getUser(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public UserInfoDTO getUser(@RequestBody(required = false) LoginDto loginDto, HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         String authorities = authentication.getAuthorities().toString();
