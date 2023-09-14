@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.repository;
 import by.itminsk.cyclingclubbackend.model.user.EditUserDTO;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserInfoDTO;
+import by.itminsk.cyclingclubbackend.model.user.UserMenuDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,7 +22,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     UserInfoDTO getUserByPhoneNumber(String phoneNumber);
 
-    EditUserDTO getEditableUserByPhoneNumber(String phoneNumber);
+    EditUserDTO findByPhoneNumber(String phoneNumber);
+
+    UserMenuDTO getUserMenuByPhoneNumber(String phoneNumber);
+
 
 
     @Query(value = "select u.id from User u where u.phoneNumber=?1")

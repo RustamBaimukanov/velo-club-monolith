@@ -190,10 +190,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EditUserDTO getEditableUser(String phoneNumber) {
-        EditUserDTO editUserDTO = iUserRepository.getEditableUserByPhoneNumber(phoneNumber);
+        EditUserDTO editUserDTO = iUserRepository.findByPhoneNumber(phoneNumber);
         editUserDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(editUserDTO.getId()));
         editUserDTO.setQualification(roleRepository.findRoleByUser(editUserDTO.getId()));
         return editUserDTO;
+    }
+
+    @Override
+    public UserMenuDTO getUserMenu(String phoneNumber) {
+        return iUserRepository.getUserMenuByPhoneNumber(phoneNumber);
     }
 
     @Override

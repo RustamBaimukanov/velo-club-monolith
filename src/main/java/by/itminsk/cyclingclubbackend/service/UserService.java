@@ -60,6 +60,8 @@ public interface UserService {
 
     EditUserDTO getEditableUser(String phoneNumber);
 
+    UserMenuDTO getUserMenu(String phoneNumber);
+
 
 
     Long getIdFromPhoneNumber(String phoneNumber);

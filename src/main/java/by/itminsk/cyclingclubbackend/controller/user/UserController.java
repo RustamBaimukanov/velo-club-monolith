@@ -45,6 +45,15 @@ public class UserController {
         return userService.getEditableUser(currentPrincipalName);
     }
 
+    @GetMapping("/user/menu")
+    public UserMenuDTO getUserMenu() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        String authorities = authentication.getAuthorities().toString();
+        System.out.println(currentPrincipalName + ":::" + authorities);
+        return userService.getUserMenu(currentPrincipalName);
+    }
+
     @PostMapping("/user/event")
     public Map<Integer, List<EventResult>> getEventByUser(@RequestBody(required = false) LoginDto loginDto) {
         if (loginDto == null) return userService.getUserInfo("+375251111111").getEvent();
