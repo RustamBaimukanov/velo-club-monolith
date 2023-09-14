@@ -33,8 +33,6 @@ public class EditUserDTO {
 
     byte[] photo;
 
-    String photoFormat;
-
     Set<SocialNetworkDTO> socialNetworks;
 
     Team team;
@@ -48,7 +46,7 @@ public class EditUserDTO {
     Double weight;
 
 
-    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo, String photoFormat, Team team, City city, Double height, Double weight) {
+    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo , Team team, City city, Double height, Double weight) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -57,7 +55,6 @@ public class EditUserDTO {
         this.birthDate = birthDate;
         this.sex = sex;
         this.photo = photo;
-        this.photoFormat = photoFormat;
         this.team = team;
         this.city = city;
         this.height = height;

@@ -30,8 +30,6 @@ public class UserInfoDTO {
 
     byte[] photo;
 
-    String photoFormat;
-
     Set<SocialNetworkDTO> socialNetworks;
 
     @JsonIgnore
@@ -48,7 +46,7 @@ public class UserInfoDTO {
     String qualification;
 
 
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo, String photoFormat, Team team, City city) {
+    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo , Team team, City city) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -57,7 +55,6 @@ public class UserInfoDTO {
         this.birthDate = birthDate;
         this.sex = sex;
         this.photo = photo;
-        this.photoFormat = photoFormat;
         this.team = team;
         this.city = city;
     }
