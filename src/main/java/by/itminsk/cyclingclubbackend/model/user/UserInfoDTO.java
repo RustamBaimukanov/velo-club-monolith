@@ -51,6 +51,8 @@ public class UserInfoDTO {
 
     Map<Integer, List<EventResult>> event;
 
+    String qualification;
+
 
     public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, Double height, Double weight, String address, byte[] photo, String photoFormat, Team team, City city) {
         this.id = id;

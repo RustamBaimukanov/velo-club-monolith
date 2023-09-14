@@ -164,6 +164,7 @@ public class UserServiceImpl implements UserService {
         userInfoDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(userInfoDTO.getId()));
         userInfoDTO.setTrophies(trophyService.findAllByUserId(userInfoDTO.getId()));
         userInfoDTO.setEventResults(eventResultsRepository.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setQualification(roleRepository.findRoleByUser(userInfoDTO.getId()));
         Map<Integer, List<EventResult>> eventMap = userInfoDTO
                 .getEventResults()
                 .stream()

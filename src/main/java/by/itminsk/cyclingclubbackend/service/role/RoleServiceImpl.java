@@ -18,4 +18,9 @@ public class RoleServiceImpl implements RoleService{
     public List<RoleDto> getQualifications() {
         return roleRepository.findAllByIdIsNot(1L);
     }
+
+    @Override
+    public String getQualificationByUserId(Long userId) {
+        return roleRepository.findRoleByUser(userId);
+    }
 }
