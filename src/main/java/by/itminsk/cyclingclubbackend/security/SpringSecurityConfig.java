@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 
 @Configuration
@@ -27,7 +30,13 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception
     { http
         // ...
-		.cors(cors -> cors.disable())
+		.cors(cors -> cors.configurationSource(request -> {
+            var cr = new CorsConfiguration();
+            cr.setAllowedOrigins(List.of("http://localhost:4200"));
+            cr.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+            cr.setAllowedHeaders(List.of("*"));
+            return cr;
+        }))
             .csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
@@ -37,6 +46,7 @@ public class SpringSecurityConfig {
             // "/api/get/teams", "/api/get/event","/api/check-tel-restore", "/api/check-tel-signup",
             // "/api/restore/restore-password").permitAll()
             .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
+            .requestMatchers("/api/private/**").hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
             .anyRequest().authenticated()
             .and()

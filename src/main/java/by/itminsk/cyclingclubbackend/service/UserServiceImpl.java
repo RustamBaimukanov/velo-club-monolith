@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
             user.setSex(registerDto.getGender());
             user.setCity(cityService.getCity(registerDto.getCity()));
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-            Role role = roleRepository.findRoleByName("Велолюбитель");
+            Role role = roleRepository.findRoleByName("DABBLER");
             user.addRole(role);
             iUserRepository.saveAndFlush(user);
             trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
@@ -235,7 +235,7 @@ public class UserServiceImpl implements UserService {
                 user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
                 user.setBirthDate(registerDto.getBirth());
                 user.setSex(registerDto.getGender());
-                Role role = roleRepository.findRoleByName("Велолюбитель");
+                Role role = roleRepository.findRoleByName("DABBLER");
                 //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
                 user.addRole(role);
                 //user.addTrophy(trophy);
@@ -251,7 +251,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
-        registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim());
+        registerByAdminDto.setEmail(registerByAdminDto.getEmail());
         if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0)) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
         } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0) {
@@ -311,7 +311,7 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<String> rolesNames = new ArrayList<>();
-        //user.getRoles().forEach(r -> rolesNames.add(r.getName()));
+        user.getRoles().forEach(r -> rolesNames.add(r.getName()));
         return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), "Bearer "), HttpStatus.OK);
 
     }

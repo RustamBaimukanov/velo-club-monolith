@@ -25,6 +25,9 @@ public class Role implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "qualification")
+    private String qualification;
+
     public Role(String name) {
         this.name = name;
     }

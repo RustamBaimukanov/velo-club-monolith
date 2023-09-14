@@ -1,9 +1,7 @@
 package by.itminsk.cyclingclubbackend.dto;
 
 import jakarta.persistence.Column;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +10,8 @@ import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterByAdminDto implements Serializable {
 
     String firstName ;

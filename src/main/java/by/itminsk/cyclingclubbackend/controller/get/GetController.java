@@ -1,10 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller.get;
 
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
-import by.itminsk.cyclingclubbackend.model.user.City;
-import by.itminsk.cyclingclubbackend.model.user.Role;
-import by.itminsk.cyclingclubbackend.model.user.Team;
-import by.itminsk.cyclingclubbackend.model.user.User;
+import by.itminsk.cyclingclubbackend.model.user.*;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.role.RoleService;
@@ -46,7 +43,7 @@ public class GetController {
     }
 
     @GetMapping("/qualifications")
-    public List<Role> getQualifications(){
+    public List<RoleDto> getQualifications(){
         return roleService.getQualifications();
     }
 

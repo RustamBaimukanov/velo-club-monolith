@@ -48,23 +48,12 @@ public class JwtUtilities{
     }
 
     public String generateToken(String phoneNumber , List<String> roles) {
-
+        System.out.println(roles.toString());
         return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.MILLIS)))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    public String generateToken(String phoneNumber , List<String> roles, boolean isRememberUser) {
-
-        if (isRememberUser) return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(Date.from(Instant.now().plus(2629800000L, ChronoUnit.MILLIS)))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
-        else {
-            return Jwts.builder().setSubject(phoneNumber).claim("role",roles).setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.MILLIS)))
-                    .signWith(SignatureAlgorithm.HS256, secret).compact();
-        }
-    }
 
     public boolean validateToken(String token) {
         try {

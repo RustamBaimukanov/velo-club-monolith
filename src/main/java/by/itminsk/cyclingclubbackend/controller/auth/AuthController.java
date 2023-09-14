@@ -38,11 +38,7 @@ public class AuthController {
     @Autowired
     private RoleService roleService;
 
-    @PostMapping("/signup-complete")
-    public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto) throws IOException {
 
-        return  userService.registerByAdmin(registerDto);
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup (@RequestBody RegisterDto registerDto)

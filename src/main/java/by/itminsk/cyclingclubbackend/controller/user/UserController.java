@@ -35,7 +35,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         String authorities = authentication.getAuthorities().toString();
-
         System.out.println(currentPrincipalName + ":::" + authorities);
         return userService.getUserInfo(currentPrincipalName);
     }
