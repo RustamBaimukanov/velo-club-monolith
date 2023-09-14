@@ -189,6 +189,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public EditUserDTO getEditableUser(String phoneNumber) {
+        EditUserDTO editUserDTO = iUserRepository.getEditableUserByPhoneNumber(phoneNumber);
+        editUserDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(editUserDTO.getId()));
+        editUserDTO.setQualification(roleRepository.findRoleByUser(editUserDTO.getId()));
+        return editUserDTO;
+    }
+
+    @Override
     public Long getIdFromPhoneNumber(String phoneNumber) {
         return iUserRepository.getIdFromPhoneNumber(phoneNumber);
     }

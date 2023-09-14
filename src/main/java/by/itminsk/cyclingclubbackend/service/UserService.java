@@ -5,10 +5,7 @@ import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.model.login.LoginStatus;
-import by.itminsk.cyclingclubbackend.model.user.Role;
-import by.itminsk.cyclingclubbackend.model.user.User;
-import by.itminsk.cyclingclubbackend.model.user.UserDTO;
-import by.itminsk.cyclingclubbackend.model.user.UserInfoDTO;
+import by.itminsk.cyclingclubbackend.model.user.*;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -60,6 +57,9 @@ public interface UserService {
     User getUser(String phoneNumber);
 
     UserInfoDTO getUserInfo(String phoneNumber);
+
+    EditUserDTO getEditableUser(String phoneNumber);
+
 
 
     Long getIdFromPhoneNumber(String phoneNumber);

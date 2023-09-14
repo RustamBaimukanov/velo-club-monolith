@@ -1,10 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller.user;
 
 import by.itminsk.cyclingclubbackend.dto.LoginDto;
-import by.itminsk.cyclingclubbackend.model.user.EventResult;
-import by.itminsk.cyclingclubbackend.model.user.Trophy;
-import by.itminsk.cyclingclubbackend.model.user.User;
-import by.itminsk.cyclingclubbackend.model.user.UserInfoDTO;
+import by.itminsk.cyclingclubbackend.model.user.*;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
 import com.google.gson.GsonBuilder;
@@ -37,6 +34,15 @@ public class UserController {
         String authorities = authentication.getAuthorities().toString();
         System.out.println(currentPrincipalName + ":::" + authorities);
         return userService.getUserInfo(currentPrincipalName);
+    }
+
+    @GetMapping("/user/edit")
+    public EditUserDTO getEditableUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        String authorities = authentication.getAuthorities().toString();
+        System.out.println(currentPrincipalName + ":::" + authorities);
+        return userService.getEditableUser(currentPrincipalName);
     }
 
     @PostMapping("/user/event")

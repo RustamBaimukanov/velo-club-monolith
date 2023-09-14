@@ -1,17 +1,20 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 @Getter
 @Setter
 @EqualsAndHashCode
-public class UserInfoDTO {
+public class EditUserDTO {
 
     @JsonIgnore
     Long id;
@@ -34,21 +37,18 @@ public class UserInfoDTO {
 
     Set<SocialNetworkDTO> socialNetworks;
 
-    @JsonIgnore
-    Set<EventResult> eventResults;
-
-    Set<Trophy> trophies;
-
     Team team;
 
     City city;
 
-    Map<Integer, List<EventResult>> event;
-
     String qualification;
 
+    Double height;
 
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo, String photoFormat, Team team, City city) {
+    Double weight;
+
+
+    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo, String photoFormat, Team team, City city, Double height, Double weight) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -60,10 +60,9 @@ public class UserInfoDTO {
         this.photoFormat = photoFormat;
         this.team = team;
         this.city = city;
+        this.height = height;
+        this.weight = weight;
     }
-
-    //Set<EventResult> eventResults;
-
 
 
 }

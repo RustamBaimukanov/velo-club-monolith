@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.repository;
 
+import by.itminsk.cyclingclubbackend.model.user.EditUserDTO;
 import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.UserInfoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByPhoneNumber(String phoneNumber);
 
     UserInfoDTO getUserByPhoneNumber(String phoneNumber);
+
+    EditUserDTO getEditableUserByPhoneNumber(String phoneNumber);
+
 
     @Query(value = "select u.id from User u where u.phoneNumber=?1")
     Long getIdFromPhoneNumber(String phoneNumber);
