@@ -7,6 +7,8 @@ import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
 import com.google.gson.GsonBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,8 @@ public class UserController {
     private TrophyService trophyService;
 
 
-    @PostMapping("/user/info")
-    public UserInfoDTO getUser(@RequestBody(required = false) LoginDto loginDto, HttpServletRequest request) {
+    @GetMapping("/user/info")
+    public UserInfoDTO getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         String authorities = authentication.getAuthorities().toString();
@@ -45,6 +47,12 @@ public class UserController {
         return userService.getEditableUser(currentPrincipalName);
     }
 
+//    @PostMapping("/user/edit")
+//    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
+//        return userService.editUser(updateUserDTO);
+//
+//    }
+
     @GetMapping("/user/menu")
     public UserMenuDTO getUserMenu() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,12 +62,12 @@ public class UserController {
         return userService.getUserMenu(currentPrincipalName);
     }
 
-    @PostMapping("/user/event")
-    public Map<Integer, List<EventResult>> getEventByUser(@RequestBody(required = false) LoginDto loginDto) {
-        if (loginDto == null) return userService.getUserInfo("+375251111111").getEvent();
-        if (loginDto.getTel() == null) return userService.getUserInfo("+375251111111").getEvent();
+    @GetMapping("/user/event")
+    public Map<Integer, List<EventResult>> getEventByUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         try {
-            return userService.getUserInfo(loginDto.getTel()).getEvent();
+            return userService.getUserInfo(currentPrincipalName).getEvent();
         } catch (Exception e) {
             return null;
         }
