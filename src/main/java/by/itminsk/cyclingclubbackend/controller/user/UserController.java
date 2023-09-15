@@ -87,10 +87,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/event")
-    public Map<Integer, List<EventResult>> getEvent() {
-
-        return userService.getUserInfo("+375251111111").getEvent();
-
-    }
+//    @GetMapping("/user/event")
+//    public Map<Integer, List<EventResult>> getEvent() {
+//
+//        return userService.getUserInfo("+375251111111").getEvent();
+//
+//    }
 }
