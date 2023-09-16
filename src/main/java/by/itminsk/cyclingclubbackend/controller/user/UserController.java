@@ -47,11 +47,11 @@ public class UserController {
         return userService.getEditableUser(currentPrincipalName);
     }
 
-//    @PostMapping("/user/edit")
-//    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
-//        return userService.editUser(updateUserDTO);
-//
-//    }
+    @PostMapping("/user/edit")
+    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
+        return userService.editUser(updateUserDTO);
+
+    }
 
     @GetMapping("/user/menu")
     public UserMenuDTO getUserMenu() {

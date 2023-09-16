@@ -202,16 +202,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
+        System.out.println(user.get().getEmail()  + ":::" + updateUserDTO.getEmail());
+        if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
+                && !updateUserDTO.getEmail().equals(user.get().getEmail())){
+            return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
+        }
+//        iUserRepository.findUserByEmailAndEmailIsNotNull(updateUserDTO.getEmail()).if
+        user.ifPresent(u -> {
+            u.setFirstName(updateUserDTO.getFirstName());
+            u.setLastName(updateUserDTO.getLastName());
+            u.setEmail(updateUserDTO.getEmail());
+            u.setBirthDate(updateUserDTO.getBirth());
+            u.setSex(updateUserDTO.getGender());
+            u.setHeight(updateUserDTO.getHeight());
+            System.out.println(updateUserDTO.getHeight());
+            u.setWeight(updateUserDTO.getWeight());
+            if (updateUserDTO.getUserImg() != null){
+                try {
+                    u.setPhoto(updateUserDTO.getUserImg().getBytes());
+                    u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            iUserRepository.save(u);
+        });
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
     public Long getIdFromPhoneNumber(String phoneNumber) {
         return iUserRepository.getIdFromPhoneNumber(phoneNumber);
     }
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        registerDto.setEmail(registerDto.getEmail().trim());
-        if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail().length() != 0)) {
+        registerDto.setEmail(registerDto.getEmail().trim().length() == 0 ? null : registerDto.getEmail());
+        if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail()!=null) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
-        } else if (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail().length() != 0) {
+        } else if (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail() != null) {
             return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
         } else if (iUserRepository.existsByPhoneNumber(registerDto.getTel())) {
             return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);
@@ -265,10 +298,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
-        registerByAdminDto.setEmail(registerByAdminDto.getEmail());
-        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0)) {
+        registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim().length() == 0 ? null : registerByAdminDto.getEmail());
+        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) && registerByAdminDto.getEmail()!=null) {
             return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
-        } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail().length() != 0) {
+        } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail() != null) {
             return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
         } else if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel())) {
             return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);

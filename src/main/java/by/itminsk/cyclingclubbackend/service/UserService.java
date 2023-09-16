@@ -62,6 +62,8 @@ public interface UserService {
 
     UserMenuDTO getUserMenu(String phoneNumber);
 
+    ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO);
+
 
 
     Long getIdFromPhoneNumber(String phoneNumber);
