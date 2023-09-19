@@ -18,7 +18,6 @@ public class EventResult {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @JsonIgnore
     private Long id;
 
     @Column(name = "place")

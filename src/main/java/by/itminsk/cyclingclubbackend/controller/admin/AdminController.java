@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller.admin;
 
 import by.itminsk.cyclingclubbackend.dto.RegisterByAdminDto;
+import by.itminsk.cyclingclubbackend.model.user.UpdateUserDTO;
 import by.itminsk.cyclingclubbackend.service.UserService;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.role.RoleService;
@@ -40,5 +41,11 @@ public class AdminController {
         System.out.println(currentPrincipalName + "---" + authorities);
         response.getHeaderNames().forEach(System.out::println);
         return  userService.registerByAdmin(registerDto);
+    }
+
+    @PostMapping("/user/edit")
+    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
+        return userService.editUserByAdmin(updateUserDTO);
+
     }
 }

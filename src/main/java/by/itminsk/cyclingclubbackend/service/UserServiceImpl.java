@@ -206,6 +206,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
+        if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         System.out.println(user.get().getEmail()  + ":::" + updateUserDTO.getEmail());
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())){
@@ -233,6 +234,36 @@ public class UserServiceImpl implements UserService {
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
+        Optional<User> user = iUserRepository.findUserByPhoneNumber(updateUserDTO.getTel());
+        if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
+        if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
+                && !updateUserDTO.getEmail().equals(user.get().getEmail())){
+            return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
+        }
+//        iUserRepository.findUserByEmailAndEmailIsNotNull(updateUserDTO.getEmail()).if
+        user.ifPresent(u -> {
+            u.setFirstName(updateUserDTO.getFirstName());
+            u.setLastName(updateUserDTO.getLastName());
+            u.setEmail(updateUserDTO.getEmail());
+            u.setBirthDate(updateUserDTO.getBirth());
+            u.setSex(updateUserDTO.getGender());
+            u.setHeight(updateUserDTO.getHeight());
+            System.out.println(updateUserDTO.getHeight());
+            u.setWeight(updateUserDTO.getWeight());
+            if (updateUserDTO.getUserImg() != null){
+                try {
+                    u.setPhoto(updateUserDTO.getUserImg().getBytes());
+                    u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            iUserRepository.save(u);
+        });
+        return new ResponseEntity<>(HttpStatus.OK);    }
 
     @Override
     public Long getIdFromPhoneNumber(String phoneNumber) {

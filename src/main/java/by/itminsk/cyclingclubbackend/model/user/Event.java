@@ -29,6 +29,7 @@ public class Event {
     @Column(name = "date")
     private Date date;
 
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
