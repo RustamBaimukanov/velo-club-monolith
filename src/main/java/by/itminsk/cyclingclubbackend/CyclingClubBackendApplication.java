@@ -1,17 +1,7 @@
 package by.itminsk.cyclingclubbackend;
 
-import by.itminsk.cyclingclubbackend.dto.RegisterDto;
-import by.itminsk.cyclingclubbackend.model.user.*;
-import by.itminsk.cyclingclubbackend.repository.*;
-import by.itminsk.cyclingclubbackend.service.UserService;
-import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.*;
 
 @SpringBootApplication
         //(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
