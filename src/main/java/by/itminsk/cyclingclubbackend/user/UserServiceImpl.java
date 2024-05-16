@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.user;
 
+import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.user.dto.BearerToken;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.user.dto.RegisterByAdminDto;
@@ -356,11 +357,10 @@ public class UserServiceImpl implements UserService {
                 user.setPhoto(registerByAdminDto.getUserImg().getBytes());
                 user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
             }
-            //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-            //user.addTrophy(trophy);
             Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
             user.addRole(role);
-            iUserRepository.save(user);
+            iUserRepository.saveAndFlush(user);
+            trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
