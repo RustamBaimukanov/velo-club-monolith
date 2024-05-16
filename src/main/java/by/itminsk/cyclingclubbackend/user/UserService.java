@@ -48,7 +48,7 @@ public interface UserService {
 
     Role saveRole(Role role);
 
-    User saverUser (User user) ;
+    User saverUser (User user);
 
     Boolean existByPhoneNumber(String phoneNumber);
 
@@ -65,8 +65,6 @@ public interface UserService {
     ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO);
 
     ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO);
-
-
 
 
     Long getIdFromPhoneNumber(String phoneNumber);

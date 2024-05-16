@@ -6,6 +6,7 @@ import by.itminsk.cyclingclubbackend.user.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.user.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.event.EventResult;
 import by.itminsk.cyclingclubbackend.event.EventResultsRepository;
+import by.itminsk.cyclingclubbackend.util.ImageUtil;
 import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.role.RoleRepository;
@@ -225,7 +226,7 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             if (updateUserDTO.getUserImg() != null){
                 try {
-                    u.setPhoto(updateUserDTO.getUserImg().getBytes());
+                    u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
                     u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -256,7 +257,7 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             if (updateUserDTO.getUserImg() != null){
                 try {
-                    u.setPhoto(updateUserDTO.getUserImg().getBytes());
+                    u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
                     u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> postEditableUser(@RequestBody UpdateUserDTO updateUserDTO) {
         return userService.editUser(updateUserDTO);
 
     }
