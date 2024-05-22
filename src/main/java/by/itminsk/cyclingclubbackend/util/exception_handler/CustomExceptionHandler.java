@@ -24,5 +24,11 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>("Такой пользователь не существует",HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {ObjectNotFound.class})
+    protected ResponseEntity<?> objectNotFound(final ObjectNotFound ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
 

@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.event;
 
 import by.itminsk.cyclingclubbackend.event.dto.EventBlockDTO;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class EventServiceImpl implements EventService{
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
-    @Autowired
-    private EventResultsRepository eventResultsRepository;
+    private final EventResultsRepository eventResultsRepository;
 
     @Override
     public EventBlockDTO getEvent(Long id) {

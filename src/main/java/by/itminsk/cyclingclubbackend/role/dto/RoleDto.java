@@ -6,15 +6,18 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@ToString
 public class RoleDto {
 
     private Long id;
 
-    private String name;
+    private RoleEnum name;
 
-    public RoleDto(Long id, String qualification) {
+    private String qualification;
+
+
+    public RoleDto(Long id, RoleEnum name, String qualification) {
         this.id = id;
-        this.name = qualification;
+        this.name = name;
+        this.qualification = qualification;
     }
 }

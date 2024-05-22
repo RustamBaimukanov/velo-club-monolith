@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.r_city.City;
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
 import by.itminsk.cyclingclubbackend.team.Team;
@@ -9,6 +10,7 @@ import by.itminsk.cyclingclubbackend.user.UserService;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
 import by.itminsk.cyclingclubbackend.role.RoleService;
 import by.itminsk.cyclingclubbackend.team.TeamService;
+import by.itminsk.cyclingclubbackend.user.dto.UserGetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +48,11 @@ public class GetController {
     @GetMapping("/qualifications")
     public List<RoleDto> getQualifications(){
         return roleService.getQualifications();
+    }
+
+    @GetMapping("/users-except-role")
+    public List<UserGetDto> getUsersExceptRole(@RequestParam RoleEnum role){
+        return userService.getUsersExceptRole(role);
     }
 
     @GetMapping("/user-img")

@@ -1,6 +1,8 @@
 package by.itminsk.cyclingclubbackend.role;
 
 import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -8,11 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@EnableJpaRepositories
 @Repository
+@Hidden
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    Role findRoleByName(String name);
+    Role findRoleByName(RoleEnum name);
 
     List<RoleDto> findAllByIdIsNot(Long id);
 

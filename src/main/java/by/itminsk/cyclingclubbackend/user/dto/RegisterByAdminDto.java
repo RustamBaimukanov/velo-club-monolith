@@ -1,8 +1,12 @@
 package by.itminsk.cyclingclubbackend.user.dto;
 
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -22,10 +26,12 @@ public class RegisterByAdminDto implements Serializable {
     Double height;
     Double weight;
     String address;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     Date birth;
     String gender;
     String region;
     String club;
     MultipartFile userImg;
-    String qualification;
+    RoleEnum qualification;
 }

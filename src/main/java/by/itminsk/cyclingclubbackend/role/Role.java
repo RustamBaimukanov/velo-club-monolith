@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.role;
 
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,13 +23,14 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    private String name;
+    private RoleEnum name;
 
     @Column(name = "qualification")
     private String qualification;
 
-    public Role(String name) {
+    public Role(RoleEnum name) {
         this.name = name;
     }
 }

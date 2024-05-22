@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.user;
 
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.user.dto.BearerToken;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
@@ -113,7 +114,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setEmail("Ruler");
         //user.setPassword(this.passwordEncoder.encode("1111"));
-        user.addRole(roleRepository.findRoleByName("admin"));
+        user.setRole(roleRepository.findRoleByName(RoleEnum.ADMIN));
         userRepository.save(user);
     }
 
@@ -223,7 +224,6 @@ public class UserServiceImpl implements UserService {
             u.setBirthDate(updateUserDTO.getBirth());
             u.setSex(updateUserDTO.getGender());
             u.setHeight(updateUserDTO.getHeight());
-            System.out.println(updateUserDTO.getHeight());
             u.setWeight(updateUserDTO.getWeight());
             if (updateUserDTO.getUserImg() != null){
                 try {
@@ -274,6 +274,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserGetDto> getUsersExceptRole(RoleEnum role) {
+        return userRepository.findAllByRoleNameNot(role);
+    }
+
+    @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
         registerDto.setEmail(registerDto.getEmail().trim().length() == 0 ? null : registerDto.getEmail());
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail()!=null) {
@@ -292,11 +297,11 @@ public class UserServiceImpl implements UserService {
             user.setSex(registerDto.getGender());
             user.setCity(cityService.getCity(registerDto.getCity()));
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-            Role role = roleRepository.findRoleByName("DABBLER");
-            user.addRole(role);
+            Role role = roleRepository.findRoleByName(RoleEnum.DABBLER);
+            user.setRole(role);
             iUserRepository.saveAndFlush(user);
             trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
-            String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName()));
+            String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName().name()));
             return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
 
         }
@@ -316,9 +321,9 @@ public class UserServiceImpl implements UserService {
                 user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
                 user.setBirthDate(registerDto.getBirth());
                 user.setSex(registerDto.getGender());
-                Role role = roleRepository.findRoleByName("DABBLER");
+                Role role = roleRepository.findRoleByName(RoleEnum.DABBLER);
                 //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-                user.addRole(role);
+                user.setRole(role);
                 //user.addTrophy(trophy);
 
                 user.setCity(cityService.getCityById(1L));
@@ -358,7 +363,7 @@ public class UserServiceImpl implements UserService {
                 user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
             }
             Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
-            user.addRole(role);
+            user.setRole(role);
             iUserRepository.saveAndFlush(user);
             trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
             return new ResponseEntity<>(HttpStatus.OK);
@@ -390,9 +395,7 @@ public class UserServiceImpl implements UserService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        List<String> rolesNames = new ArrayList<>();
-        user.getRoles().forEach(r -> rolesNames.add(r.getName()));
-        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), rolesNames), "Bearer "), HttpStatus.OK);
+        return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), Collections.singletonList(user.getRole().getName().name())), "Bearer "), HttpStatus.OK);
 
     }
 

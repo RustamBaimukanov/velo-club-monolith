@@ -70,13 +70,9 @@ public class User implements Serializable, UserDetails {
     @Transient
     private String confirmPassword;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -108,10 +104,6 @@ public class User implements Serializable, UserDetails {
     private City city;
 
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
     public void addTrophy(Trophy trophy) {
         this.trophies.add(trophy);
     }
@@ -125,7 +117,7 @@ public class User implements Serializable, UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        authorities.add(new SimpleGrantedAuthority(this.role.getName().name()));
         return authorities;
     }
 
@@ -154,12 +146,6 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
-
-    public User(String email, String password, Set<Role> roles) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
 
 
 
