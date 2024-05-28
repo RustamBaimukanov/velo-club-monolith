@@ -10,8 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class City {
 
     @Id

@@ -29,7 +29,7 @@ public class RegisterByAdminDto implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     Date birth;
-    String gender;
+    GenderEnum gender;
     String region;
     String club;
     MultipartFile userImg;

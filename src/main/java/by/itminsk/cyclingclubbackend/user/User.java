@@ -7,6 +7,7 @@ import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetwork;
 import by.itminsk.cyclingclubbackend.team.Team;
 import by.itminsk.cyclingclubbackend.trophy.Trophy;
+import by.itminsk.cyclingclubbackend.user.dto.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User implements Serializable, UserDetails {
 
     @Id
@@ -45,8 +47,9 @@ public class User implements Serializable, UserDetails {
     @Column(name = "birth_date")
     private Date birthDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "sex")
-    private String sex;
+    private GenderEnum sex;
 
     @Column(name = "height")
     private Double height;
@@ -74,7 +77,7 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "users_news",
             joinColumns = @JoinColumn(name = "user_id"),

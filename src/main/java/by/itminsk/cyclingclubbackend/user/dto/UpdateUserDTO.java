@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.user.dto;
 
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -31,7 +32,7 @@ public class UpdateUserDTO {
     @Temporal(TemporalType.DATE)
     Date birth;
 
-    String gender;
+    GenderEnum gender;
 
     MultipartFile userImg;
 
@@ -39,7 +40,7 @@ public class UpdateUserDTO {
 
     String region;
 
-    String qualification;
+    RoleEnum qualification;
 
     Double height;
 

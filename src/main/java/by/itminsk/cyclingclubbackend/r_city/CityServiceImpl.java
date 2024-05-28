@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.r_city;
 
+import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,11 @@ public class CityServiceImpl implements CityService{
     @Override
     public City getCityById(Long id) {
         return cityRepository.findById(id).orElse(new City(1L,"Минск"));
+    }
+
+    @Override
+    public void cityExistenceValidator(Long id) {
+        if (!cityRepository.existsById(id)) throw new ObjectNotFound("Регион не найден.");
+
     }
 }

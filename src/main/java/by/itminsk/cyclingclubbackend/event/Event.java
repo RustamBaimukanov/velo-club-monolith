@@ -1,8 +1,10 @@
 package by.itminsk.cyclingclubbackend.event;
 
+import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.race.Race;
 import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.user.User;
+import by.itminsk.cyclingclubbackend.user.dto.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Event {
 
     @Id
@@ -30,13 +33,31 @@ public class Event {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "note")
+    private String note;
+
     @Column(name = "date")
     private Date date;
+
+    @Column(name = "available_birth_date_from")
+    private Date availableBirthDateFrom;
+
+    @Column(name = "available_birth_date_to")
+    private Date availableBirthDateTo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "available_gender")
+    private GenderEnum availableGender;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "race_id")
     private Race race;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
 
     @JsonIgnore
@@ -46,7 +67,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> availableRoles = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany
@@ -55,7 +76,7 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> users = new HashSet<>();
+    private Set<User> availableUsers = new HashSet<>();
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

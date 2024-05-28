@@ -56,4 +56,14 @@ public class RaceServiceImpl implements RaceService {
                 .routeStartPoint(race.getRouteStartPoint())
                 .routeEndPoint(race.getRouteEndPoint()).build()).collect(Collectors.toList());
     }
+
+    @Override
+    public Race findRaceById(Long id) {
+        return raceRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Маршрут не найден."));
+    }
+
+    @Override
+    public void raceExistenceValidator(Long id) {
+        if (!raceRepository.existsById(id)) throw new ObjectNotFound("Маршрут не найден.");
+    }
 }

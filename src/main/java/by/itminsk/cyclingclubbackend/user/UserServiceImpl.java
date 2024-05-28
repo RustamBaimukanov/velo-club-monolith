@@ -9,9 +9,11 @@ import by.itminsk.cyclingclubbackend.user.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.event.EventResult;
 import by.itminsk.cyclingclubbackend.event.EventResultsRepository;
 import by.itminsk.cyclingclubbackend.util.ImageUtil;
+import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.role.RoleRepository;
+import by.itminsk.cyclingclubbackend.util.exception_handler.UnacceptableDataException;
 import by.itminsk.cyclingclubbackend.util.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetworkRepository;
@@ -39,7 +41,6 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -211,7 +212,6 @@ public class UserServiceImpl implements UserService {
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
         if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
-        System.out.println(user.get().getEmail()  + ":::" + updateUserDTO.getEmail());
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())){
             return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
@@ -240,13 +240,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(updateUserDTO.getTel());
         if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())){
             return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
         }
-//        iUserRepository.findUserByEmailAndEmailIsNotNull(updateUserDTO.getEmail()).if
+
+
+
         user.ifPresent(u -> {
             u.setFirstName(updateUserDTO.getFirstName());
             u.setLastName(updateUserDTO.getLastName());
@@ -254,8 +258,8 @@ public class UserServiceImpl implements UserService {
             u.setBirthDate(updateUserDTO.getBirth());
             u.setSex(updateUserDTO.getGender());
             u.setHeight(updateUserDTO.getHeight());
-            System.out.println(updateUserDTO.getHeight());
             u.setWeight(updateUserDTO.getWeight());
+            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber())) throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
             if (updateUserDTO.getUserImg() != null){
                 try {
                     u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
@@ -276,6 +280,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserGetDto> getUsersExceptRole(RoleEnum role) {
         return userRepository.findAllByRoleNameNot(role);
+    }
+
+    @Override
+    public void userExistValidator(Long id) {
+        if (!userRepository.existsById(id)) throw new ObjectNotFound("Пользователь не найден.");
+    }
+
+    @Override
+    public void userExistValidator(Set<Long> ids) {
+        if (!userRepository.existsByIdIn(ids)) throw new ObjectNotFound("Пользователи не найдены.");
+
     }
 
     @Override

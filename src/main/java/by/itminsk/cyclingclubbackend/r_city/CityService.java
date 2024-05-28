@@ -12,4 +12,7 @@ public interface CityService {
 
     City getCityById(Long id);
 
+    void cityExistenceValidator(Long id);
+
+
 }

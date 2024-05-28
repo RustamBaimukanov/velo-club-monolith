@@ -30,7 +30,7 @@ public class EditUserDTO {
 
     Date birthDate;
 
-    String sex;
+    GenderEnum sex;
 
     byte[] photo;
 
@@ -47,7 +47,7 @@ public class EditUserDTO {
     Double weight;
 
 
-    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo , Team team, City city, Double height, Double weight) {
+    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, GenderEnum sex, byte[] photo , Team team, City city, Double height, Double weight) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;

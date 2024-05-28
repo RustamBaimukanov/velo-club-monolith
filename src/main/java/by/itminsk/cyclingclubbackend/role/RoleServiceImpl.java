@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -14,7 +15,7 @@ public class RoleServiceImpl implements RoleService{
     private RoleRepository roleRepository;
     @Override
     public List<RoleDto> getQualifications() {
-        return roleRepository.findAllByIdIsNot(1L);
+        return roleRepository.findAll().stream().map(role -> new RoleDto(role.getId(), role.getName(), role.getQualification())).collect(Collectors.toList());
     }
 
     @Override

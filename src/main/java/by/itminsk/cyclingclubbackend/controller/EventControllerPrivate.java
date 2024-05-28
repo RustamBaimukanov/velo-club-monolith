@@ -16,11 +16,16 @@ public class EventControllerPrivate {
 
     private final EventService eventService;
 
-
     @PostMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addEvent(@ModelAttribute EventPostDto event) {
-        System.out.println(event.getEventName());
-        System.out.println(event.getGender());
+        System.out.println(event);
+        return ResponseEntity.ok("");
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/event-test")
+    public ResponseEntity<?> addEventTest(@RequestBody EventPostDto event) {
+        eventService.createEvent(event);
         return ResponseEntity.ok("");
     }
 

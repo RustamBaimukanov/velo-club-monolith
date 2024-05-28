@@ -14,4 +14,9 @@ public interface RaceService {
     RaceDto getRace(Long id);
 
     List<RaceDto> getRace(Boolean isRelevant);
+
+
+    Race findRaceById(Long id);
+
+    void raceExistenceValidator(Long id);
 }

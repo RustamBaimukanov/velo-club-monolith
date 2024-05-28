@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 @Hidden
@@ -48,5 +49,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
     List<UserGetDto> findAllByRoleNameNot(RoleEnum role);
+
+    Set<User> findAllByIdIn(List<Long> ids);
+
+    Boolean existsByIdIn(Set<Long> ids);
 
 }

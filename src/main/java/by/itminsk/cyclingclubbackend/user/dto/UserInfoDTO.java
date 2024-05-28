@@ -29,7 +29,7 @@ public class UserInfoDTO {
 
     Date birthDate;
 
-    String sex;
+    GenderEnum sex;
 
     byte[] photo;
 
@@ -49,7 +49,7 @@ public class UserInfoDTO {
     String qualification;
 
 
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, String sex, byte[] photo , Team team, City city) {
+    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, GenderEnum sex, byte[] photo , Team team, City city) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
