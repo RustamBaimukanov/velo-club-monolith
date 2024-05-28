@@ -409,13 +409,13 @@ public class UserServiceImpl implements UserService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("Некорректный номер телефона или пароль."));
         return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), Collections.singletonList(user.getRole().getName().name())), "Bearer "), HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity<?> restorePassword(LoginDto loginDto) throws RestoreUserNotFound {
+    public ResponseEntity<?> restorePassword(LoginDto loginDto){
         User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new RestoreUserNotFound("Такой пользователь не существует"));
         user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
         iUserRepository.save(user);

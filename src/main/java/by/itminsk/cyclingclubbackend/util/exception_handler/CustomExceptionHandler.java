@@ -19,16 +19,25 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(value = {UsernameNotFoundException.class, AuthenticationException.class})
-    protected ResponseEntity<?> handleNotFound(final AuthenticationException ex, final WebRequest request) {
-        return new ResponseEntity<>("Некорректный номер телефона или пароль",HttpStatus.UNAUTHORIZED);
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UsernameNotFoundException.class})
+    protected ErrorResponse handleNotFound(final UsernameNotFoundException ex) {
+        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {AuthenticationException.class})
+    protected ErrorResponse handleAuthenticationException(final AuthenticationException ex) {
+        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+    }
+
+    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {RestoreUserNotFound.class})
-    protected ResponseEntity<?> restoreUserNotFount(final RestoreUserNotFound ex) {
-        return new ResponseEntity<>("Такой пользователь не существует",HttpStatus.NOT_ACCEPTABLE);
+    protected ErrorResponse restoreUserNotFount(final RestoreUserNotFound ex) {
+        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
     }
 
     @ResponseBody

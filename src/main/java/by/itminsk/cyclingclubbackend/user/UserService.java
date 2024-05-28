@@ -33,7 +33,7 @@ public interface UserService {
 
     ResponseEntity<?> authenticate(LoginDto loginDto);
 
-    ResponseEntity<?> restorePassword(LoginDto loginDto) throws RestoreUserNotFound;
+    ResponseEntity<?> restorePassword(LoginDto loginDto);
 
 
     ResponseEntity<?> register (RegisterDto registerDto);

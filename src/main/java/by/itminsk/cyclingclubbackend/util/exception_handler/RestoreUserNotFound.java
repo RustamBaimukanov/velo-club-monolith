@@ -1,7 +1,14 @@
 package by.itminsk.cyclingclubbackend.util.exception_handler;
 
-public class RestoreUserNotFound extends Exception {
-    public RestoreUserNotFound(String errorMessage) {
-        super(errorMessage);
+public class RestoreUserNotFound extends RuntimeException {
+    private final String message;
+
+    public RestoreUserNotFound(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }
