@@ -1,6 +1,8 @@
 package by.itminsk.cyclingclubbackend.user;
 
+import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.team.Team;
 import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.user.dto.BearerToken;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
@@ -197,7 +199,7 @@ public class UserServiceImpl implements UserService {
     public EditUserDTO getEditableUser(String phoneNumber) {
         EditUserDTO editUserDTO = iUserRepository.findByPhoneNumber(phoneNumber);
         editUserDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(editUserDTO.getId()));
-        editUserDTO.setQualification(roleRepository.findRoleByUser(editUserDTO.getId()));
+        editUserDTO.setQualification(userRepository.findRoleByUserId(editUserDTO.getId()));
         return editUserDTO;
     }
 
@@ -225,6 +227,8 @@ public class UserServiceImpl implements UserService {
             u.setSex(updateUserDTO.getGender());
             u.setHeight(updateUserDTO.getHeight());
             u.setWeight(updateUserDTO.getWeight());
+            u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
+//            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (updateUserDTO.getUserImg() != null){
                 try {
                     u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
@@ -259,6 +263,8 @@ public class UserServiceImpl implements UserService {
             u.setSex(updateUserDTO.getGender());
             u.setHeight(updateUserDTO.getHeight());
             u.setWeight(updateUserDTO.getWeight());
+            u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
+            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber())) throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
             if (updateUserDTO.getUserImg() != null){
                 try {
@@ -275,6 +281,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getIdFromPhoneNumber(String phoneNumber) {
         return iUserRepository.getIdFromPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public UserGetDto getUser(Long id) {
+        return userRepository.findUserDtoById(id).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+    }
+
+    @Override
+    public List<UserGetDto> getUser() {
+        return userRepository.findAllUserDto();
     }
 
     @Override

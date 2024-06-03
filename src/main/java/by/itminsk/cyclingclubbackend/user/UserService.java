@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.user;
 
+import by.itminsk.cyclingclubbackend.race.dto.RaceDto;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.user.dto.RegisterByAdminDto;
@@ -70,6 +71,10 @@ public interface UserService {
 
 
     Long getIdFromPhoneNumber(String phoneNumber);
+
+    UserGetDto getUser(Long id);
+
+    List<UserGetDto> getUser();
 
     List<UserGetDto> getUsersExceptRole(RoleEnum role);
 

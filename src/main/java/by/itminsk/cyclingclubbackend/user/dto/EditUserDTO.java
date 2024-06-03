@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.user.dto;
 
 import by.itminsk.cyclingclubbackend.r_city.City;
+import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
 import by.itminsk.cyclingclubbackend.social_network.dto.SocialNetworkDTO;
 import by.itminsk.cyclingclubbackend.team.Team;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,7 +41,7 @@ public class EditUserDTO {
 
     City city;
 
-    String qualification;
+    RoleDto qualification;
 
     Double height;
 

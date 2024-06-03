@@ -23,28 +23,28 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     protected ErrorResponse handleNotFound(final UsernameNotFoundException ex) {
-        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {AuthenticationException.class})
     protected ErrorResponse handleAuthenticationException(final AuthenticationException ex) {
-        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {RestoreUserNotFound.class})
     protected ErrorResponse restoreUserNotFount(final RestoreUserNotFound ex) {
-        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {ObjectNotFound.class})
     protected ErrorResponse objectNotFound(final ObjectNotFound ex) {
-        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
     @ResponseBody
@@ -59,7 +59,7 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UnacceptableDataException.class})
     protected ErrorResponse unacceptableException(final UnacceptableDataException ex) {
-        return new ErrorResponse(Collections.singletonList(new ErrorContent("", ex.getMessage())));
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
 }

@@ -20,14 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Validated
-public class EventServiceImpl implements EventService{
+public class EventServiceImpl implements EventService {
 
     private final RaceService raceService;
 
@@ -48,8 +47,8 @@ public class EventServiceImpl implements EventService{
     @Override
     public EventBlockDTO getEvent(Long id) {
         Map<String, Integer> rating = new HashMap<>();
-        for (EventResult result:
-        eventResultsRepository.findAllByEventId(id)) {
+        for (EventResult result :
+                eventResultsRepository.findAllByEventId(id)) {
             rating.put(result.getUser().getFirstName() + " " + result.getUser().getLastName(), result.getPlace());
         }
         EventBlockDTO eventBlockDTO = eventRepository.findEventById(id);
@@ -60,6 +59,7 @@ public class EventServiceImpl implements EventService{
     @Override
     public void createEvent(EventPostDto eventPostDto) {
         validateCreateEventContent(eventPostDto);
+
 //raceRepository.findById(eventPostDto.getBestRoute().getId()).orElseThrow(() -> new ObjectNotFound("Маршрут не найден."))
         Event event = Event.builder()
                 .name(eventPostDto.getEventName())
@@ -67,11 +67,12 @@ public class EventServiceImpl implements EventService{
                 .availableBirthDateFrom(eventPostDto.getBirthDateFrom())
                 .availableBirthDateTo(eventPostDto.getBirthDateTo())
                 .availableGender(eventPostDto.getGender())
-                .race(Race.builder().id(eventPostDto.getBestRoute().getId()).build())
+                .race(Race.builder().id(eventPostDto.getBestRoute()).build())
                 .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
-                .availableUsers(eventPostDto.getAddParticipants().stream().map(participant -> User.builder().id(participant.getId()).build()).collect(Collectors.toSet()))
-                .city(City.builder().id(eventPostDto.getRegionId()).build())
+                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants().stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
+                .city(City.builder().id(eventPostDto.getRegion()).build())
                 .availableGender(eventPostDto.getGender())
+                .date(new Date())
                 .build();
         eventRepository.save(event);
     }
@@ -79,9 +80,10 @@ public class EventServiceImpl implements EventService{
     @Override
     public void validateCreateEventContent(EventPostDto eventPostDto) {
         //TODO пока не ясно как обработать роли, найти решение при возникновении прецедента
-        raceService.raceExistenceValidator(eventPostDto.getBestRoute().getId());
-        cityService.cityExistenceValidator(eventPostDto.getRegionId());
-        userService.userExistValidator(eventPostDto.getAddParticipants().stream().map(UserGetDto::getId).collect(Collectors.toSet()));
+        raceService.raceExistenceValidator(eventPostDto.getBestRoute());
+        cityService.cityExistenceValidator(eventPostDto.getRegion());
+        if (eventPostDto.getAddParticipants() != null)
+            userService.userExistValidator(new HashSet<>(eventPostDto.getAddParticipants()));
     }
 
 }

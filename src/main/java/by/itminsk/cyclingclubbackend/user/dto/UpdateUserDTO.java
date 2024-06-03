@@ -28,7 +28,7 @@ public class UpdateUserDTO {
 
     String lastName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @DateTimeFormat(pattern = "YYYY-MM-DD")
     @Temporal(TemporalType.DATE)
     Date birth;
 
@@ -36,9 +36,9 @@ public class UpdateUserDTO {
 
     MultipartFile userImg;
 
-    String club;
+    Long club;
 
-    String region;
+    Long region;
 
     RoleEnum qualification;
 

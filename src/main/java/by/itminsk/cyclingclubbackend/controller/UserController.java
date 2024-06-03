@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.controller;
 
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import by.itminsk.cyclingclubbackend.user.UserService;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.event.EventResult;
@@ -20,9 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -30,8 +30,21 @@ public class UserController {
 
     private final TrophyService trophyService;
 
+    @GetMapping(value = "/user")
+    public ResponseEntity<?> getUser(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) RoleEnum exceptedRole) {
+        if (id != null) {
+            return ResponseEntity.ok(userService.getUser(id));
+        } else if (exceptedRole != null) {
+            return ResponseEntity.ok(userService.getUsersExceptRole(exceptedRole));
+        } else {
+            return ResponseEntity.ok(userService.getUser());
+        }
 
-    @GetMapping("/info")
+    }
+
+    @GetMapping("/user/info")
     public UserInfoDTO getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -40,7 +53,7 @@ public class UserController {
         return userService.getUserInfo(currentPrincipalName);
     }
 
-    @GetMapping("/edit")
+    @GetMapping("/user/edit")
     public EditUserDTO getEditableUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -49,13 +62,13 @@ public class UserController {
         return userService.getEditableUser(currentPrincipalName);
     }
 
-    @PostMapping("/edit")
-    public ResponseEntity<?> postEditableUser(@RequestBody UpdateUserDTO updateUserDTO) {
+    @PostMapping("/user/edit")
+    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
         return userService.editUser(updateUserDTO);
 
     }
 
-    @GetMapping("/menu")
+    @GetMapping("/user/menu")
     public UserMenuDTO getUserMenu() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -64,7 +77,7 @@ public class UserController {
         return userService.getUserMenu(currentPrincipalName);
     }
 
-    @GetMapping("/event")
+    @GetMapping("/user/event")
     public Map<Integer, List<EventResult>> getEventByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -75,7 +88,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/trophies")
+    @PostMapping("/user/trophies")
     public Set<Trophy> getTrophiesByUser(@RequestBody(required = false) LoginDto loginDto) {
         if (loginDto == null)
             return trophyService.findAllByPhoneNumber("+375259999903");

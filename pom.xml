@@ -11,7 +11,7 @@
     <groupId>by.it-minsk</groupId>
     <artifactId>CyclingClubBackend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>CyclingClubBackend</name>
     <description>CyclingClubBackend</description>
     <properties>

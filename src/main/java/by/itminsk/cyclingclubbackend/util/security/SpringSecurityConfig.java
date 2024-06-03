@@ -33,7 +33,9 @@ public class SpringSecurityConfig {
         // ...
 		.cors(cors -> cors.configurationSource(request -> {
             var cr = new CorsConfiguration();
-            cr.setAllowedOrigins(List.of("http://localhost:4200"));
+            cr.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "http://localhost:8082","http://localhost:80", "http://172.19.10.207:80",
+                    "http://172.19.10.207:4200", "http://172.19.10.207:8080", "http://172.19.10.207:8082"
+                    ));
             cr.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
             cr.setAllowedHeaders(List.of("*"));
             return cr;
@@ -48,6 +50,7 @@ public class SpringSecurityConfig {
             // "/api/restore/restore-password").permitAll()
             .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
             .requestMatchers("/api/race").authenticated()
+            .requestMatchers("/api/user").authenticated()
             .requestMatchers("/api/private/**").hasAuthority("ADMIN")
 //            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/v2/**", "/swagger-ui/**").permitAll()
             .anyRequest().permitAll()

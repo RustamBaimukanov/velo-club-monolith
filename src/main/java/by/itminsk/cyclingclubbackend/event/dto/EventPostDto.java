@@ -39,16 +39,16 @@ public class EventPostDto {
     @NotNull(message = "Не выбрана категория участников")
     private RolesEnum participantsCategory;
 
-    private List<UserGetDto> addParticipants;
+    private List<Long> addParticipants;
 
     @NotNull(message = "Не выбран маршрут")
-    private RaceDto bestRoute;
+    private Long bestRoute;
 
     @NotNull(message = "Не выбрано ограничение по полу")
     private GenderEnum gender;
 
     @NotNull(message = "Не указано местоположение для мероприятия")
-    private Long regionId;
+    private Long region;
 
 
 
