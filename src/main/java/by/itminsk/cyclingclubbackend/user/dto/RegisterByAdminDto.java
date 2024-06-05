@@ -26,12 +26,11 @@ public class RegisterByAdminDto implements Serializable {
     Double height;
     Double weight;
     String address;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     Date birth;
     GenderEnum gender;
-    String region;
-    String club;
+    Long region;
+    Long club;
     MultipartFile userImg;
     RoleEnum qualification;
 }

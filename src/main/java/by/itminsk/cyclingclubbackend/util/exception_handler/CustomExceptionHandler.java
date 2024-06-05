@@ -62,5 +62,12 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UniqueObjectExistException.class})
+    protected ErrorResponse uniqueObjectExistException(final UniqueObjectExistException ex) {
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
+    }
+
 }
 

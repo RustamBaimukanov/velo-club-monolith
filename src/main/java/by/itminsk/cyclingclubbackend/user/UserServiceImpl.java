@@ -16,6 +16,7 @@ import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
 import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.role.RoleRepository;
 import by.itminsk.cyclingclubbackend.util.exception_handler.UnacceptableDataException;
+import by.itminsk.cyclingclubbackend.util.exception_handler.UniqueObjectExistException;
 import by.itminsk.cyclingclubbackend.util.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetworkRepository;
@@ -180,15 +181,15 @@ public class UserServiceImpl implements UserService {
                     eventResult.setName(eventResult.getEvent().getName());
                 })
                 .collect(Collectors.groupingBy(eventResult -> {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(eventResult.getEvent().getDate());
-                    return calendar.get(Calendar.YEAR);
-                }, LinkedHashMap::new, Collectors.toList()
-                ) );
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(eventResult.getEvent().getDate());
+                            return calendar.get(Calendar.YEAR);
+                        }, LinkedHashMap::new, Collectors.toList()
+                ));
         Map<Integer, List<EventResult>> integerListMap = new LinkedHashMap<>();
         List<Integer> integerList = eventMap.keySet().stream().sorted(Comparator.comparingInt(Integer::intValue).reversed()).toList();
-        for (Integer year:
-             integerList) {
+        for (Integer year :
+                integerList) {
             integerListMap.put(year, eventMap.get(year));
         }
         userInfoDTO.setEvent(integerListMap);
@@ -215,7 +216,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
         if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
-                && !updateUserDTO.getEmail().equals(user.get().getEmail())){
+                && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
             return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
         }
 //        iUserRepository.findUserByEmailAndEmailIsNotNull(updateUserDTO.getEmail()).if
@@ -229,7 +230,7 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
 //            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-            if (updateUserDTO.getUserImg() != null){
+            if (updateUserDTO.getUserImg() != null) {
                 try {
                     u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
                     u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
@@ -249,10 +250,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = iUserRepository.findUserByPhoneNumber(updateUserDTO.getTel());
         if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
-                && !updateUserDTO.getEmail().equals(user.get().getEmail())){
+                && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
             return new ResponseEntity<>("Пользователь с данным email уже существует!", HttpStatus.SEE_OTHER);
         }
-
 
 
         user.ifPresent(u -> {
@@ -265,8 +265,9 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
             u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber())) throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
-            if (updateUserDTO.getUserImg() != null){
+            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
+                throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
+            if (updateUserDTO.getUserImg() != null) {
                 try {
                     u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
                     u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
@@ -276,7 +277,8 @@ public class UserServiceImpl implements UserService {
             }
             iUserRepository.save(u);
         });
-        return new ResponseEntity<>(HttpStatus.OK);    }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Override
     public Long getIdFromPhoneNumber(String phoneNumber) {
@@ -312,12 +314,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
         registerDto.setEmail(registerDto.getEmail().trim().length() == 0 ? null : registerDto.getEmail());
-        if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail()!=null) {
-            return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail() != null) {
+            throw  new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
         } else if (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail() != null) {
-            return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
+            throw  new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
         } else if (iUserRepository.existsByPhoneNumber(registerDto.getTel())) {
-            return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);
+            throw  new UniqueObjectExistException("Пользователь с таким телефоном уже зарегистрирован!");
         } else {
             User user = new User();
             user.setPhoneNumber(registerDto.getTel());
@@ -369,12 +371,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
         registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim().length() == 0 ? null : registerByAdminDto.getEmail());
-        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) && registerByAdminDto.getEmail()!=null) {
-            return new ResponseEntity<>("Пользователь с таким телефоном и почтой уже зарегистрирован!", HttpStatus.SEE_OTHER);
+        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) && registerByAdminDto.getEmail() != null) {
+            throw  new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
         } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail() != null) {
-            return new ResponseEntity<>("Пользователь с данным email уже зарегистрирован!", HttpStatus.SEE_OTHER);
+            throw  new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
         } else if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel())) {
-            return new ResponseEntity<>("Пользователь с таким телефоном уже зарегистрирован!", HttpStatus.SEE_OTHER);
+            throw  new UniqueObjectExistException("Пользователь с таким телефоном уже зарегистрирован!");
         } else {
             User user = new User();
             user.setPhoneNumber(registerByAdminDto.getTel());
@@ -387,8 +389,9 @@ public class UserServiceImpl implements UserService {
             user.setHeight(registerByAdminDto.getHeight());
             user.setWeight(registerByAdminDto.getWeight());
             user.setAddress(registerByAdminDto.getAddress());
-            user.setTeam(teamService.getTeam(registerByAdminDto.getClub()));
-            user.setCity(cityService.getCity(registerByAdminDto.getRegion()));
+            if (registerByAdminDto.getClub() != null)
+                user.setTeam(Team.builder().id(registerByAdminDto.getClub()).build());
+            user.setCity(City.builder().id(registerByAdminDto.getRegion()).build());
             if (registerByAdminDto.getUserImg() != null) {
                 user.setPhoto(registerByAdminDto.getUserImg().getBytes());
                 user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
@@ -431,7 +434,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> restorePassword(LoginDto loginDto){
+    public ResponseEntity<?> restorePassword(LoginDto loginDto) {
         User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new RestoreUserNotFound("Такой пользователь не существует"));
         user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
         iUserRepository.save(user);
