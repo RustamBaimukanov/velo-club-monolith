@@ -27,7 +27,7 @@ public class RegisterDto implements Serializable {
     Boolean acceptTerms;
     Date birth;
     GenderEnum gender;
-    String city;
+    Long city;
     Map<String, String> socialNetwork = new HashMap<>();
 
 }
