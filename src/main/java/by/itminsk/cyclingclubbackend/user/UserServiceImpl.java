@@ -328,7 +328,7 @@ public class UserServiceImpl implements UserService {
             user.setLastName(registerDto.getLastName());
             user.setBirthDate(registerDto.getBirth());
             user.setSex(registerDto.getGender());
-            user.setCity(cityService.getCity(registerDto.getCity()));
+            user.setCity(City.builder().id(registerDto.getCity()).build());
             user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
             Role role = roleRepository.findRoleByName(RoleEnum.DABBLER);
             user.setRole(role);
