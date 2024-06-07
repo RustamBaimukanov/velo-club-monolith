@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.social_network.dto;
 
+import by.itminsk.cyclingclubbackend.social_network.SocialNetworkEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,9 @@ public class SocialNetworkDTO {
 
     private String account;
 
-    private String name;
+    private SocialNetworkEnum name;
 
-    public SocialNetworkDTO(String name, String account) {
+    public SocialNetworkDTO(SocialNetworkEnum name, String account) {
         this.account = account;
         this.name = name;
     }

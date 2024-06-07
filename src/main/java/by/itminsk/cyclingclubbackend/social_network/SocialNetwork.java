@@ -21,8 +21,9 @@ public class SocialNetwork {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name")
-    private String name;
+    private SocialNetworkEnum name;
 
     @Column(name = "account")
     private String account;

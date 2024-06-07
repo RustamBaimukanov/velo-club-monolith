@@ -60,7 +60,6 @@ public class EventServiceImpl implements EventService {
     public void createEvent(EventPostDto eventPostDto) {
         validateCreateEventContent(eventPostDto);
 
-//raceRepository.findById(eventPostDto.getBestRoute().getId()).orElseThrow(() -> new ObjectNotFound("Маршрут не найден."))
         Event event = Event.builder()
                 .name(eventPostDto.getEventName())
                 .note(eventPostDto.getEventDescription())
