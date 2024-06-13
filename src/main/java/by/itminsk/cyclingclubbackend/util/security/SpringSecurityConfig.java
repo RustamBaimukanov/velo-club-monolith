@@ -51,6 +51,7 @@ public class SpringSecurityConfig {
             .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
             .requestMatchers("/api/race").authenticated()
             .requestMatchers("/api/user").authenticated()
+            .requestMatchers("/api/team/**").authenticated()
             .requestMatchers("/api/private/**").hasAuthority("ADMIN")
 //            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/v2/**", "/swagger-ui/**").permitAll()
             .anyRequest().permitAll()

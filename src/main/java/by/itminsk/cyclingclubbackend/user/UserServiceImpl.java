@@ -2,6 +2,9 @@ package by.itminsk.cyclingclubbackend.user;
 
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.social_network.SocialNetwork;
+import by.itminsk.cyclingclubbackend.social_network.SocialNetworkEnum;
+import by.itminsk.cyclingclubbackend.social_network.SocialNetworkService;
 import by.itminsk.cyclingclubbackend.team.Team;
 import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.user.dto.BearerToken;
@@ -25,6 +28,7 @@ import by.itminsk.cyclingclubbackend.trophy.TrophyService;
 import by.itminsk.cyclingclubbackend.user.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,28 +49,24 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private TrophyService trophyService;
+    private final TrophyService trophyService;
 
-    @Autowired
-    private SocialNetworkRepository socialNetworkRepository;
+    private final SocialNetworkService socialNetworkService;
 
-    @Autowired
-    private CityService cityService;
+    private final CityService cityService;
 
-    @Autowired
-    private TeamService teamService;
+    private final TeamService teamService;
 
-    @Autowired
-    private EventResultsRepository eventResultsRepository;
+    private final EventResultsRepository eventResultsRepository;
+
+    private final SocialNetworkRepository socialNetworkRepository;
 
 
     private final AuthenticationManager authenticationManager;
@@ -216,12 +216,14 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException(e);
                 }
             }
+            socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -242,7 +244,8 @@ public class UserServiceImpl implements UserService {
             u.setHeight(updateUserDTO.getHeight());
             u.setWeight(updateUserDTO.getWeight());
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
-            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
+            if (updateUserDTO.getClub() != null)
+                u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
                 throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
             if (updateUserDTO.getUserImg() != null) {
@@ -253,6 +256,7 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException(e);
                 }
             }
+            socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
         });
         return new ResponseEntity<>(HttpStatus.OK);
@@ -315,34 +319,6 @@ public class UserServiceImpl implements UserService {
             String token = jwtUtilities.generateToken(registerDto.getTel(), Collections.singletonList(role.getName().name()));
             return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
 
-        }
-    }
-
-    @Override
-    public User registerAuto(RegisterDto registerDto) {
-        if (iUserRepository.existsByPhoneNumber(registerDto.getTel())) {
-            return null;
-        } else {
-            if (confirmPassword(registerDto.getPassword(), registerDto.getConfirmPassword())) {
-                User user = new User();
-                user.setPhoneNumber(registerDto.getTel());
-                user.setEmail(registerDto.getEmail());
-                user.setFirstName(registerDto.getFirstName());
-                user.setLastName(registerDto.getLastName());
-                user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-                user.setBirthDate(registerDto.getBirth());
-                user.setSex(registerDto.getGender());
-                Role role = roleRepository.findRoleByName(RoleEnum.DABBLER);
-                //Trophy trophy = trophyRepository.findTrophyByName("Золотой кубок");
-                user.setRole(role);
-                //user.addTrophy(trophy);
-
-                user.setCity(cityService.getCityById(1L));
-                user.setTeam(teamService.getTeamById(1L));
-                return iUserRepository.saveAndFlush(user);
-            } else {
-                return null;
-            }
         }
     }
 

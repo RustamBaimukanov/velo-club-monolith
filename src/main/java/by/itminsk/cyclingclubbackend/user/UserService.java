@@ -39,9 +39,6 @@ public interface UserService {
 
     ResponseEntity<?> register (RegisterDto registerDto);
 
-    User registerAuto (RegisterDto registerDto);
-
-
     ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException;
 
     Boolean confirmPassword (String password, String confirmPassword);

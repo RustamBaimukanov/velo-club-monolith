@@ -10,11 +10,14 @@ import lombok.Setter;
 @Setter
 public class SocialNetworkDTO {
 
+    private Long id;
+
     private String account;
 
     private SocialNetworkEnum name;
 
-    public SocialNetworkDTO(SocialNetworkEnum name, String account) {
+    public SocialNetworkDTO(Long id, SocialNetworkEnum name, String account) {
+        this.id = id;
         this.account = account;
         this.name = name;
     }

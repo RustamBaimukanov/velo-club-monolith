@@ -12,16 +12,12 @@ public class TrophyServiceImpl implements TrophyService {
 
     @Autowired
     private TrophyRepository trophyRepository;
-
     @Autowired
     private TrophyGroupRepository trophyGroupRepository;
-
     @Autowired
     private TrophyTypeRepository trophyTypeRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Override
     public void addTrophy(Long groupId, Long typeId, User user, String description) {
         TrophyGroup trophyGroup = trophyGroupRepository.getById(1L);

@@ -12,4 +12,7 @@ import java.util.Set;
 public interface SocialNetworkRepository extends JpaRepository<SocialNetwork, Integer> {
 
     Set<SocialNetworkDTO> findAllByUserId(Long userId);
+
+    Boolean existsByUser_Id(Long userId);
+
 }

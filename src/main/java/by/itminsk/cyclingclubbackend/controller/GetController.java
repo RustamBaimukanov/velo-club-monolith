@@ -2,6 +2,7 @@ package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.team.dto.TeamDTO;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
 import by.itminsk.cyclingclubbackend.team.Team;
@@ -42,8 +43,8 @@ public class GetController {
     }
 
     @GetMapping("/teams")
-    public List<Team> getTeams(){
-        return teamService.getTeams();
+    public List<TeamDTO> getTeams(){
+        return teamService.getTeam();
     }
 
     @GetMapping("/qualifications")

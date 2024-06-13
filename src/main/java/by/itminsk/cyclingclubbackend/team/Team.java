@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.team;
 
+import by.itminsk.cyclingclubbackend.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 

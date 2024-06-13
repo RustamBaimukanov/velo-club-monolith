@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.user.dto;
 
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.social_network.SocialNetworkEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -45,5 +46,7 @@ public class UpdateUserDTO {
     Double height;
 
     Double weight;
+
+    Map<SocialNetworkEnum, String> socialNetworks;
 
 }
