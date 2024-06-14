@@ -294,6 +294,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+    }
+
+    @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
         registerDto.setEmail(registerDto.getEmail().trim().length() == 0 ? null : registerDto.getEmail());
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail() != null) {

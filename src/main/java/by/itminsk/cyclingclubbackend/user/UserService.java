@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
@@ -76,6 +77,9 @@ public interface UserService {
     void userExistValidator(Long id);
 
     void userExistValidator(Set<Long> ids);
+
+    User findUserByPhoneNumber(String phoneNumber);
+
 
 
 }

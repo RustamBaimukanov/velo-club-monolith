@@ -8,7 +8,6 @@ import java.util.Date;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class NewsDTO {
 
     private Long id;
@@ -18,4 +17,11 @@ public class NewsDTO {
     private String content;
 
     private Date creationDate;
+
+    public NewsDTO(Long id, String title, String content, Date creationDate) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.creationDate = creationDate;
+    }
 }

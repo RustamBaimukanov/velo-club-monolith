@@ -1,11 +1,10 @@
 package by.itminsk.cyclingclubbackend.news;
 
+import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -17,6 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class News {
 
     @Id
@@ -27,18 +27,27 @@ public class News {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 4000)
     private String content;
 
     @Column(name = "creation_date")
     private Date creationDate;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "news_roles",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> availableRoles = new HashSet<>();
+
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "users_news",
+            name = "news_users",
             joinColumns = @JoinColumn(name = "news_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> users = new HashSet<>();
-
+    private Set<User> availableUsers = new HashSet<>();
 }

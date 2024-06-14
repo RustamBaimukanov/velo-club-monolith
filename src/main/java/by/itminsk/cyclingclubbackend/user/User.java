@@ -89,7 +89,7 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "user_id")
     private Set<Trophy> trophies = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "availableUsers")
     Set<News> news;
 
     @ManyToOne

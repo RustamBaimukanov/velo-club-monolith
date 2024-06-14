@@ -1,12 +1,23 @@
 package by.itminsk.cyclingclubbackend.news;
 
-import by.itminsk.cyclingclubbackend.news.News;
+import by.itminsk.cyclingclubbackend.news.dto.NewsDTO;
+import by.itminsk.cyclingclubbackend.role.Role;
+import by.itminsk.cyclingclubbackend.user.User;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Set;
 
 @Repository
 @Hidden
 public interface NewsRepository extends JpaRepository<News, Long> {
+
+    @Query("select new by.itminsk.cyclingclubbackend.news.dto.NewsDTO(n.id, n.title, n.content, n.creationDate)" +
+            " from News n left outer join n.availableRoles r left outer join n.availableUsers u where r.id = :roleId or u.id = :userId")
+    Set<NewsDTO> findAllByRoleOrUser(Long roleId, Long userId);
+
 }
