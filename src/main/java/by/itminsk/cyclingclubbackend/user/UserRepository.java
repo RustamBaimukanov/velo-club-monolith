@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.user;
 
+import by.itminsk.cyclingclubbackend.news.News;
 import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
 import by.itminsk.cyclingclubbackend.user.dto.EditUserDTO;

@@ -77,15 +77,6 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_news",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "news_id")
-    )
-    private Set<News> news = new HashSet<>();
-
-
     @OneToMany
     @JoinColumn(name = "user_id")
     private Set<SocialNetwork> socialNetworks = new HashSet<>();
@@ -97,6 +88,9 @@ public class User implements Serializable, UserDetails {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Set<Trophy> trophies = new HashSet<>();
+
+    @ManyToMany(mappedBy = "users")
+    Set<News> news;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
