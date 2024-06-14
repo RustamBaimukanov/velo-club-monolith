@@ -53,8 +53,6 @@ public class NewsServiceImpl implements NewsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         User user = userService.findUserByPhoneNumber(currentPrincipalName);
-        log.info("User Id : {}", user.getId());
-        log.info("Role Id : {}", user.getRole().getId());
         return newsRepository.findAllByRoleOrUser(user.getRole().getId(), user.getId()).stream()
                 .peek(news -> news.setContent(String.join(" ", List.of(StringUtils.split(news.getContent(), " ")).subList(0, 20))))
                 .sorted(Comparator.comparing(NewsDTO::getCreationDate).reversed()).collect(Collectors.toList());
