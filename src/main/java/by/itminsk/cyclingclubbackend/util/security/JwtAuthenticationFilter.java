@@ -1,7 +1,9 @@
 package by.itminsk.cyclingclubbackend.util.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +31,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+            throws ServletException, IOException, ExpiredJwtException {
 
-        String token = jwtUtilities.getToken(request) ;
-
-        if (token!=null && jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token))))
+        String token = jwtUtilities.getToken(request);
+        try {
+            jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token)));
+        }
+        catch (ExpiredJwtException e){
+            StringBuilder sb = new StringBuilder();
+            sb.append("{ ");
+            sb.append("\"error\": {");
+            sb.append("\"message\": \"Время сессии окончено.\"");
+            sb.append("} ");
+            sb.append("} ");
+            response.setContentType("application/json; charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write(sb.toString());
+            return;
+        }
+        if (token!=null)
         {
             String phoneNumber = jwtUtilities.extractUsername(new String(Base64.getMimeDecoder().decode(token)));
 

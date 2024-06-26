@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.util.security;
 
+import by.itminsk.cyclingclubbackend.util.exception_handler.ExpiredTokenException;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -55,27 +56,32 @@ public class JwtUtilities{
     }
 
 
-    public boolean validateToken(String token) {
-        try {
+    public void validateToken(String token){
+
+
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException e) {
-            log.info("Invalid JWT signature.");
-            log.trace("Invalid JWT signature trace: {}", e);
-        } catch (MalformedJwtException e) {
-            log.info("Invalid JWT token.");
-            log.trace("Invalid JWT token trace: {}", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token.");
-            log.trace("Expired JWT token trace: {}", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token.");
-            log.trace("Unsupported JWT token trace: {}", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT token compact of handler are invalid.");
-            log.trace("JWT token compact of handler are invalid trace: {}", e);
-        }
-        return false;
+
+
+
+//        try {
+//        } catch (SignatureException e) {
+//            log.info("Invalid JWT signature.");
+//            log.trace("Invalid JWT signature trace: {}", e);
+//        } catch (MalformedJwtException e) {
+//            log.info("Invalid JWT token.");
+//            log.trace("Invalid JWT token trace: {}", e);
+//        }
+//        catch (ExpiredJwtException e) {
+//            throw new ExpiredTokenException("Время действия сессии истекло.");
+//        }
+//        catch (UnsupportedJwtException e) {
+//            log.info("Unsupported JWT token.");
+//            log.trace("Unsupported JWT token trace: {}", e);
+//        } catch (IllegalArgumentException e) {
+//            log.info("JWT token compact of handler are invalid.");
+//            log.trace("JWT token compact of handler are invalid trace: {}", e);
+//        }
+//        return false;
     }
 
     public String getToken (HttpServletRequest httpServletRequest) {

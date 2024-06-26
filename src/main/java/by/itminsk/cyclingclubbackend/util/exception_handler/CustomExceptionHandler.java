@@ -2,21 +2,24 @@ package by.itminsk.cyclingclubbackend.util.exception_handler;
 
 import by.itminsk.cyclingclubbackend.util.exception_handler.error.ErrorContent;
 import by.itminsk.cyclingclubbackend.util.exception_handler.error.ErrorResponse;
+import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.SignatureException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
+@Slf4j
 public class CustomExceptionHandler {
 
     @ResponseBody
@@ -68,6 +71,23 @@ public class CustomExceptionHandler {
     protected ErrorResponse uniqueObjectExistException(final UniqueObjectExistException ex) {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {ExpiredJwtException.class})
+    protected ErrorResponse expiredTokenException(final ExpiredJwtException ex) {
+        System.out.println("TEST");
+        log.info("TEST");
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
+    }
+//
+//    @ResponseBody
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(value = {SignatureException.class})
+//    protected ErrorResponse tokenSignatureException(final SignatureException ex) {
+//        log.info("Invalid JWT signature");
+//        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
+//    }
 
 }
 

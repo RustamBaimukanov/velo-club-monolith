@@ -12,6 +12,7 @@ import by.itminsk.cyclingclubbackend.user.dto.UserInfoDTO;
 import by.itminsk.cyclingclubbackend.user.dto.UserMenuDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,12 +46,10 @@ public class UserController {
     }
 
     @GetMapping("/user/info")
-    public UserInfoDTO getUser() {
+    public ResponseEntity<?> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        String authorities = authentication.getAuthorities().toString();
-        System.out.println(currentPrincipalName + ":::" + authorities);
-        return userService.getUserInfo(currentPrincipalName);
+        return ResponseEntity.ok(userService.getUserInfo(currentPrincipalName));
     }
 
     @GetMapping("/user/edit")

@@ -50,7 +50,7 @@ public class SpringSecurityConfig {
             // "/api/restore/restore-password").permitAll()
             .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
             .requestMatchers("/api/race").authenticated()
-            .requestMatchers("/api/user").authenticated()
+            .requestMatchers("/api/user/**").authenticated()
             .requestMatchers("/api/team/**").authenticated()
             .requestMatchers("/api/news/**").authenticated()
             .requestMatchers("/api/private/**").hasAuthority("ADMIN")
