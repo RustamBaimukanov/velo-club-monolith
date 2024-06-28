@@ -80,6 +80,7 @@ public class CustomExceptionHandler {
         log.info("TEST");
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
+
 //
 //    @ResponseBody
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
