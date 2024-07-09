@@ -192,7 +192,9 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
-        if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
+        if (updateUserDTO.getEmail() != null){
+            if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
+        }
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
             throw new UniqueObjectExistException("Пользователь с данным email уже существует!");
@@ -225,10 +227,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
+        if (updateUserDTO.getEmail() != null){
+            updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(updateUserDTO.getTel());
-        if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
             throw new UniqueObjectExistException("Пользователь с данным email уже существует!");
@@ -300,7 +304,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        registerDto.setEmail(registerDto.getEmail().trim().length() == 0 ? null : registerDto.getEmail());
+        if (registerDto.getEmail() != null){
+            registerDto.setEmail(registerDto.getEmail().trim().equals("") ? null : registerDto.getEmail());
+        }
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail() != null) {
             throw new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
         } else if (iUserRepository.existsByEmail(registerDto.getEmail()) && registerDto.getEmail() != null) {
@@ -329,7 +335,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
-        registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim().length() == 0 ? null : registerByAdminDto.getEmail());
+        if (registerByAdminDto.getEmail() != null){
+            registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim().equals("") ? null : registerByAdminDto.getEmail());
+        }
         if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) && registerByAdminDto.getEmail() != null) {
             throw new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
         } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail() != null) {
@@ -339,6 +347,7 @@ public class UserServiceImpl implements UserService {
         } else {
             User user = new User();
             user.setPhoneNumber(registerByAdminDto.getTel());
+            log.warn(registerByAdminDto.getEmail());
             user.setEmail(registerByAdminDto.getEmail());
             user.setFirstName(registerByAdminDto.getFirstName());
             user.setLastName(registerByAdminDto.getLastName());
