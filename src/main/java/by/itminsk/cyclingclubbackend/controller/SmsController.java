@@ -35,7 +35,7 @@ public class SmsController {
 
     @PostMapping("/check-tel-signup")
     public ResponseEntity<?> checkTelExitingSignUp(@RequestBody SmsDto smsDto) {
-        if (!userService.existByPhoneNumber(smsDto.getTel()))
+        if (userService.existByPhoneNumber(smsDto.getTel()))
             throw new UniqueObjectExistException("Такой номер телефона уже зарегистрирован.");
         return new ResponseEntity<>(HttpStatus.OK);
     }

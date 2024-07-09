@@ -1,8 +1,6 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.event.EventService;
 import by.itminsk.cyclingclubbackend.team.TeamService;
-import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
