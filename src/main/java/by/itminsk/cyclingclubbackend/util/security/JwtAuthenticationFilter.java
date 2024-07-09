@@ -34,34 +34,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException, ExpiredJwtException {
 
         String token = jwtUtilities.getToken(request);
-        try {
-            jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token)));
-        }
-        catch (ExpiredJwtException e){
-            StringBuilder sb = new StringBuilder();
-            sb.append("{ ");
-            sb.append("\"error\": {");
-            sb.append("\"message\": \"Время сессии окончено.\"");
-            sb.append("} ");
-            sb.append("} ");
-            response.setContentType("application/json; charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write(sb.toString());
-            return;
-        }
-        if (token!=null)
-        {
-            String phoneNumber = jwtUtilities.extractUsername(new String(Base64.getMimeDecoder().decode(token)));
+        if (token != null){
+            try {
+                jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token)));
+                String phoneNumber = jwtUtilities.extractUsername(new String(Base64.getMimeDecoder().decode(token)));
 
-            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
-            if (userDetails != null) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
-                log.info("authenticated user with phoneNumber :{}", phoneNumber);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
+                if (userDetails != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
+                    log.info("authenticated user with phoneNumber :{}", phoneNumber);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                }
             }
+            catch (ExpiredJwtException e){
+                String sb = "{ " +
+                        "\"error\": {" +
+                        "\"message\": \"Время сессии окончено.\"" +
+                        "} " +
+                        "} ";
+                response.setContentType("application/json; charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write(sb);
+                return;
+            }
+
+
         }
+
+
+
+
+
         filterChain.doFilter(request,response);
     }
 

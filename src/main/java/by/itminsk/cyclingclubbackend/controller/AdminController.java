@@ -6,6 +6,8 @@ import by.itminsk.cyclingclubbackend.user.UserService;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
 import by.itminsk.cyclingclubbackend.role.RoleService;
 import by.itminsk.cyclingclubbackend.team.TeamService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +21,28 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api/private")
 @RequiredArgsConstructor
+@Tag(name = "Админ", description = "Операции связанные с админом")
 public class AdminController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "Добавление пользователя",
+            description = "API добавления пользователя."
+    )
     @PostMapping("/signup-complete")
     public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto, HttpServletResponse response) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         String authorities = authentication.getAuthorities().toString();
-        System.out.println(currentPrincipalName + "---" + authorities);
         response.getHeaderNames().forEach(System.out::println);
         return  userService.registerByAdmin(registerDto);
     }
 
+    @Operation(
+            summary = "Редактирование пользователя",
+            description = "API редактирования пользователя."
+    )
     @PostMapping("/user/edit")
     public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
         return userService.editUserByAdmin(updateUserDTO);
