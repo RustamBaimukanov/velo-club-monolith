@@ -1,6 +1,8 @@
 package by.itminsk.cyclingclubbackend.news;
 
+import by.itminsk.cyclingclubbackend.news_metainfo.NewsMetaInfo;
 import by.itminsk.cyclingclubbackend.role.Role;
+import by.itminsk.cyclingclubbackend.social_network.SocialNetwork;
 import by.itminsk.cyclingclubbackend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -32,6 +34,10 @@ public class News {
 
     @Column(name = "creation_date")
     private Date creationDate;
+
+    @OneToMany
+    @JoinColumn(name = "news_id")
+    private Set<NewsMetaInfo> socialNetworks = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
