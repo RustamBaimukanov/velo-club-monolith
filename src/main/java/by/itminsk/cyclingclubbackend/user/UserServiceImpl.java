@@ -218,6 +218,10 @@ public class UserServiceImpl implements UserService {
                     throw new RuntimeException(e);
                 }
             }
+            else {
+                u.setPhoto(null);
+                u.setPhotoFormat(null);
+            }
             socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
         });
@@ -259,6 +263,10 @@ public class UserServiceImpl implements UserService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }
+            else {
+                u.setPhoto(null);
+                u.setPhotoFormat(null);
             }
             socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
@@ -363,6 +371,10 @@ public class UserServiceImpl implements UserService {
             if (registerByAdminDto.getUserImg() != null) {
                 user.setPhoto(registerByAdminDto.getUserImg().getBytes());
                 user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
+            }
+            else {
+                user.setPhoto(null);
+                user.setPhotoFormat(null);
             }
             Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
             user.setRole(role);
