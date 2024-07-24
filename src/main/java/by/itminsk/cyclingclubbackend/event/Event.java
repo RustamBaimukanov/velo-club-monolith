@@ -3,6 +3,8 @@ package by.itminsk.cyclingclubbackend.event;
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.race.Race;
 import by.itminsk.cyclingclubbackend.role.Role;
+import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.role.dto.RolesEnum;
 import by.itminsk.cyclingclubbackend.user.User;
 import by.itminsk.cyclingclubbackend.user.dto.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "events")
@@ -36,6 +39,7 @@ public class Event {
     @Column(name = "note")
     private String note;
 
+    //Дата создания
     @Column(name = "date")
     private Date date;
 
@@ -44,6 +48,17 @@ public class Event {
 
     @Column(name = "available_birth_date_to")
     private Date availableBirthDateTo;
+
+    //Время проведения мероприятия от
+    @Column(name = "start_date")
+    private Date startDate;
+
+    //Время проведения мероприятия до
+    @Column(name = "end_date")
+    private Date endDate;
+
+    //Нужно добавить напоминание о мероприятии(веб сокеты?)
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "available_gender")
@@ -77,6 +92,24 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> availableUsers = new HashSet<>();
+
+    public RolesEnum getCategory() {
+        if (this.availableRoles.size() > 1) {
+            return RolesEnum.ANY;
+        }
+        switch (this.availableRoles.stream().toList().get(0).getName()) {
+            case ADMIN -> {
+                return RolesEnum.ADMIN;
+            }
+            case DABBLER -> {
+                return RolesEnum.DABBLER;
+            }
+            case SPORTSMAN -> {
+                return RolesEnum.SPORTSMAN;
+            }
+        }
+        return RolesEnum.ANY;
+    }
 
     @Override
     public boolean equals(Object o) {

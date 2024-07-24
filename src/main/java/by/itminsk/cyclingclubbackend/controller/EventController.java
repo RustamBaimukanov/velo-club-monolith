@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
@@ -20,5 +22,11 @@ public class EventController {
     public String getEvent(@PathVariable Long id) {
         return new Gson().toJson(eventService.getEvent(id));
     }
+
+    @GetMapping("/event")
+    public String getEventByCalendar(@RequestParam Date date) {
+        return new Gson().toJson(eventService.getEventsByDay(date));
+    }
+
 
 }

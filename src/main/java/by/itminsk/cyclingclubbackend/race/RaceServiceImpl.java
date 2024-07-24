@@ -50,11 +50,17 @@ public class RaceServiceImpl implements RaceService {
     @Override
     public List<RaceDto> getRace(Boolean isRelevant) {
         //TODO is relevant - лучшие маршруты, какой критерии определяет лучший маршрут?
-        return raceRepository.findAll().stream().map(race -> RaceDto.builder()
-                .id(race.getId())
-                .name(race.getName())
-                .routeStartPoint(race.getRouteStartPoint())
-                .routeEndPoint(race.getRouteEndPoint()).build()).collect(Collectors.toList());
+        if (isRelevant){
+            return null;
+        }
+        else {
+            return raceRepository.findAll().stream().map(race -> RaceDto.builder()
+                    .id(race.getId())
+                    .name(race.getName())
+                    .routeStartPoint(race.getRouteStartPoint())
+                    .routeEndPoint(race.getRouteEndPoint()).build()).collect(Collectors.toList());
+        }
+
     }
 
     @Override

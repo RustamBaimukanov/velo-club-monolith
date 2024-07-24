@@ -25,4 +25,17 @@ public class Race {
 
     @Column(name = "route_end_point")
     private String routeEndPoint;
+
+    //В метрах
+    @Column(name = "distance")
+    private Double distance;
+
+    //В миллисекундах
+    @Column(name = "race_time")
+    private Double raceTime;
+
+    @Column(name = "calories")
+    private Double calories;
+
+    //TODO количество оценок от пользователей
 }

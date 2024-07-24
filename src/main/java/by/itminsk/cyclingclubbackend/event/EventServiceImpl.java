@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.event;
 
 import by.itminsk.cyclingclubbackend.event.dto.EventBlockDTO;
+import by.itminsk.cyclingclubbackend.event.dto.EventDto;
 import by.itminsk.cyclingclubbackend.event.dto.EventPostDto;
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.r_city.CityRepository;
@@ -54,6 +55,16 @@ public class EventServiceImpl implements EventService {
         EventBlockDTO eventBlockDTO = eventRepository.findEventById(id);
         eventBlockDTO.setRating(rating);
         return eventBlockDTO;
+    }
+
+    @Override
+    public List<EventDto> getEventsByDay(Date date) {
+        return eventRepository.findAllByStartDateAfterAndEndDateBefore(date, date).stream().map(event -> EventDto.builder()
+                .eventName(event.getName())
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .participantsCategory(event.getCategory())
+                .build()).collect(Collectors.toList());
     }
 
     @Override
