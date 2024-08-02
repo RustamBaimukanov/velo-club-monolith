@@ -399,18 +399,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> authenticate(LoginDto loginDto) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getTel(),
                         loginDto.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = iUserRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("Некорректный номер телефона или пароль."));
         return new ResponseEntity<>(new BearerToken(jwtUtilities.generateToken(user.getUsername(), Collections.singletonList(user.getRole().getName().name())), "Bearer "), HttpStatus.OK);
-
     }
 
     @Override

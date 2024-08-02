@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -58,6 +59,14 @@ public class CustomExceptionHandler {
         return new ErrorResponse(ex.getConstraintViolations().stream().map(violation-> new ErrorContent(violation.getPropertyPath().toString(), violation.getMessage())).collect(Collectors.toList()));
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    protected ErrorResponse methodValidationException(final MethodArgumentNotValidException ex) {
+        return new ErrorResponse(ex.getFieldErrors().stream().map(violation-> new ErrorContent(violation.getField(), violation.getDefaultMessage())).collect(Collectors.toList()));
+    }
+
+    //MethodArgumentNotValidException
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UnacceptableDataException.class})

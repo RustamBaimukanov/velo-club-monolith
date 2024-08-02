@@ -1,13 +1,16 @@
 package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.event.dto.EventPostDto;
+import by.itminsk.cyclingclubbackend.race.RaceMapper;
 import by.itminsk.cyclingclubbackend.race.RaceService;
 import by.itminsk.cyclingclubbackend.race.dto.RaceDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,13 +21,15 @@ public class RaceController {
 
     private final RaceService raceService;
 
+    private final RaceMapper raceMapper;
+
     @Operation(
             summary = "Добавление маршрута",
             description = "API добавления маршрута(на данный момент скудный набор данных,дополнительные поля будут добавлены после обсуждения)"
     )
     @PostMapping(value = "/race", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addRace(@ModelAttribute RaceDto race) {
-        raceService.createRace(race);
+    public ResponseEntity<?> addRace(@Valid @ModelAttribute RaceDto race) {
+        raceService.createRace(raceMapper.fromRaceDto(race));
         return ResponseEntity.ok("");
     }
 
@@ -33,8 +38,8 @@ public class RaceController {
             description = "API редактирования существующего маршрута(на данный момент скудный набор данных,дополнительные поля будут добавлены после обсуждения, к тому же нужно будет предусмотреть следующий случай-что делать с редактирование маршрута если есть активное событие привязанное к этому маршруту)"
     )
     @PutMapping(value = "/race", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateRace(@ModelAttribute RaceDto race) {
-        raceService.updateRace(race);
+    public ResponseEntity<?> updateRace(@Valid @ModelAttribute RaceDto race) {
+        raceService.updateRace(raceMapper.fromRaceDto(race));
         return ResponseEntity.ok("");
     }
 
@@ -47,10 +52,9 @@ public class RaceController {
             @RequestParam(required = false) Long id,
             @RequestParam(required = false, defaultValue = "false") Boolean isRelevant) {
         if (id != null) {
-            return ResponseEntity.ok(raceService.getRace(id));
+            return ResponseEntity.ok(raceMapper.toRaceDto(raceService.getRace(id)));
         } else {
-            return ResponseEntity.ok(raceService.getRace(isRelevant));
+            return ResponseEntity.ok(raceMapper.toRaceDtoList(raceService.getRace(isRelevant)));
         }
-
     }
 }

@@ -15,50 +15,31 @@ public class RaceServiceImpl implements RaceService {
     private final RaceRepository raceRepository;
 
     @Override
-    public void createRace(RaceDto raceDto) {
-        Race race = Race.builder()
-                .name(raceDto.getName())
-                .routeStartPoint(raceDto.getRouteStartPoint())
-                .routeEndPoint(raceDto.getRouteEndPoint())
-                .build();
+    public void createRace(Race race) {
+        race.setId(null);
         raceRepository.save(race);
     }
 
     @Override
-    public void updateRace(RaceDto raceDto) {
+    public void updateRace(Race race) {
         //TODO добавить обработку, есть ли такой маршрут
-        Race race = Race.builder()
-                .id(raceDto.getId())
-                .name(raceDto.getName())
-                .routeStartPoint(raceDto.getRouteStartPoint())
-                .routeEndPoint(raceDto.getRouteEndPoint())
-                .build();
+
         raceRepository.save(race);
     }
 
     @Override
-    public RaceDto getRace(Long id) {
-        Race race = raceRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Маршрут не найден."));
-        return RaceDto.builder()
-                .id(race.getId())
-                .name(race.getName())
-                .routeStartPoint(race.getRouteStartPoint())
-                .routeEndPoint(race.getRouteEndPoint())
-                .build();
+    public Race getRace(Long id) {
+        return raceRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Маршрут не найден."));
     }
 
     @Override
-    public List<RaceDto> getRace(Boolean isRelevant) {
+    public List<Race> getRace(Boolean isRelevant) {
         //TODO is relevant - лучшие маршруты, какой критерии определяет лучший маршрут?
         if (isRelevant){
             return null;
         }
         else {
-            return raceRepository.findAll().stream().map(race -> RaceDto.builder()
-                    .id(race.getId())
-                    .name(race.getName())
-                    .routeStartPoint(race.getRouteStartPoint())
-                    .routeEndPoint(race.getRouteEndPoint()).build()).collect(Collectors.toList());
+            return raceRepository.findAll();
         }
 
     }
