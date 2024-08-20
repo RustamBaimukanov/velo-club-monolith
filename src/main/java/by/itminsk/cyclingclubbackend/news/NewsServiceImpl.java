@@ -26,7 +26,6 @@ public class NewsServiceImpl implements NewsService {
 
     private final UserService userService;
 
-
     private final RoleRepository roleRepository;
 
     @Override

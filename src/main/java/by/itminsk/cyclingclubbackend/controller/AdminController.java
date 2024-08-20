@@ -32,10 +32,6 @@ public class AdminController {
     )
     @PostMapping("/signup-complete")
     public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto, HttpServletResponse response) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        String authorities = authentication.getAuthorities().toString();
-        response.getHeaderNames().forEach(System.out::println);
         return  userService.registerByAdmin(registerDto);
     }
 
