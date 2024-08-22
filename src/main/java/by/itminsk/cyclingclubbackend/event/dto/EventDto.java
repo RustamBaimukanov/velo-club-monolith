@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -18,10 +20,10 @@ public class EventDto {
     private String eventName;
 
     //Время проведения мероприятия от
-    private Date startDate;
+    private LocalDateTime startDate;
 
     //Время проведения мероприятия до
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private RolesEnum participantsCategory;
 }

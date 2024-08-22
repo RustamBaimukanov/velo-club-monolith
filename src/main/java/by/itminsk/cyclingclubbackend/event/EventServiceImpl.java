@@ -1,8 +1,6 @@
 package by.itminsk.cyclingclubbackend.event;
 
-import by.itminsk.cyclingclubbackend.event.dto.EventBlockDTO;
-import by.itminsk.cyclingclubbackend.event.dto.EventDto;
-import by.itminsk.cyclingclubbackend.event.dto.EventPostDto;
+import by.itminsk.cyclingclubbackend.event.dto.*;
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.r_city.CityRepository;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
@@ -17,16 +15,26 @@ import by.itminsk.cyclingclubbackend.user.dto.UserGetDto;
 import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @Service
 @AllArgsConstructor
 @Validated
+@Slf4j
 public class EventServiceImpl implements EventService {
 
     private final RaceService raceService;
@@ -58,13 +66,39 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> getEventsByDay(Date date) {
-        return eventRepository.findAllByStartDateAfterAndEndDateBefore(date, date).stream().map(event -> EventDto.builder()
-                .eventName(event.getName())
+    public List<Event> getEventsByDay(LocalDate date) {
+        return eventRepository.findAllByStartDateBeforeAndEndDateAfter(date.atTime(0,0), date.atTime(0,0));
+
+    }
+
+    @Override
+    public List<Event> getEventsByMonth(LocalDate date) {
+        return eventRepository.findAllByStartDateBeforeAndEndDateAfter(date.with(lastDayOfMonth()).atTime(0,0), date.with(firstDayOfMonth()).atTime(0,0));
+    }
+
+    @Override
+    //TODO переписать преобразователь в другом методе если текущий вариант усложнится.
+    public List<EventCalendarDto> getEventCalendar(LocalDate date) {
+        YearMonth ym = YearMonth.of(date.getYear(), date.getMonth());
+        LocalDate firstOfMonth = ym.atDay(1);
+        LocalDate firstOfFollowingMonth = ym.plusMonths(1).atDay(1);
+        List<EventDto> events = getEventsByMonth(date).stream().map(event -> EventDto.builder()
                 .startDate(event.getStartDate())
                 .endDate(event.getEndDate())
-                .participantsCategory(event.getCategory())
-                .build()).collect(Collectors.toList());
+                .build()).toList();
+        List<EventCalendarDto> eventCalendarList = new ArrayList<>();
+        firstOfMonth.datesUntil(firstOfFollowingMonth).forEach(calendarDate -> {
+                    LocalDateTime calendarDateTime = calendarDate.atTime(0, 0);
+                    if (events.stream()
+                            .anyMatch(event -> (event.getStartDate().isBefore(calendarDateTime) || event.getStartDate().isEqual(calendarDateTime))
+                                    && (event.getEndDate().isAfter(calendarDateTime) || event.getEndDate().isEqual(calendarDateTime))))
+                        eventCalendarList.add(new EventCalendarDto(calendarDate, EventCalendarStatusEnum.EXIST));
+                    else {
+                        eventCalendarList.add(new EventCalendarDto(calendarDate, EventCalendarStatusEnum.NOT_EXIST));
+                    }
+                }
+        );
+        return eventCalendarList;
     }
 
     @Override

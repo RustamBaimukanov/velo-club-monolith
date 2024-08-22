@@ -100,14 +100,5 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-//
-//    @ResponseBody
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(value = {SignatureException.class})
-//    protected ErrorResponse tokenSignatureException(final SignatureException ex) {
-//        log.info("Invalid JWT signature");
-//        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
-//    }
-
 }
 
