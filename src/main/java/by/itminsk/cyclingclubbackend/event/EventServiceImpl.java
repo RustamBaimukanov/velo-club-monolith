@@ -67,13 +67,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsByDay(LocalDate date) {
-        return eventRepository.findAllByStartDateBeforeAndEndDateAfter(date.atTime(0,0), date.atTime(0,0));
+        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0,0), date.atTime(0,0));
 
     }
 
     @Override
     public List<Event> getEventsByMonth(LocalDate date) {
-        return eventRepository.findAllByStartDateBeforeAndEndDateAfter(date.with(lastDayOfMonth()).atTime(0,0), date.with(firstDayOfMonth()).atTime(0,0));
+        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.with(lastDayOfMonth()).atTime(0,0), date.with(firstDayOfMonth()).atTime(0,0));
     }
 
     @Override
