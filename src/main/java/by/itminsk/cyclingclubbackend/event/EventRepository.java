@@ -16,7 +16,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     EventBlockDTO findEventById(Long id);
 
-    List<Event> findAllByStartDateBeforeAndEndDateAfter(LocalDateTime data1, LocalDateTime date2);
+    List<Event> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDateTime data1, LocalDateTime date2);
 
 
 }
