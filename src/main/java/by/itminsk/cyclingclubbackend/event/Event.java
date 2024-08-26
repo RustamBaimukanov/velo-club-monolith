@@ -76,6 +76,10 @@ public class Event {
     @JoinColumn(name = "city_id")
     private City city;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "created_user_id")
+    private User createdUser;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

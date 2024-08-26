@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -49,7 +51,6 @@ public class EventServiceImpl implements EventService {
 
     private final RoleRepository roleRepository;
 
-    private final UserRepository userRepository;
 
     private final CityRepository cityRepository;
 
@@ -104,7 +105,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public void createEvent(EventPostDto eventPostDto) {
         validateCreateEventContent(eventPostDto);
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         Event event = Event.builder()
                 .name(eventPostDto.getEventName())
                 .note(eventPostDto.getEventDescription())
@@ -113,9 +115,11 @@ public class EventServiceImpl implements EventService {
                 .availableGender(eventPostDto.getGender())
                 .race(Race.builder().id(eventPostDto.getBestRoute()).build())
                 .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
-                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants().stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
+                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants()
+                        .stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
                 .city(City.builder().id(eventPostDto.getRegion()).build())
                 .availableGender(eventPostDto.getGender())
+                .createdUser(userService.findUserByPhoneNumber(currentPrincipalName))
                 .date(new Date())
                 .build();
         eventRepository.save(event);
