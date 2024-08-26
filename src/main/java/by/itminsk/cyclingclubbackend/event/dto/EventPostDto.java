@@ -4,12 +4,14 @@ import by.itminsk.cyclingclubbackend.race.dto.RaceDto;
 import by.itminsk.cyclingclubbackend.role.dto.RolesEnum;
 import by.itminsk.cyclingclubbackend.user.dto.GenderEnum;
 import by.itminsk.cyclingclubbackend.user.dto.UserGetDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class EventPostDto {
+
+    private Long id;
 
     @NotBlank(message = "Название мероприятия не может быть пустым")
     @Size(max = 255,message = "Название мероприятия не может превышать 255 символов")
@@ -35,6 +39,12 @@ public class EventPostDto {
     @Temporal(TemporalType.DATE)
     @NotNull(message = "Не указано возрастное ограничение до")
     private Date birthDateTo;
+
+    //TODO пока нет в форме, не валидируется
+    private LocalDateTime startDate;
+
+    //TODO пока нет в форме, не валидируется
+    private LocalDateTime endDate;
 
     @NotNull(message = "Не выбрана категория участников")
     private RolesEnum participantsCategory;

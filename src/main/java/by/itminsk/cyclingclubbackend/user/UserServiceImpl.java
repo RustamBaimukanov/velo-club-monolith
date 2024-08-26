@@ -14,12 +14,9 @@ import by.itminsk.cyclingclubbackend.user.dto.RegisterDto;
 import by.itminsk.cyclingclubbackend.event.EventResult;
 import by.itminsk.cyclingclubbackend.event.EventResultsRepository;
 import by.itminsk.cyclingclubbackend.util.ImageUtil;
-import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
-import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
+import by.itminsk.cyclingclubbackend.util.exception_handler.*;
 import by.itminsk.cyclingclubbackend.role.Role;
 import by.itminsk.cyclingclubbackend.role.RoleRepository;
-import by.itminsk.cyclingclubbackend.util.exception_handler.UnacceptableDataException;
-import by.itminsk.cyclingclubbackend.util.exception_handler.UniqueObjectExistException;
 import by.itminsk.cyclingclubbackend.util.security.JwtUtilities;
 import by.itminsk.cyclingclubbackend.r_city.CityService;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetworkRepository;
@@ -292,6 +289,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserGetDto> getUsersExceptRole(RoleEnum role) {
         return userRepository.findAllByRoleNameNot(role);
+    }
+
+    @Override
+    public void sameUserValidator(Long userId, String phoneNumber) {
+        User user = findUserByPhoneNumber(phoneNumber);
+        if (!(user.getRole().getName() == RoleEnum.ADMIN) && !user.getId().equals(userId)){
+            throw new PermissionException("Данный пользователь не имеет соответствующих прав доступа.");
+        }
     }
 
     @Override

@@ -103,6 +103,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event getById(Long id) {
+        return eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Мероприятие не найдено."));
+    }
+
+    @Override
     public void createEvent(EventPostDto eventPostDto) {
         validateCreateEventContent(eventPostDto);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -112,6 +117,8 @@ public class EventServiceImpl implements EventService {
                 .note(eventPostDto.getEventDescription())
                 .availableBirthDateFrom(eventPostDto.getBirthDateFrom())
                 .availableBirthDateTo(eventPostDto.getBirthDateTo())
+                .startDate(eventPostDto.getStartDate())
+                .endDate(eventPostDto.getEndDate())
                 .availableGender(eventPostDto.getGender())
                 .race(Race.builder().id(eventPostDto.getBestRoute()).build())
                 .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
@@ -126,12 +133,45 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void updateEvent(EventPostDto eventPostDto) {
+        validateCreateEventContent(eventPostDto);
+        eventExistenceValidator(eventPostDto.getId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        Event event = getById(eventPostDto.getId()).toBuilder()
+                .name(eventPostDto.getEventName())
+                .note(eventPostDto.getEventDescription())
+                .availableBirthDateFrom(eventPostDto.getBirthDateFrom())
+                .availableBirthDateTo(eventPostDto.getBirthDateTo())
+                .startDate(eventPostDto.getStartDate())
+                .endDate(eventPostDto.getEndDate())
+                .availableGender(eventPostDto.getGender())
+                .race(Race.builder().id(eventPostDto.getBestRoute()).build())
+                .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
+                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants()
+                        .stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
+                .city(City.builder().id(eventPostDto.getRegion()).build())
+                .availableGender(eventPostDto.getGender())
+                .date(new Date())
+                .build();
+        userService.sameUserValidator(event.getCreatedUser().getId(), currentPrincipalName);
+
+        eventRepository.save(event);
+    }
+
+    @Override
     public void validateCreateEventContent(EventPostDto eventPostDto) {
         //TODO пока не ясно как обработать роли, найти решение при возникновении прецедента
         raceService.raceExistenceValidator(eventPostDto.getBestRoute());
         cityService.cityExistenceValidator(eventPostDto.getRegion());
         if (eventPostDto.getAddParticipants() != null)
             userService.userExistValidator(new HashSet<>(eventPostDto.getAddParticipants()));
+    }
+
+    @Override
+    public void eventExistenceValidator(Long id) {
+        if (!eventRepository.existsById(id)) throw new ObjectNotFound("Мероприятие не найдено.");
     }
 
 }

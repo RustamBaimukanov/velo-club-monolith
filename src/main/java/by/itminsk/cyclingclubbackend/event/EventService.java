@@ -20,9 +20,16 @@ public interface EventService {
 
     List<EventCalendarDto> getEventCalendar(LocalDate date);
 
+    Event getById(Long id);
+
 
     void createEvent(@Valid EventPostDto eventPostDto);
 
+    void updateEvent(@Valid EventPostDto eventPostDto);
+
+
     void validateCreateEventContent(EventPostDto eventPostDto);
+
+    void eventExistenceValidator(Long id);
 
 }

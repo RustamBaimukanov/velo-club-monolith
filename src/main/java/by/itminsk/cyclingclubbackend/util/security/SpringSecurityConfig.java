@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -53,6 +54,7 @@ public class SpringSecurityConfig {
             .requestMatchers("/api/user/**").authenticated()
             .requestMatchers("/api/team/**").authenticated()
             .requestMatchers("/api/news/**").authenticated()
+            .requestMatchers("/api/event/**").authenticated()
             .requestMatchers("/api/private/**").hasAuthority("ADMIN")
 //            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/v2/**", "/swagger-ui/**").permitAll()
             .anyRequest().permitAll()

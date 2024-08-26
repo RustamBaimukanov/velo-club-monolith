@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -32,6 +34,26 @@ import java.util.stream.Collectors;
 public class EventController {
 
     private final EventService eventService;
+
+    @Operation(
+            summary = "Добавление мероприятия",
+            description = "API добавления мероприятия(будет дополнено, после обсуждении)."
+    )
+    @PostMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addEvent(@ModelAttribute EventPostDto event) {
+        eventService.createEvent(event);
+        return ResponseEntity.ok("");
+    }
+
+    @Operation(
+            summary = "Редактирование существующего мероприятия",
+            description = "API редактирования мероприятия(будет дополнено, после обсуждении)."
+    )
+    @PutMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateEvent(@ModelAttribute EventPostDto event) {
+        eventService.updateEvent(event);
+        return ResponseEntity.ok("");
+    }
 
     @GetMapping("/event/{id}")
     public String getEvent(@PathVariable Long id) {

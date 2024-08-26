@@ -100,5 +100,13 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {PermissionException.class})
+    protected ErrorResponse permissionException(final PermissionException ex) {
+        log.error(ex.getMessage());
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
+    }
+
 }
 

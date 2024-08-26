@@ -74,6 +74,8 @@ public interface UserService {
 
     List<UserGetDto> getUsersExceptRole(RoleEnum role);
 
+    void sameUserValidator(Long userId, String phoneNumber);
+
     void userExistValidator(Long id);
 
     void userExistValidator(Set<Long> ids);
