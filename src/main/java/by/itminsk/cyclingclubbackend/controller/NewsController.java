@@ -47,12 +47,21 @@ public class NewsController {
             description = "API получения новости в одиночном варианте через id, либо все новости с учетом доступности для роли пользователя или конкретного пользователя отсортированном в порядке указанном в ТЗ(без пагинации, пока, следует обсудить)"
     )
     @GetMapping("/news")
-    public ResponseEntity<?> getNews(@RequestParam(required = false) Long id) {
+    public ResponseEntity<?> getNews(@RequestParam(required = false) Long id, @RequestParam(required = false, defaultValue = "0") Integer page) {
         if (id != null) {
             return ResponseEntity.ok(newsService.getNews(id));
         } else {
-            return ResponseEntity.ok(newsService.getNews());
+            return ResponseEntity.ok(newsService.getNews(page));
         }
+    }
+
+    @Operation(
+            summary = "Получение последних новостей",
+            description = "Получение последних новостей(3 последние по дате)"
+    )
+    @GetMapping("/news/latest")
+    public ResponseEntity<?> getLatestNews() {
+        return ResponseEntity.ok(newsService.getLatestNews());
     }
 
 }

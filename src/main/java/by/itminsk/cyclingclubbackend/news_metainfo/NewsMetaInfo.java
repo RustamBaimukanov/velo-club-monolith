@@ -25,4 +25,7 @@ public class NewsMetaInfo {
 
     @Column(name = "format")
     private String format;
+
+    @Column(name = "is_core")
+    private Boolean isCore;
 }

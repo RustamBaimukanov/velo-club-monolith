@@ -10,6 +10,8 @@ import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,13 +50,14 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDTO> getNews() {
+    public List<NewsDTO> getNews(Integer page) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         User user = userService.findUserByPhoneNumber(currentPrincipalName);
-        return newsRepository.findAllByRoleOrUser(user.getRole().getId(), user.getId()).stream()
+        Pageable pageable = PageRequest.of(page, 10);
+        return newsRepository.findAllByRoleOrUser(user.getRole().getId(), user.getId() ,pageable).stream()
                 .peek(news -> news.setContent(String.join(" ", List.of(StringUtils.split(news.getContent(), " ")).subList(0, 20))))
-                .sorted(Comparator.comparing(NewsDTO::getCreationDate).reversed()).collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,5 +66,16 @@ public class NewsServiceImpl implements NewsService {
 
         if (eventPostDto.getAddRecipient() != null)
             userService.userExistValidator(new HashSet<>(eventPostDto.getAddRecipient()));
+    }
+
+    @Override
+    public List<NewsDTO> getLatestNews() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = userService.findUserByPhoneNumber(currentPrincipalName);
+        Pageable pageable = PageRequest.of(0, 3);
+        return newsRepository.findAllByRoleOrUser(user.getRole().getId(), user.getId() ,pageable).stream()
+                .peek(news -> news.setContent(String.join(" ", List.of(StringUtils.split(news.getContent(), " ")).subList(0, 20))))
+                .collect(Collectors.toList());
     }
 }

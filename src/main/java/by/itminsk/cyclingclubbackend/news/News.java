@@ -37,7 +37,7 @@ public class News {
 
     @OneToMany
     @JoinColumn(name = "news_id")
-    private Set<NewsMetaInfo> socialNetworks = new HashSet<>();
+    private Set<NewsMetaInfo> metaInfo = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)

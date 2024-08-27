@@ -47,6 +47,8 @@ public class UpdateUserDTO {
 
     Double weight;
 
+    ImageStateEnum imageStatus;
+
     Map<SocialNetworkEnum, String> socialNetworks;
 
 }

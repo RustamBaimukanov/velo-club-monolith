@@ -186,6 +186,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO) {
+        log.info(String.valueOf(updateUserDTO.getImageStatus()));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
@@ -207,17 +208,20 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
 //            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-            if (updateUserDTO.getUserImg() != null) {
-                try {
-                    u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
-                    u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+
+            switch (updateUserDTO.getImageStatus()){
+                case CHANGE_IMG -> {
+                    try {
+                        u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
+                        u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-            else {
-                u.setPhoto(null);
-                u.setPhotoFormat(null);
+                case DELETE_IMG -> {
+                    u.setPhoto(null);
+                    u.setPhotoFormat(null);
+                }
             }
             socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
@@ -228,6 +232,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
+        log.info(String.valueOf(updateUserDTO.getImageStatus()));
+
         if (updateUserDTO.getEmail() != null){
             updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
         }
@@ -253,17 +259,22 @@ public class UserServiceImpl implements UserService {
                 u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
                 throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
-            if (updateUserDTO.getUserImg() != null) {
-                try {
-                    u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
-                    u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+            switch (updateUserDTO.getImageStatus()){
+                case CHANGE_IMG -> {
+                    try {
+                        u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
+                        u.setPhotoFormat(updateUserDTO.getUserImg().getContentType());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-            else {
-                u.setPhoto(null);
-                u.setPhotoFormat(null);
+                case NO_CHANGE_IMG -> {
+
+                }
+                case DELETE_IMG -> {
+                    u.setPhoto(null);
+                    u.setPhotoFormat(null);
+                }
             }
             socialNetworkService.saveSocialNetworksWhenUserEdit(u, updateUserDTO.getSocialNetworks());
             iUserRepository.save(u);
