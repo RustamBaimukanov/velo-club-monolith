@@ -35,13 +35,5 @@ public class AdminController {
         return  userService.registerByAdmin(registerDto);
     }
 
-    @Operation(
-            summary = "Редактирование пользователя",
-            description = "API редактирования пользователя."
-    )
-    @PostMapping("/user/edit")
-    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
-        return userService.editUserByAdmin(updateUserDTO);
 
-    }
 }

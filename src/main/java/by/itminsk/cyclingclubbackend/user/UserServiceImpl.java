@@ -208,7 +208,8 @@ public class UserServiceImpl implements UserService {
             u.setWeight(updateUserDTO.getWeight());
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
 //            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-
+            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
+                throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
             switch (updateUserDTO.getImageStatus()){
                 case CHANGE_IMG -> {
                     try {
@@ -231,15 +232,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO) {
         log.info(String.valueOf(updateUserDTO.getImageStatus()));
 
         if (updateUserDTO.getEmail() != null){
             updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        Optional<User> user = iUserRepository.findUserByPhoneNumber(updateUserDTO.getTel());
+
+        Optional<User> user = iUserRepository.findById(id);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
             throw new UniqueObjectExistException("Пользователь с данным email уже существует!");
@@ -257,8 +257,7 @@ public class UserServiceImpl implements UserService {
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
             if (updateUserDTO.getClub() != null)
                 u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
-                throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
+
             switch (updateUserDTO.getImageStatus()){
                 case CHANGE_IMG -> {
                     try {
@@ -325,6 +324,35 @@ public class UserServiceImpl implements UserService {
     public User findUserByPhoneNumber(String phoneNumber) {
         return userRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
     }
+
+    @Override
+    public UserInfoDTO getUserProfile(Long id) {
+        UserInfoDTO userInfoDTO = iUserRepository.getUserById(id);
+        userInfoDTO.setSocialNetworks(socialNetworkRepository.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setTrophies(trophyService.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setEventResults(eventResultsRepository.findAllByUserId(userInfoDTO.getId()));
+        userInfoDTO.setQualification(roleRepository.findRoleByUser(userInfoDTO.getId()));
+        Map<Integer, List<EventResult>> eventMap = userInfoDTO
+                .getEventResults()
+                .stream()
+                .peek(eventResult -> {
+                    eventResult.setDate(eventResult.getEvent().getDate());
+                    eventResult.setName(eventResult.getEvent().getName());
+                })
+                .collect(Collectors.groupingBy(eventResult -> {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(eventResult.getEvent().getDate());
+                            return calendar.get(Calendar.YEAR);
+                        }, LinkedHashMap::new, Collectors.toList()
+                ));
+        Map<Integer, List<EventResult>> integerListMap = new LinkedHashMap<>();
+        List<Integer> integerList = eventMap.keySet().stream().sorted(Comparator.comparingInt(Integer::intValue).reversed()).toList();
+        for (Integer year :
+                integerList) {
+            integerListMap.put(year, eventMap.get(year));
+        }
+        userInfoDTO.setEvent(integerListMap);
+        return userInfoDTO;    }
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {

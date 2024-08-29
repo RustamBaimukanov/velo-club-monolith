@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByPhoneNumber(String phoneNumber);
 
+    UserInfoDTO getUserById(Long id);
+
     UserInfoDTO getUserByPhoneNumber(String phoneNumber);
 
     EditUserDTO findByPhoneNumber(String phoneNumber);

@@ -10,10 +10,12 @@ import by.itminsk.cyclingclubbackend.user.dto.EditUserDTO;
 import by.itminsk.cyclingclubbackend.user.dto.UpdateUserDTO;
 import by.itminsk.cyclingclubbackend.user.dto.UserInfoDTO;
 import by.itminsk.cyclingclubbackend.user.dto.UserMenuDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +33,31 @@ public class UserController {
 
     private final TrophyService trophyService;
 
+    @Operation(
+            summary = "Редактирование пользователя",
+            description = "API редактирования пользователя."
+    )
+    @PutMapping("/user")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> editUserByAdmin(@RequestParam Long id, @ModelAttribute UpdateUserDTO updateUserDTO) {
+        return userService.editUserByAdmin(id, updateUserDTO);
+
+    }
+
     @GetMapping(value = "/user")
     public ResponseEntity<?> getUser(
+            @RequestParam(required = false) Long id) {
+        if (id != null) {
+            return ResponseEntity.ok(userService.getUserProfile(id));
+        }
+        else {
+            return ResponseEntity.ok(userService.getUser());
+        }
+
+    }
+
+    @GetMapping(value = "/user/participants")
+    public ResponseEntity<?> getParticipants(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) RoleEnum exceptedRole) {
         if (id != null) {

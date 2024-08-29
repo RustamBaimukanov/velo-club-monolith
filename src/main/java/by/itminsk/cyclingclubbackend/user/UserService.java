@@ -63,7 +63,7 @@ public interface UserService {
 
     ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO);
 
-    ResponseEntity<?> editUserByAdmin(UpdateUserDTO updateUserDTO);
+    ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO);
 
 
     Long getIdFromPhoneNumber(String phoneNumber);
@@ -83,5 +83,5 @@ public interface UserService {
     User findUserByPhoneNumber(String phoneNumber);
 
 
-
+    UserInfoDTO getUserProfile(Long id);
 }
