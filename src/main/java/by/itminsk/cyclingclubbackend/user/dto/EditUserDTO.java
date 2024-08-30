@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class EditUserDTO {
 
     String lastName;
 
-    Date birthDate;
+    LocalDate birthDate;
 
     GenderEnum sex;
 
@@ -48,7 +49,7 @@ public class EditUserDTO {
     Double weight;
 
 
-    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, GenderEnum sex, byte[] photo , Team team, City city, Double height, Double weight) {
+    public EditUserDTO(Long id, String email, String phoneNumber, String firstName, String lastName, LocalDate birthDate, GenderEnum sex, byte[] photo , Team team, City city, Double height, Double weight) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;

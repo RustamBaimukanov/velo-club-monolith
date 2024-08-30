@@ -12,8 +12,10 @@ import by.itminsk.cyclingclubbackend.user.dto.UserInfoDTO;
 import by.itminsk.cyclingclubbackend.user.dto.UserMenuDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -34,12 +37,14 @@ public class UserController {
     private final TrophyService trophyService;
 
     @Operation(
-            summary = "Редактирование пользователя",
-            description = "API редактирования пользователя."
+            summary = "Редактирование пользователя админом",
+            description = "API редактирования пользователя админом."
     )
-    @PutMapping("/user")
+    @PutMapping(value = "/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> editUserByAdmin(@RequestParam Long id, @ModelAttribute UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> editUserByAdmin(@RequestParam(defaultValue = "1") Long id, @ModelAttribute UpdateUserDTO updateUserDTO) {
+        log.info(String.valueOf(updateUserDTO.getQualification()));
+        log.info(String.valueOf(updateUserDTO.getImageStatus()));
         return userService.editUserByAdmin(id, updateUserDTO);
 
     }

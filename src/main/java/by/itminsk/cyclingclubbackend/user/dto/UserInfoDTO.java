@@ -8,6 +8,7 @@ import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -16,7 +17,6 @@ import java.util.*;
 @EqualsAndHashCode
 public class UserInfoDTO {
 
-    @JsonIgnore
     Long id;
 
     String email;
@@ -27,7 +27,7 @@ public class UserInfoDTO {
 
     String lastName;
 
-    Date birthDate;
+    LocalDate birthDate;
 
     GenderEnum sex;
 
@@ -49,7 +49,7 @@ public class UserInfoDTO {
     String qualification;
 
 
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, Date birthDate, GenderEnum sex, byte[] photo , Team team, City city) {
+    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, LocalDate birthDate, GenderEnum sex, byte[] photo , Team team, City city) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;

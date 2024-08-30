@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class RegisterDto implements Serializable {
     String password ;
     String confirmPassword;
     Boolean acceptTerms;
-    Date birth;
+    LocalDate birth;
     GenderEnum gender;
     Long city;
     Map<String, String> socialNetwork = new HashMap<>();

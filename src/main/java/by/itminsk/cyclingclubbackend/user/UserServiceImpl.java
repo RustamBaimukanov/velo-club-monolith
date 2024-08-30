@@ -186,7 +186,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO) {
-        log.info(String.valueOf(updateUserDTO.getImageStatus()));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
@@ -231,14 +230,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO) {
-        log.info(String.valueOf(updateUserDTO.getImageStatus()));
 
         if (updateUserDTO.getEmail() != null){
             updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
         }
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findById(id);
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
                 && !updateUserDTO.getEmail().equals(user.get().getEmail())) {
@@ -257,7 +255,8 @@ public class UserServiceImpl implements UserService {
             u.setCity(City.builder().id(updateUserDTO.getRegion()).build());
             if (updateUserDTO.getClub() != null)
                 u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
-
+            if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
+                throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
             switch (updateUserDTO.getImageStatus()){
                 case CHANGE_IMG -> {
                     try {

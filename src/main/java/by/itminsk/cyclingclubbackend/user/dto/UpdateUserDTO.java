@@ -7,10 +7,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@NoArgsConstructor
 public class UpdateUserDTO {
 
     String email;
@@ -29,9 +31,7 @@ public class UpdateUserDTO {
 
     String lastName;
 
-//    @DateTimeFormat(pattern = "YYYY-MM-DD")
-    @Temporal(TemporalType.DATE)
-    Date birth;
+    LocalDate birth;
 
     GenderEnum gender;
 

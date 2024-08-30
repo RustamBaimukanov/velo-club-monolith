@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -47,7 +48,7 @@ public class User implements Serializable, UserDetails {
     private String lastName;
 
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sex")

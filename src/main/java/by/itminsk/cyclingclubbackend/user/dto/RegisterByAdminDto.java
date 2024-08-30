@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -26,8 +27,7 @@ public class RegisterByAdminDto implements Serializable {
     Double height;
     Double weight;
     String address;
-    @Temporal(TemporalType.DATE)
-    Date birth;
+    LocalDate birth;
     GenderEnum gender;
     Long region;
     Long club;
