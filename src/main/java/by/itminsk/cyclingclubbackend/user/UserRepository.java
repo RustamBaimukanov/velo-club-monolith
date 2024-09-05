@@ -58,6 +58,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new by.itminsk.cyclingclubbackend.user.dto.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u")
     List<UserGetDto> findAllUserDto();
 
+    List<UserGetDto> findAllByRoleName(RoleEnum role);
+
+
     List<UserGetDto> findAllByRoleNameNot(RoleEnum role);
 
     Set<User> findAllByIdIn(List<Long> ids);

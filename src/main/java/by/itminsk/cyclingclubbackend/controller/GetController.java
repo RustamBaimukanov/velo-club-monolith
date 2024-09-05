@@ -52,10 +52,11 @@ public class GetController {
         return roleService.getQualifications();
     }
 
-    @GetMapping("/users-except-role")
-    public List<UserGetDto> getUsersExceptRole(@RequestParam RoleEnum role){
-        return userService.getUsersExceptRole(role);
+    @GetMapping("/roles")
+    public List<RoleDto> getRoles(){
+        return roleService.getRoles();
     }
+
 
     @GetMapping("/user-img")
     public ResponseEntity<byte[]> getFile(@RequestBody LoginDto loginDto) {

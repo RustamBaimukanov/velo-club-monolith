@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.role.dto.RolesEnum;
 import by.itminsk.cyclingclubbackend.user.UserService;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.event.EventResult;
@@ -40,9 +41,9 @@ public class UserController {
             summary = "Редактирование пользователя админом",
             description = "API редактирования пользователя админом."
     )
-    @PutMapping(value = "/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> editUserByAdmin(@RequestParam(defaultValue = "1") Long id, @ModelAttribute UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> editUserByAdmin(@RequestParam(defaultValue = "1") Long id, @RequestBody UpdateUserDTO updateUserDTO) {
         log.info(String.valueOf(updateUserDTO.getQualification()));
         log.info(String.valueOf(updateUserDTO.getImageStatus()));
         return userService.editUserByAdmin(id, updateUserDTO);
@@ -64,7 +65,7 @@ public class UserController {
     @GetMapping(value = "/user/participants")
     public ResponseEntity<?> getParticipants(
             @RequestParam(required = false) Long id,
-            @RequestParam(required = false) RoleEnum exceptedRole) {
+            @RequestParam(required = false) RolesEnum exceptedRole) {
         if (id != null) {
             return ResponseEntity.ok(userService.getUser(id));
         } else if (exceptedRole != null) {
@@ -92,7 +93,7 @@ public class UserController {
     }
 
     @PostMapping("/user/edit")
-    public ResponseEntity<?> postEditableUser(@ModelAttribute UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> postEditableUser(@RequestBody UpdateUserDTO updateUserDTO) {
         return userService.editUser(updateUserDTO);
 
     }

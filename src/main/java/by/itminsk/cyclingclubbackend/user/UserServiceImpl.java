@@ -2,6 +2,7 @@ package by.itminsk.cyclingclubbackend.user;
 
 import by.itminsk.cyclingclubbackend.r_city.City;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.role.dto.RolesEnum;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetwork;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetworkEnum;
 import by.itminsk.cyclingclubbackend.social_network.SocialNetworkService;
@@ -231,7 +232,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO) {
-
+        log.info("Email is : {}", updateUserDTO.getEmail());
         if (updateUserDTO.getEmail() != null){
             updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
         }
@@ -296,8 +297,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserGetDto> getUsersExceptRole(RoleEnum role) {
-        return userRepository.findAllByRoleNameNot(role);
+    public List<UserGetDto> getUsersExceptRole(RolesEnum role) {
+        switch (role){
+            default -> {
+                return new ArrayList<>();
+            }
+            case SPORTSMAN -> {
+                return userRepository.findAllByRoleName(RoleEnum.DABBLER);
+            }
+            case DABBLER -> {
+                return userRepository.findAllByRoleName(RoleEnum.SPORTSMAN);
+            }
+        }
     }
 
     @Override

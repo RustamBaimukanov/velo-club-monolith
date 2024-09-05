@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface RoleService {
 
+    List<RoleDto> getRoles();
+
+
     List<RoleDto> getQualifications();
 
     String getQualificationByUserId(Long userId);

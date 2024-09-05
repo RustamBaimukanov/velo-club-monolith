@@ -31,7 +31,7 @@ public class AdminController {
             description = "API добавления пользователя."
     )
     @PostMapping("/signup-complete")
-    public ResponseEntity<?> register (@ModelAttribute RegisterByAdminDto registerDto, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> register (@RequestBody RegisterByAdminDto registerDto) throws IOException {
         return  userService.registerByAdmin(registerDto);
     }
 

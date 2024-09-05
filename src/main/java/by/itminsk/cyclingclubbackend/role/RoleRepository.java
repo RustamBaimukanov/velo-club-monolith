@@ -23,6 +23,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     List<RoleDto> findAllByIdIsNot(Long id);
 
+    List<Role> findAllByNameNot(RoleEnum roleEnum);
+
     @Query(value = "select r.qualification from roles r where r.id = (select u.role_id from users u where u.id=?1)", nativeQuery = true)
     String findRoleByUser(Long userId);
 

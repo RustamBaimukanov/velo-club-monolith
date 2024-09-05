@@ -39,8 +39,8 @@ public class EventController {
             summary = "Добавление мероприятия",
             description = "API добавления мероприятия(будет дополнено, после обсуждении)."
     )
-    @PostMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addEvent(@ModelAttribute EventPostDto event) {
+    @PostMapping(value = "/event", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addEvent(@RequestBody EventPostDto event) {
         eventService.createEvent(event);
         return ResponseEntity.ok("");
     }
@@ -49,8 +49,8 @@ public class EventController {
             summary = "Редактирование существующего мероприятия",
             description = "API редактирования мероприятия(будет дополнено, после обсуждении)."
     )
-    @PutMapping(value = "/event", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateEvent(@ModelAttribute EventPostDto event) {
+    @PutMapping(value = "/event", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateEvent(@RequestBody EventPostDto event) {
         eventService.updateEvent(event);
         return ResponseEntity.ok("");
     }

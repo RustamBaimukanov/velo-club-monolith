@@ -23,32 +23,30 @@ import java.util.Set;
 @NoArgsConstructor
 public class UpdateUserDTO {
 
-    String email;
+    private String email;
 
-    String tel;
+    private String firstName;
 
-    String firstName;
+    private String lastName;
 
-    String lastName;
+    private LocalDate birth;
 
-    LocalDate birth;
+    private GenderEnum gender;
 
-    GenderEnum gender;
+    private MultipartFile userImg;
 
-    MultipartFile userImg;
+    private Long club;
 
-    Long club;
+    private Long region;
 
-    Long region;
+    private RoleEnum qualification;
 
-    RoleEnum qualification;
+    private Double height;
 
-    Double height;
+    private Double weight;
 
-    Double weight;
+    private ImageStateEnum imageStatus;
 
-    ImageStateEnum imageStatus;
-
-    Map<SocialNetworkEnum, String> socialNetworks;
+    private Map<SocialNetworkEnum, String> socialNetworks;
 
 }

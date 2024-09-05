@@ -2,6 +2,7 @@ package by.itminsk.cyclingclubbackend.user;
 
 import by.itminsk.cyclingclubbackend.race.dto.RaceDto;
 import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
+import by.itminsk.cyclingclubbackend.role.dto.RolesEnum;
 import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
 import by.itminsk.cyclingclubbackend.user.dto.RegisterByAdminDto;
 import by.itminsk.cyclingclubbackend.user.dto.RegisterDto;
@@ -72,7 +73,7 @@ public interface UserService {
 
     List<UserGetDto> getUser();
 
-    List<UserGetDto> getUsersExceptRole(RoleEnum role);
+    List<UserGetDto> getUsersExceptRole(RolesEnum role);
 
     void sameUserValidator(Long userId, String phoneNumber);
 
