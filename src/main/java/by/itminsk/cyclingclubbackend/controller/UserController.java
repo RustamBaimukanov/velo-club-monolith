@@ -43,7 +43,7 @@ public class UserController {
     )
     @PutMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> editUserByAdmin(@RequestParam(defaultValue = "1") Long id, @RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<?> editUserByAdmin(@RequestParam Long id, @RequestBody UpdateUserDTO updateUserDTO) {
         log.info(String.valueOf(updateUserDTO.getQualification()));
         log.info(String.valueOf(updateUserDTO.getImageStatus()));
         return userService.editUserByAdmin(id, updateUserDTO);
