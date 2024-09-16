@@ -32,17 +32,6 @@ public class NewsController {
     }
 
     @Operation(
-            summary = "Добавление новости(для вызова без клиента)",
-            description = "API добавления новости."
-    )
-    @ResponseBody
-    @PostMapping(value = "/news-test")
-    public ResponseEntity<?> addNewsTest(@RequestBody NewsPostDTO news) {
-        newsService.createNews(news);
-        return ResponseEntity.ok("");
-    }
-
-    @Operation(
             summary = "Получение новости",
             description = "API получения новости в одиночном варианте через id, либо все новости с учетом доступности для роли пользователя или конкретного пользователя отсортированном в порядке указанном в ТЗ(без пагинации, пока, следует обсудить)"
     )
