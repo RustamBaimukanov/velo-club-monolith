@@ -25,8 +25,8 @@ public class NewsController {
             summary = "Добавление новости",
             description = "API добавления новости."
     )
-    @PostMapping(value = "/news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addNews(@ModelAttribute NewsPostDTO news) {
+    @PostMapping(value = "/news", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addNews(@RequestBody NewsPostDTO news) {
         newsService.createNews(news);
         return ResponseEntity.ok("");
     }

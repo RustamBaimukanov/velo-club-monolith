@@ -19,8 +19,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class RegisterByAdminDto implements Serializable {
 
-    String firstName ;
-    String lastName ;
+    String firstName;
+    String lastName;
     String tel;
     String email;
     String password;

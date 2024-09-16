@@ -31,13 +31,10 @@ public class EventPostDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    @Past(message = "Недопустимое возрастное ограничение")
-    @NotNull(message = "Не указано возрастное ограничение от")
     private Date birthDateFrom;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    @NotNull(message = "Не указано возрастное ограничение до")
     private Date birthDateTo;
 
     //TODO пока нет в форме, не валидируется

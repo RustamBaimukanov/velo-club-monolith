@@ -165,7 +165,7 @@ public class EventServiceImpl implements EventService {
         //TODO пока не ясно как обработать роли, найти решение при возникновении прецедента
         raceService.raceExistenceValidator(eventPostDto.getBestRoute());
         cityService.cityExistenceValidator(eventPostDto.getRegion());
-        if (eventPostDto.getAddParticipants() != null)
+        if (eventPostDto.getAddParticipants() != null && !eventPostDto.getAddParticipants().isEmpty())
             userService.userExistValidator(new HashSet<>(eventPostDto.getAddParticipants()));
     }
 
