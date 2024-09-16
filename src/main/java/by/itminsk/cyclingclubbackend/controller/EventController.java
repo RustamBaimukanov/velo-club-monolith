@@ -1,28 +1,20 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.event.Event;
-import by.itminsk.cyclingclubbackend.event.EventService;
-import by.itminsk.cyclingclubbackend.event.dto.EventCalendarDto;
-import by.itminsk.cyclingclubbackend.event.dto.EventCalendarStatusEnum;
-import by.itminsk.cyclingclubbackend.event.dto.EventDto;
-import by.itminsk.cyclingclubbackend.event.dto.EventPostDto;
+import by.itminsk.cyclingclubbackend.service.event.EventService;
+import by.itminsk.cyclingclubbackend.model.event.EventCalendarDto;
+import by.itminsk.cyclingclubbackend.model.event.EventDto;
+import by.itminsk.cyclingclubbackend.model.event.EventPostDto;
 import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 

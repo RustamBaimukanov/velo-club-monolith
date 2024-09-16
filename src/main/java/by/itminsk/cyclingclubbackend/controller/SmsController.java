@@ -1,12 +1,11 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.sms.SmsService;
-import by.itminsk.cyclingclubbackend.sms.dto.SmsDto;
-import by.itminsk.cyclingclubbackend.user.UserService;
+import by.itminsk.cyclingclubbackend.service.sms.SmsService;
+import by.itminsk.cyclingclubbackend.model.sms.SmsDto;
+import by.itminsk.cyclingclubbackend.service.user.UserService;
 import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import by.itminsk.cyclingclubbackend.util.exception_handler.UniqueObjectExistException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

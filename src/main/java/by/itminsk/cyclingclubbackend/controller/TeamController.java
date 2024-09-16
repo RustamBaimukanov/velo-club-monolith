@@ -1,6 +1,6 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.team.TeamService;
+import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

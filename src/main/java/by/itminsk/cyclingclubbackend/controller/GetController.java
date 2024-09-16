@@ -1,25 +1,19 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.r_city.City;
-import by.itminsk.cyclingclubbackend.role.dto.RoleEnum;
-import by.itminsk.cyclingclubbackend.team.dto.TeamDTO;
-import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
-import by.itminsk.cyclingclubbackend.role.dto.RoleDto;
-import by.itminsk.cyclingclubbackend.team.Team;
-import by.itminsk.cyclingclubbackend.user.User;
-import by.itminsk.cyclingclubbackend.user.UserService;
-import by.itminsk.cyclingclubbackend.r_city.CityService;
-import by.itminsk.cyclingclubbackend.role.RoleService;
-import by.itminsk.cyclingclubbackend.team.TeamService;
-import by.itminsk.cyclingclubbackend.user.dto.UserGetDto;
+import by.itminsk.cyclingclubbackend.model.city.City;
+import by.itminsk.cyclingclubbackend.model.team.TeamDTO;
+import by.itminsk.cyclingclubbackend.model.user.LoginDto;
+import by.itminsk.cyclingclubbackend.model.role.RoleDto;
+import by.itminsk.cyclingclubbackend.model.user.User;
+import by.itminsk.cyclingclubbackend.service.user.UserService;
+import by.itminsk.cyclingclubbackend.service.city.CityService;
+import by.itminsk.cyclingclubbackend.service.role.RoleService;
+import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,16 +1,12 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.user.dto.LoginDto;
-import by.itminsk.cyclingclubbackend.user.dto.RegisterDto;
+import by.itminsk.cyclingclubbackend.model.user.LoginDto;
+import by.itminsk.cyclingclubbackend.model.user.RegisterDto;
 import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
-import by.itminsk.cyclingclubbackend.user.UserService;
-import by.itminsk.cyclingclubbackend.r_city.CityService;
-import by.itminsk.cyclingclubbackend.role.RoleService;
-import by.itminsk.cyclingclubbackend.team.TeamService;
+import by.itminsk.cyclingclubbackend.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
