@@ -4,7 +4,7 @@ import by.itminsk.cyclingclubbackend.model.city.City;
 import by.itminsk.cyclingclubbackend.model.event_result.EventResult;
 import by.itminsk.cyclingclubbackend.model.social_network.SocialNetworkDTO;
 import by.itminsk.cyclingclubbackend.model.team.Team;
-import by.itminsk.cyclingclubbackend.trophy.Trophy;
+import by.itminsk.cyclingclubbackend.model.trophy.Trophy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

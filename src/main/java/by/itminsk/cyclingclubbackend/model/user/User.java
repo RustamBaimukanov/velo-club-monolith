@@ -6,7 +6,7 @@ import by.itminsk.cyclingclubbackend.model.news.News;
 import by.itminsk.cyclingclubbackend.model.role.Role;
 import by.itminsk.cyclingclubbackend.model.social_network.SocialNetwork;
 import by.itminsk.cyclingclubbackend.model.team.Team;
-import by.itminsk.cyclingclubbackend.trophy.Trophy;
+import by.itminsk.cyclingclubbackend.model.trophy.Trophy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

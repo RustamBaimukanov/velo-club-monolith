@@ -1,11 +1,11 @@
 package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.model.role.RolesEnum;
+import by.itminsk.cyclingclubbackend.model.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.service.user.UserService;
 import by.itminsk.cyclingclubbackend.model.user.LoginDto;
 import by.itminsk.cyclingclubbackend.model.event_result.EventResult;
 import by.itminsk.cyclingclubbackend.service.trophy.TrophyService;
-import by.itminsk.cyclingclubbackend.trophy.Trophy;
 import by.itminsk.cyclingclubbackend.model.user.EditUserDTO;
 import by.itminsk.cyclingclubbackend.model.user.UpdateUserDTO;
 import by.itminsk.cyclingclubbackend.model.user.UserMenuDTO;
