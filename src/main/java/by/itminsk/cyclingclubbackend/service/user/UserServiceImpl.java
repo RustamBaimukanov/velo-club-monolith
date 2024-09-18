@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,6 +41,7 @@ import static java.util.stream.Collectors.toMap;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -94,14 +96,6 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    @Override
-    public void registration(UserDTO userDTO) {
-
-        User user = new User();
-        //user.setEmail(userDTO.getEmail());
-        // user.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(user);
-    }
 
     @Override
     public void createAdmin() {
@@ -126,6 +120,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean existByPhoneNumber(String phoneNumber) {
         return iUserRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public Boolean existByEmail(String email) {
+        if (email == null) return false;
+        return iUserRepository.existsByEmail(email);
     }
 
 
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         Optional<User> user = iUserRepository.findUserByPhoneNumber(currentPrincipalName);
-        if (updateUserDTO.getEmail() != null){
+        if (updateUserDTO.getEmail() != null) {
             if (updateUserDTO.getEmail().trim().equals("")) updateUserDTO.setEmail(null);
         }
         if (iUserRepository.existsByEmailAndEmailIsNotNull(updateUserDTO.getEmail())
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService {
 //            u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
                 throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
-            switch (updateUserDTO.getImageStatus()){
+            switch (updateUserDTO.getImageStatus()) {
                 case CHANGE_IMG -> {
                     try {
                         u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
@@ -225,7 +225,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO) {
         log.info("Email is : {}", updateUserDTO.getEmail());
-        if (updateUserDTO.getEmail() != null){
+        if (updateUserDTO.getEmail() != null) {
             updateUserDTO.setEmail(updateUserDTO.getEmail().trim().equals("") ? null : updateUserDTO.getEmail());
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
                 u.setTeam(Team.builder().id(updateUserDTO.getClub()).build());
             if (u.getRole().getName() == RoleEnum.ADMIN && updateUserDTO.getQualification() != RoleEnum.ADMIN && Objects.equals(currentPrincipalName, u.getPhoneNumber()))
                 throw new UnacceptableDataException("Администратор не может лишить себя прав администратора.");
-            switch (updateUserDTO.getImageStatus()){
+            switch (updateUserDTO.getImageStatus()) {
                 case CHANGE_IMG -> {
                     try {
                         u.setPhoto(ImageUtil.compressAndEncodeImage(updateUserDTO.getUserImg()));
@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserGetDto> getUsersExceptRole(RolesEnum role) {
-        switch (role){
+        switch (role) {
             default -> {
                 return new ArrayList<>();
             }
@@ -306,7 +306,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sameUserValidator(Long userId, String phoneNumber) {
         User user = findUserByPhoneNumber(phoneNumber);
-        if (!(user.getRole().getName() == RoleEnum.ADMIN) && !user.getId().equals(userId)){
+        if (!(user.getRole().getName() == RoleEnum.ADMIN) && !user.getId().equals(userId)) {
             throw new PermissionException("Данный пользователь не имеет соответствующих прав доступа.");
         }
     }
@@ -320,6 +320,19 @@ public class UserServiceImpl implements UserService {
     public void userExistValidator(Set<Long> ids) {
         if (!userRepository.existsByIdIn(ids)) throw new ObjectNotFound("Пользователи не найдены.");
 
+    }
+
+    @Override
+    public void uniqueUserValidator(String phoneNumber, String email) {
+        if (existByPhoneNumber(phoneNumber) && (existByEmail(email))) {
+            throw new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
+        } else if (existByEmail(email)) {
+            throw new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
+        } else if (existByPhoneNumber(phoneNumber)) {
+            throw new UniqueObjectExistException("Пользователь с таким телефоном уже зарегистрирован!");
+
+            //return userService.registerByAdmin(registerDto);
+        }
     }
 
     @Override
@@ -354,11 +367,12 @@ public class UserServiceImpl implements UserService {
             integerListMap.put(year, eventMap.get(year));
         }
         userInfoDTO.setEvent(integerListMap);
-        return userInfoDTO;    }
+        return userInfoDTO;
+    }
 
     @Override
     public ResponseEntity<?> register(RegisterDto registerDto) {
-        if (registerDto.getEmail() != null){
+        if (registerDto.getEmail() != null) {
             registerDto.setEmail(registerDto.getEmail().trim().equals("") ? null : registerDto.getEmail());
         }
         if (iUserRepository.existsByPhoneNumber(registerDto.getTel()) && (iUserRepository.existsByEmail(registerDto.getEmail())) && registerDto.getEmail() != null) {
@@ -388,46 +402,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException {
-        if (registerByAdminDto.getEmail() != null){
-            registerByAdminDto.setEmail(registerByAdminDto.getEmail().trim().equals("") ? null : registerByAdminDto.getEmail());
-        }
-        if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel()) && (iUserRepository.existsByEmail(registerByAdminDto.getEmail())) && registerByAdminDto.getEmail() != null) {
-            throw new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
-        } else if (iUserRepository.existsByEmail(registerByAdminDto.getEmail()) && registerByAdminDto.getEmail() != null) {
-            throw new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
-        } else if (iUserRepository.existsByPhoneNumber(registerByAdminDto.getTel())) {
-            throw new UniqueObjectExistException("Пользователь с таким телефоном уже зарегистрирован!");
-        } else {
-            User user = new User();
-            user.setPhoneNumber(registerByAdminDto.getTel());
-            log.warn(registerByAdminDto.getEmail());
-            user.setEmail(registerByAdminDto.getEmail());
-            user.setFirstName(registerByAdminDto.getFirstName());
-            user.setLastName(registerByAdminDto.getLastName());
-            user.setPassword(passwordEncoder.encode(registerByAdminDto.getPassword()));
-            user.setBirthDate(registerByAdminDto.getBirth());
-            user.setSex(registerByAdminDto.getGender());
-            user.setHeight(registerByAdminDto.getHeight());
-            user.setWeight(registerByAdminDto.getWeight());
-            user.setAddress(registerByAdminDto.getAddress());
-            if (registerByAdminDto.getClub() != null)
-                user.setTeam(Team.builder().id(registerByAdminDto.getClub()).build());
-            user.setCity(City.builder().id(registerByAdminDto.getRegion()).build());
-            if (registerByAdminDto.getUserImg() != null) {
-                user.setPhoto(registerByAdminDto.getUserImg().getBytes());
-                user.setPhotoFormat(registerByAdminDto.getUserImg().getContentType());
-            }
-            else {
-                user.setPhoto(null);
-                user.setPhotoFormat(null);
-            }
-            Role role = roleRepository.findRoleByName(registerByAdminDto.getQualification());
-            user.setRole(role);
-            iUserRepository.saveAndFlush(user);
-            trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+    public void registerByAdmin(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        iUserRepository.saveAndFlush(user);
+        trophyService.addTrophy(1L, 6L, user, "Выдано за регистрацию");
     }
 
     @Override

@@ -1,9 +1,6 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
@@ -12,22 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto implements Serializable {
+public class RegisterDto{
 
-    String firstName ;
-    String lastName ;
-    String tel;
-    String email;
-    String password ;
-    String confirmPassword;
-    Boolean acceptTerms;
-    LocalDate birth;
-    GenderEnum gender;
-    Long city;
-    Map<String, String> socialNetwork = new HashMap<>();
+    private String firstName;
+    private String lastName;
+    private String tel;
+    private String email;
+    private String password;
+    private String confirmPassword;
+    private Boolean acceptTerms;
+    private LocalDate birth;
+    private GenderEnum gender;
+    private Long city;
+    private Map<String, String> socialNetwork = new HashMap<>();
 
 }

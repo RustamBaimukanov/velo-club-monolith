@@ -3,6 +3,7 @@ package by.itminsk.cyclingclubbackend.service.user;
 import by.itminsk.cyclingclubbackend.model.role.RolesEnum;
 import by.itminsk.cyclingclubbackend.model.user.*;
 import by.itminsk.cyclingclubbackend.model.role.Role;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -21,7 +22,6 @@ public interface UserService {
 
     boolean delete(long id);
 
-    void registration(UserDTO userDTO);
 
     void createAdmin();
 
@@ -34,7 +34,7 @@ public interface UserService {
 
     ResponseEntity<?> register (RegisterDto registerDto);
 
-    ResponseEntity<?> registerByAdmin(RegisterByAdminDto registerByAdminDto) throws IOException;
+    void registerByAdmin(@Valid User user);
 
     Boolean confirmPassword (String password, String confirmPassword);
 
@@ -46,6 +46,9 @@ public interface UserService {
     User saverUser (User user);
 
     Boolean existByPhoneNumber(String phoneNumber);
+
+    Boolean existByEmail(String email);
+
 
     User getUser(String phoneNumber);
 
@@ -73,6 +76,8 @@ public interface UserService {
     void userExistValidator(Long id);
 
     void userExistValidator(Set<Long> ids);
+
+    void uniqueUserValidator(String phoneNumber, String email);
 
     User findUserByPhoneNumber(String phoneNumber);
 

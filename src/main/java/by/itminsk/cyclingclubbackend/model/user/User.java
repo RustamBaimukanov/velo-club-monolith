@@ -9,6 +9,9 @@ import by.itminsk.cyclingclubbackend.model.team.Team;
 import by.itminsk.cyclingclubbackend.model.trophy.Trophy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,15 +36,21 @@ public class User implements Serializable, UserDetails {
     private Long id;
 
     @Column(name = "email")
+    @Email
+    @Size(max = 255, message = "Длина почты слишком велика.")
     private String email;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(name = "phone_number", length = 13)
+    @Pattern(regexp="^[+\\d](?:.*\\d)?$", message = "Формат номера телефона не верен.")
+    @Size(min = 13, max = 13, message = "Некорректная длина номера телефона.")
     private String phoneNumber;
 
     @Column(name = "first_name")
+    @Size(max = 255, message = "Длина имени слишком велика.")
     private String firstName;
 
     @Column(name = "last_name")
+    @Size(max = 255, message = "Длина фамилии слишком велика.")
     private String lastName;
 
     @Column(name = "birth_date")
@@ -56,9 +65,6 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "weight")
     private Double weight;
-
-    @Column(name = "address")
-    private String address;
 
     @Column(name = "password")
     @JsonIgnore

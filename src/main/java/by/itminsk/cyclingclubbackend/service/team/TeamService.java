@@ -10,4 +10,7 @@ public interface TeamService {
     List<TeamDTO> getTeam();
 
     List<UserGetDto> getTeamUsers(Long id);
+
+    void teamExistenceValidator(Long id);
+
 }

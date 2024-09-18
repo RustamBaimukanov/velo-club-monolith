@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TeamServiceImpl implements TeamService{
+public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
 
@@ -35,5 +35,11 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public List<UserGetDto> getTeamUsers(Long id) {
         return userRepository.findUsersByTeamId(id);
+    }
+
+    @Override
+    public void teamExistenceValidator(Long id) {
+        if (!teamRepository.existsById(id)) throw new ObjectNotFound("Команда не найден.");
+
     }
 }
