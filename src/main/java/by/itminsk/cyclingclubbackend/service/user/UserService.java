@@ -32,7 +32,7 @@ public interface UserService {
     ResponseEntity<?> restorePassword(LoginDto loginDto);
 
 
-    ResponseEntity<?> register (RegisterDto registerDto);
+    ResponseEntity<?> register (@Valid User user);
 
     void registerByAdmin(@Valid User user);
 

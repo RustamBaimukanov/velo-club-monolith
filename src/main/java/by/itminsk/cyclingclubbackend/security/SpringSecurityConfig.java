@@ -53,8 +53,8 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/team/**").authenticated()
                 .requestMatchers("/api/news/**").authenticated()
                 .requestMatchers("/api/event/**").authenticated()
-//            .requestMatchers("/api/private/**").hasAuthority("ADMIN")
-                .requestMatchers("/api/private/**").permitAll()
+                .requestMatchers("/api/private/**").hasAuthority("ADMIN")
+//                .requestMatchers("/api/private/**").permitAll()
 
 //            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/v2/**", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()

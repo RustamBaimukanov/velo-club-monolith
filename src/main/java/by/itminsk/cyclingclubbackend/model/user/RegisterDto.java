@@ -9,22 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class RegisterDto{
+public record RegisterDto(String firstName,
+                          String lastName,
+                          String tel,
+                          String email,
+                          String password,
+                          String confirmPassword,
+                          Boolean acceptTerms,
+                          LocalDate birth,
+                          GenderEnum gender,
+                          Long city) {
 
-    private String firstName;
-    private String lastName;
-    private String tel;
-    private String email;
-    private String password;
-    private String confirmPassword;
-    private Boolean acceptTerms;
-    private LocalDate birth;
-    private GenderEnum gender;
-    private Long city;
-    private Map<String, String> socialNetwork = new HashMap<>();
 
 }
