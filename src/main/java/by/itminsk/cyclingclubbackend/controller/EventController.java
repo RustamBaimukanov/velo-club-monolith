@@ -1,5 +1,7 @@
 package by.itminsk.cyclingclubbackend.controller;
 
+import by.itminsk.cyclingclubbackend.mapper.event.EventMapper;
+import by.itminsk.cyclingclubbackend.model.event.Event;
 import by.itminsk.cyclingclubbackend.service.event.EventService;
 import by.itminsk.cyclingclubbackend.model.event.EventCalendarDto;
 import by.itminsk.cyclingclubbackend.model.event.EventDto;
@@ -27,12 +29,16 @@ public class EventController {
 
     private final EventService eventService;
 
+    private final EventMapper eventMapper;
+
     @Operation(
             summary = "Добавление мероприятия",
             description = "API добавления мероприятия(будет дополнено, после обсуждении)."
     )
-    @PostMapping(value = "/event", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addEvent(@RequestBody EventPostDto event) {
+    @PostMapping(value = "/event")
+    public ResponseEntity<?> addEvent(@RequestBody EventPostDto eventDto) {
+        eventService.validateCreateEventContent(eventDto);
+        Event event = eventMapper.eventDtoToEvent(eventDto);
         eventService.createEvent(event);
         return ResponseEntity.ok("");
     }
@@ -41,8 +47,10 @@ public class EventController {
             summary = "Редактирование существующего мероприятия",
             description = "API редактирования мероприятия(будет дополнено, после обсуждении)."
     )
-    @PutMapping(value = "/event", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/event")
     public ResponseEntity<?> updateEvent(@RequestBody EventPostDto event) {
+        eventService.validateCreateEventContent(event);
+        eventService.eventExistenceValidator(event.getId());
         eventService.updateEvent(event);
         return ResponseEntity.ok("");
     }

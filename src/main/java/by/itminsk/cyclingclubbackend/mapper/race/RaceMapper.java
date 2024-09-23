@@ -1,5 +1,7 @@
-package by.itminsk.cyclingclubbackend.model.race;
+package by.itminsk.cyclingclubbackend.mapper.race;
 
+import by.itminsk.cyclingclubbackend.model.race.Race;
+import by.itminsk.cyclingclubbackend.model.race.RaceDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

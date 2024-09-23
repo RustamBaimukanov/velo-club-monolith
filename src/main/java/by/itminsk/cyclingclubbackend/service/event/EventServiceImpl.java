@@ -105,34 +105,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void createEvent(EventPostDto eventPostDto) {
-        validateCreateEventContent(eventPostDto);
+    public void createEvent(Event event) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        Event event = Event.builder()
-                .name(eventPostDto.getEventName())
-                .note(eventPostDto.getEventDescription())
-                .availableBirthDateFrom(eventPostDto.getBirthDateFrom())
-                .availableBirthDateTo(eventPostDto.getBirthDateTo())
-                .startDate(eventPostDto.getStartDate())
-                .endDate(eventPostDto.getEndDate())
-                .availableGender(eventPostDto.getGender())
-                .race(Race.builder().id(eventPostDto.getBestRoute()).build())
-                .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
-                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants()
-                        .stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
-                .city(City.builder().id(eventPostDto.getRegion()).build())
-                .availableGender(eventPostDto.getGender())
-                .createdUser(userService.findUserByPhoneNumber(currentPrincipalName))
-                .date(new Date())
-                .build();
+        event.setCreatedUser(userService.findUserByPhoneNumber(currentPrincipalName));
+        event.setAvailableRoles(roleRepository.findRolesByNameIn(event.getParticipantsCategory().getRoleEnumSet()));
         eventRepository.save(event);
     }
 
     @Override
     public void updateEvent(EventPostDto eventPostDto) {
-        validateCreateEventContent(eventPostDto);
-        eventExistenceValidator(eventPostDto.getId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
 

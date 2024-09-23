@@ -8,6 +8,9 @@ import by.itminsk.cyclingclubbackend.model.user.User;
 import by.itminsk.cyclingclubbackend.model.user.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -32,9 +35,12 @@ public class Event {
     @JsonIgnore
     private Long id;
 
+    @NotBlank(message = "Название мероприятия не может быть пустым")
+    @Size(max = 255,message = "Название мероприятия не может превышать 255 символов")
     @Column(name = "name")
     private String name;
 
+    @Size(max = 4000, message = "Описание мероприятия не может превышать N символов")
     @Column(name = "note")
     private String note;
 
@@ -61,16 +67,19 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "available_gender")
+    @NotNull(message = "Не выбрано ограничение по полу")
     private GenderEnum availableGender;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "race_id")
+    @NotNull(message = "Не выбран маршрут")
     private Race race;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "city_id")
+    @NotNull(message = "Не указано местоположение для мероприятия")
     private City city;
 
     @JsonIgnore
@@ -95,6 +104,9 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> availableUsers = new HashSet<>();
+
+    @Transient
+    private RolesEnum participantsCategory;
 
     public RolesEnum getCategory() {
         if (this.availableRoles.size() > 1) {

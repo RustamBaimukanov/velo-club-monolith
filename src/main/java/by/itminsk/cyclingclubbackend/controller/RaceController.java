@@ -1,6 +1,6 @@
 package by.itminsk.cyclingclubbackend.controller;
 
-import by.itminsk.cyclingclubbackend.model.race.RaceMapper;
+import by.itminsk.cyclingclubbackend.mapper.race.RaceMapper;
 import by.itminsk.cyclingclubbackend.service.race.RaceService;
 import by.itminsk.cyclingclubbackend.model.race.RaceDto;
 import io.swagger.v3.oas.annotations.Operation;

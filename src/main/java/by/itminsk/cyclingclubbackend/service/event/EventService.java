@@ -22,7 +22,7 @@ public interface EventService {
     Event getById(Long id);
 
 
-    void createEvent(@Valid EventPostDto eventPostDto);
+    void createEvent(@Valid Event event);
 
     void updateEvent(@Valid EventPostDto eventPostDto);
 

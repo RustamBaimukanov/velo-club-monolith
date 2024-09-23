@@ -1,21 +1,17 @@
 package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.model.user.RegisterByAdminDto;
-import by.itminsk.cyclingclubbackend.model.user.mapper.UserSignUpMapper;
+import by.itminsk.cyclingclubbackend.mapper.user.UserSignUpMapper;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import by.itminsk.cyclingclubbackend.service.user.UserService;
-import by.itminsk.cyclingclubbackend.util.exception_handler.UniqueObjectExistException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("api/private")

@@ -1,4 +1,4 @@
-package by.itminsk.cyclingclubbackend.model.user.mapper;
+package by.itminsk.cyclingclubbackend.mapper.user;
 
 import by.itminsk.cyclingclubbackend.model.city.City;
 import by.itminsk.cyclingclubbackend.model.race.Race;

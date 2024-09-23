@@ -2,8 +2,7 @@ package by.itminsk.cyclingclubbackend.controller;
 
 import by.itminsk.cyclingclubbackend.model.user.LoginDto;
 import by.itminsk.cyclingclubbackend.model.user.RegisterDto;
-import by.itminsk.cyclingclubbackend.model.user.User;
-import by.itminsk.cyclingclubbackend.model.user.mapper.UserSignUpMapper;
+import by.itminsk.cyclingclubbackend.mapper.user.UserSignUpMapper;
 import by.itminsk.cyclingclubbackend.service.city.CityService;
 import by.itminsk.cyclingclubbackend.service.team.TeamService;
 import by.itminsk.cyclingclubbackend.util.exception_handler.RestoreUserNotFound;
