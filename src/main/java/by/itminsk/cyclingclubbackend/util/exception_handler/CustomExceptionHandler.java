@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomExceptionHandler {
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     protected ErrorResponse handleNotFound(final UsernameNotFoundException ex) {
@@ -31,7 +30,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {AuthenticationException.class})
     protected ErrorResponse handleAuthenticationException(final AuthenticationException ex) {
@@ -39,7 +37,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {RestoreUserNotFound.class})
     protected ErrorResponse restoreUserNotFount(final RestoreUserNotFound ex) {
@@ -47,7 +44,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {ObjectNotFound.class})
     protected ErrorResponse objectNotFound(final ObjectNotFound ex) {
@@ -55,7 +51,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {ConstraintViolationException.class})
     protected ErrorResponse violationException(final ConstraintViolationException ex) {
@@ -65,7 +60,6 @@ public class CustomExceptionHandler {
         }).collect(Collectors.toList()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     protected ErrorResponse methodValidationException(final MethodArgumentNotValidException ex) {
@@ -76,7 +70,6 @@ public class CustomExceptionHandler {
     }
 
     //MethodArgumentNotValidException
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UnacceptableDataException.class})
     protected ErrorResponse unacceptableException(final UnacceptableDataException ex) {
@@ -84,7 +77,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {UniqueObjectExistException.class})
     protected ErrorResponse uniqueObjectExistException(final UniqueObjectExistException ex) {
@@ -92,7 +84,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {ExpiredJwtException.class})
     protected ErrorResponse expiredTokenException(final ExpiredJwtException ex) {
@@ -100,7 +91,6 @@ public class CustomExceptionHandler {
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {PermissionException.class})
     protected ErrorResponse permissionException(final PermissionException ex) {
