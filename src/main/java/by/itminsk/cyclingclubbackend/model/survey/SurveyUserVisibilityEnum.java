@@ -1,10 +1,8 @@
 package by.itminsk.cyclingclubbackend.model.survey;
 
-public enum VisibilityLevelEnum {
-
-    PUBLIC,
+public enum SurveyUserVisibilityEnum {
 
     ANONYMOUS,
 
-    ORDINARY
+    IDENTIFIED
 }

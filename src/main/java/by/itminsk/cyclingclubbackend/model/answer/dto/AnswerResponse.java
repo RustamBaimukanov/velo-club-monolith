@@ -1,4 +1,8 @@
 package by.itminsk.cyclingclubbackend.model.answer.dto;
 
-public record AnswerResponse(Long id, String answer) {
+import by.itminsk.cyclingclubbackend.model.user.UserGetDto;
+
+import java.util.Set;
+
+public record AnswerResponse(Long id, Boolean ownOption, String answer, Set<UserGetDto> users) {
 }

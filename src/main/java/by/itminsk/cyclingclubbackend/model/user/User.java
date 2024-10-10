@@ -1,5 +1,6 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
+import by.itminsk.cyclingclubbackend.model.answer.Answer;
 import by.itminsk.cyclingclubbackend.model.city.City;
 import by.itminsk.cyclingclubbackend.model.event_result.EventResult;
 import by.itminsk.cyclingclubbackend.model.news.News;
@@ -87,35 +88,42 @@ public class User implements Serializable, UserDetails {
     @JoinColumn(name = "user_id")
     private Set<SocialNetwork> socialNetworks = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     @JoinColumn(name = "user_id")
     private Set<EventResult> eventResults = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     @JoinColumn(name = "user_id")
     private Set<Trophy> trophies = new HashSet<>();
 
     @ManyToMany(mappedBy = "availableUsers")
     Set<News> news;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
     private City city;
 
+    @ManyToMany(mappedBy = "users")
+    Set<Answer> answers = new HashSet<>();
 
-    public void addTrophy(Trophy trophy) {
-        this.trophies.add(trophy);
+
+//    public void addTrophy(Trophy trophy) {
+//        this.trophies.add(trophy);
+//    }
+//
+//    public void addSocialNetwork(SocialNetwork socialNetwork) {
+//        this.socialNetworks.add(socialNetwork);
+//    }
+
+    public User addAnswer(Answer answer) {
+        answers.add(answer);
+        answer.getUsers().add(this);
+        return this;
     }
-
-    public void addSocialNetwork(SocialNetwork socialNetwork) {
-        this.socialNetworks.add(socialNetwork);
-    }
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

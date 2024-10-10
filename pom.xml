@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>by.it-minsk</groupId>
@@ -99,11 +99,6 @@
             <version>1.15</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-62</artifactId>
-            <version>3.5.1</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>

@@ -1,24 +1,11 @@
 package by.itminsk.cyclingclubbackend.model.user;
 
-import lombok.Getter;
-import lombok.Setter;
+public record UserGetDto(
+        Long id,
 
-@Getter
-@Setter
-public class UserGetDto {
+        String email,
 
-    private Long id;
+        String firstName,
 
-    private String email;
-
-    private String firstName;
-
-    private String lastName;
-
-    public UserGetDto(Long id, String email, String firstName, String lastName) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-}
+        String lastName
+) { }

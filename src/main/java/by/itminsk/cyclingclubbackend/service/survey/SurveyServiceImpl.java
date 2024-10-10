@@ -4,12 +4,15 @@ import by.itminsk.cyclingclubbackend.model.survey.Survey;
 import by.itminsk.cyclingclubbackend.repository.survey.SurveyRepository;
 import by.itminsk.cyclingclubbackend.util.exception_handler.ObjectNotFound;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SurveyServiceImpl implements SurveyService{
 
     private final SurveyRepository surveyRepository;
@@ -33,8 +36,9 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
+//    @Transactional(readOnly = true)
     public Survey getSurvey(Long id) {
-        return surveyRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Опрос не найден"));
+        return surveyRepository.findSurveyById(id).orElseThrow(() -> new ObjectNotFound("Опрос не найден"));
     }
 
     @Override

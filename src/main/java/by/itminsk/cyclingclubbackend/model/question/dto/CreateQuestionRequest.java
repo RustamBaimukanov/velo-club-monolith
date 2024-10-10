@@ -8,6 +8,7 @@ import java.util.List;
 public record CreateQuestionRequest(
         @Schema(example = "Вопрос 1", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String question,
-
+        Boolean allowMultipleAnswer,
+        Boolean isRequired,
         List<CreateAnswerRequest> answers) {
 }
