@@ -1,6 +1,7 @@
 package by.itminsk.cyclingclubbackend.service.survey;
 
 import by.itminsk.cyclingclubbackend.model.survey.Survey;
+import by.itminsk.cyclingclubbackend.model.survey.SurveyFilter;
 
 import java.util.List;
 
@@ -12,8 +13,11 @@ public interface SurveyService {
 
     void removeSurvey(Long id);
 
+    void cancelSurvey(Long id);
+
+
     Survey getSurvey(Long id);
 
-    List<Survey> getSurvey();
+    List<Survey> getSurvey(SurveyFilter filter);
 
 }

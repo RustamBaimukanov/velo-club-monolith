@@ -79,8 +79,14 @@ public interface UserService {
 
     void uniqueUserValidator(String phoneNumber, String email);
 
+    void voteFor(Long answerId);
+
+    void cancelVoteFor(Long answerId);
+
+
     User findUserByPhoneNumber(String phoneNumber);
 
 
     UserInfoDTO getUserProfile(Long id);
+
 }

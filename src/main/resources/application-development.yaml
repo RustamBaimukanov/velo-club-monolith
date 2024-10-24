@@ -1,0 +1,48 @@
+server:
+  port: '8080'
+spring:
+  jpa:
+    database: postgresql
+    defer-datasource-initialization: 'true'
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: 'true'
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+  datasource:
+    password: '123456'
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://172.19.25.10:5432/cyclingclub
+  sql:
+    init:
+      mode: always
+hibernate:
+  jdbc:
+    use_streams_for_binary: 'false'
+
+logging:
+  level:
+    org:
+      springframework:
+        web: debug
+        transaction: DEBUG
+        orm:
+          jpa: DEBUG
+      hibernate:
+        graph:
+          internal: debug
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: 'true'
+    path: /test
+jwt:
+  secret: 2b44b0b00fd822d8ce753e54dac3dc4e06c2725f7db930f3b9924468b53194dbccdbe23d7baa5ef5fbc414ca4b2e64700bad60c5a7c45eaba56880985582fba4
+  expiration: '36000000'
+

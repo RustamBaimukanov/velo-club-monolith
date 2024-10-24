@@ -1,36 +1,73 @@
 package by.itminsk.cyclingclubbackend.mapper.survey;
 
 import by.itminsk.cyclingclubbackend.model.answer.Answer;
+import by.itminsk.cyclingclubbackend.model.answer.dto.AnswerResponse;
 import by.itminsk.cyclingclubbackend.model.question.Question;
 import by.itminsk.cyclingclubbackend.model.question.dto.CreateQuestionRequest;
 import by.itminsk.cyclingclubbackend.model.question.dto.QuestionResponse;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import by.itminsk.cyclingclubbackend.model.question.dto.UpdateQuestionRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        builder = @Builder(disableBuilder = true),
-        uses = AnswerMapper.class)
-public interface QuestionMapper {
+public class QuestionMapper {
 
-
-    @AfterMapping
-    default void useQuestionAnswerSync(CreateQuestionRequest createQuestionRequest, @MappingTarget Question question) {
-        List<Answer> answers = Mappers.getMapper(AnswerMapper.class).createAnswerRequestListToAnswerList(createQuestionRequest.answers());
-        for (Answer answer :
-                answers) {
-            question.addAnswer(answer);
+    public static Question mapToQuestion(CreateQuestionRequest request) {
+        if (request == null) {
+            return null; // или выбросьте исключение
         }
+
+        Question question = new Question();
+        question.setQuestion(request.question());
+        question.setAllowMultipleAnswer(request.allowMultipleAnswer());
+        question.setIsRequired(request.isRequired());
+
+        // Обработка ответов и установление связи
+        if (request.answers() != null) {
+            List<Answer> answerList = request.answers().stream()
+                    .map(AnswerMapper::mapToAnswer)
+                    .peek(answer -> answer.setQuestion(question)) // Устанавливаем связь с вопросом
+                    .collect(Collectors.toList());
+            question.setAnswers(answerList);
+        }
+
+        return question;
     }
 
-    @Mapping(target = "answers", ignore = true)
-    Question createQuestionRequestToQuestion(CreateQuestionRequest createQuestionRequest);
+    public static Question mapToQuestion(UpdateQuestionRequest request) {
+        if (request == null) {
+            return null;
+        }
 
-    List<Question> createQuestionRequestListToQuestionList(List<CreateQuestionRequest> createQuestionRequest);
+        Question question = new Question();
+        question.setId(request.id()); // Получаем id для обновления
+        question.setQuestion(request.question());
+        question.setAllowMultipleAnswer(request.allowMultipleAnswer());
+        question.setIsRequired(request.isRequired());
 
-    QuestionResponse questionToQuestionResponse(Question question);
+        // Обработка ответов и установление связи
+        if (request.answers() != null) {
+            List<Answer> answerList = request.answers().stream()
+                    .map(AnswerMapper::mapToAnswer)
+                    .peek(answer -> answer.setQuestion(question)) // Устанавливаем связь с вопросом
+                    .collect(Collectors.toList());
+            question.setAnswers(answerList);
+        }
 
-    List<QuestionResponse> questionListToQuestionResponseList(List<Question> questions);
+        return question;
+    }
 
+    public static QuestionResponse questionToQuestionResponse(Question question) {
+        List<AnswerResponse> answerResponses = question.getAnswers().stream()
+                .map(AnswerMapper::answerToAnswerResponse)
+                .collect(Collectors.toList());
+
+        return new QuestionResponse(
+                question.getId(),
+                question.getQuestion(),
+                question.getAllowMultipleAnswer(),
+                question.getIsRequired(),
+                answerResponses
+        );
+    }
 }

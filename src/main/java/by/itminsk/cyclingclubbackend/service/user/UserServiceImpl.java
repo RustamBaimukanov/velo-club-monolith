@@ -1,9 +1,11 @@
 package by.itminsk.cyclingclubbackend.service.user;
 
+import by.itminsk.cyclingclubbackend.model.answer.Answer;
 import by.itminsk.cyclingclubbackend.model.city.City;
 import by.itminsk.cyclingclubbackend.model.role.RoleEnum;
 import by.itminsk.cyclingclubbackend.model.role.RolesEnum;
 import by.itminsk.cyclingclubbackend.model.user.*;
+import by.itminsk.cyclingclubbackend.repository.answer.AnswerRepository;
 import by.itminsk.cyclingclubbackend.repository.user.UserRepository;
 import by.itminsk.cyclingclubbackend.service.social_network.SocialNetworkService;
 import by.itminsk.cyclingclubbackend.model.team.Team;
@@ -29,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
@@ -47,6 +50,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
+
+    private final AnswerRepository answerRepository;
 
     private final TrophyService trophyService;
 
@@ -333,6 +338,28 @@ public class UserServiceImpl implements UserService {
 
             //return userService.registerByAdmin(registerDto);
         }
+    }
+
+    @Override
+    @Transactional
+    public void voteFor(Long answerId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(()-> new ObjectNotFound("Ответ не найден."));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = iUserRepository.findUserByPhoneNumber(currentPrincipalName).orElseThrow(() -> new ObjectNotFound("Не найден."));
+        user.addAnswer(answer);
+        //iUserRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void cancelVoteFor(Long answerId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(()-> new ObjectNotFound("Ответ не найден."));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = iUserRepository.findUserByPhoneNumber(currentPrincipalName).orElseThrow(() -> new ObjectNotFound("Не найден."));
+        user.removeAnswer(answer);
+        //iUserRepository.save(user);
     }
 
     @Override

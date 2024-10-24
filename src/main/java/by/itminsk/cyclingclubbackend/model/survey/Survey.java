@@ -22,33 +22,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//@NamedEntityGraph(
-//        name = "graph.Survey.questions",
-//        attributeNodes = {
-//                @NamedAttributeNode(value = "questions"
-//                        ,
-//                        subgraph = "graph.Question.answers"
-//                )
-//        }
-//        ,
-//        subgraphs = {
-//                @NamedSubgraph(
-//                        name = "graph.Question.answers",
-//                        attributeNodes = {
-//                                @NamedAttributeNode(value = "answers"
-////                                        , subgraph = "graph.Answer.votes"
-//                                )
-//                        }
-//                        )
-////                ,
-////                @NamedSubgraph(
-////                        name = "graph.Answer.votes",
-////                        attributeNodes = {
-////                                @NamedAttributeNode(value = "votes")
-////                        }
-////                )
-//        }
-//)
 public class Survey {
 
     @Id
@@ -65,9 +38,11 @@ public class Survey {
     @Column(name = "allow_change_answer")
     private Boolean allowChangeAnswer;
 
-    @NotNull
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDate createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -102,6 +77,17 @@ public class Survey {
     @Builder.Default
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDate.now();
+        this.updatedAt = LocalDate.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDate.now();
+    }
 
     public Survey addQuestion(Question question) {
         questions.add(question);

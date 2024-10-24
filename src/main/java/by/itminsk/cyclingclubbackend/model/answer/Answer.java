@@ -54,10 +54,5 @@ public class Answer {
         return this;
     }
 
-//    public Answer addVote(Vote vote) {
-//        votes.add(vote);
-//        vote.setAnswer(this);
-//        return this;
-//    }
 
 }

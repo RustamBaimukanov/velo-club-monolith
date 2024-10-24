@@ -125,6 +125,12 @@ public class User implements Serializable, UserDetails {
         return this;
     }
 
+    public User removeAnswer(Answer answer) {
+        answers.remove(answer);
+        answer.getUsers().remove(this);
+        return this;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

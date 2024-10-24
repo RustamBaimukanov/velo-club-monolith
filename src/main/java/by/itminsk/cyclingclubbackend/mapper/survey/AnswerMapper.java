@@ -3,22 +3,57 @@ package by.itminsk.cyclingclubbackend.mapper.survey;
 import by.itminsk.cyclingclubbackend.model.answer.Answer;
 import by.itminsk.cyclingclubbackend.model.answer.dto.AnswerResponse;
 import by.itminsk.cyclingclubbackend.model.answer.dto.CreateAnswerRequest;
-import by.itminsk.cyclingclubbackend.model.question.Question;
-import by.itminsk.cyclingclubbackend.model.question.dto.CreateQuestionRequest;
-import by.itminsk.cyclingclubbackend.model.question.dto.QuestionResponse;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import by.itminsk.cyclingclubbackend.model.answer.dto.UpdateAnswerRequest;
+import by.itminsk.cyclingclubbackend.model.user.User;
+import by.itminsk.cyclingclubbackend.model.user.UserGetDto;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, builder = @Builder(disableBuilder = true))
-public interface AnswerMapper {
+public class AnswerMapper {
 
-    Answer createAnswerRequestToAnswer(CreateAnswerRequest createAnswerRequest);
+    public static Answer mapToAnswer(CreateAnswerRequest request) {
+        if (request == null) {
+            return null;
+        }
 
-    List<Answer> createAnswerRequestListToAnswerList(List<CreateAnswerRequest> createAnswerRequests);
+        Answer answer = new Answer();
+        answer.setOwnOption(request.ownOption());
+        answer.setAnswer(request.answer());
+        return answer;
+    }
 
-    AnswerResponse answerToAnswerResponse(Answer answer);
+    public static Answer mapToAnswer(UpdateAnswerRequest request) {
+        if (request == null) {
+            return null;
+        }
 
-    List<AnswerResponse> answerListToAnswerResponseList(List<Answer> answers);
+        Answer answer = new Answer();
+        answer.setId(request.id()); // Получаем id для обновления
+        answer.setOwnOption(request.ownOption());
+        answer.setAnswer(request.answer());
+        return answer;
+    }
+
+    public static AnswerResponse answerToAnswerResponse(Answer answer) {
+        Set<UserGetDto> userDtos = answer.getUsers().stream()
+                .map(AnswerMapper::userToUserGetDto)
+                .collect(Collectors.toSet());
+
+        return new AnswerResponse(
+                answer.getId(),
+                answer.getOwnOption(),
+                answer.getAnswer(),
+                userDtos
+        );
+    }
+
+    public static UserGetDto userToUserGetDto(User user) {
+        return new UserGetDto(
+                user.getId(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName()
+        );
+    }
 }
