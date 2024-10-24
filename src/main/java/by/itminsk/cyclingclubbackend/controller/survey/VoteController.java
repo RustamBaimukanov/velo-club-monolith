@@ -17,6 +17,7 @@ public class VoteController {
 
     private final UserService userService;
 
+
     @Operation(
             summary = "Проголосовать за выбранный ответ")
     @PostMapping("{id}")
