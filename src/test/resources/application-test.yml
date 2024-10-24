@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: suneclipse
+    url: jdbc:postgresql://172.19.10.207:5433/test
+    password: '123456'
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+logging:
+  level:
+    org:
+      springframework:
+        transaction: DEBUG
+        orm:
+          jpa: DEBUG
+      hibernate:
+        graph:
+          internal: debug

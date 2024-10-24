@@ -29,13 +29,10 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Size(max = 50)
-    @NotBlank
     @Column(name = "title")
     private String title;
 
-    @NotNull
-    @Column(name = "allow_change_answer")
+    @Column(name = "allow_change_answer", nullable = false)
     private Boolean allowChangeAnswer;
 
     @Column(name = "created_at", updatable = false, nullable = false)
@@ -53,25 +50,22 @@ public class Survey {
     /***
      * Сокрытие результатов(публичный/непубличный)
      */
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "result_visibility")
+    @Column(name = "result_visibility", nullable = false)
     private SurveyResultVisibilityEnum resultVisibility;
 
     /***
      * Статус опроса(активный/неактивный)
      */
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private SurveyStatusEnum surveyStatus;
 
     /***
      * Видимость голосующих пользователей(анонимные/известные)
      */
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_visibility")
+    @Column(name = "user_visibility", nullable = false)
     private SurveyUserVisibilityEnum userVisibility;
 
     @Builder.Default
