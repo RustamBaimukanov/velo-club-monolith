@@ -4,31 +4,61 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Временные файлы и каталоги системы
+.DS_Store
+Thumbs.db
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Лог-файлы
+*.log
+logs/
+
+# Каталоги сборки Maven
+build/
+
+# Настройки IntelliJ IDEA
+.idea/
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Настройки Eclipse
+.project
+.classpath
+.settings/
+bin/
 
-### VS Code ###
+# Настройки VS Code
 .vscode/
-.idea/
+
+# Файлы конфигурации ОС
+*.swp
+*.swo
+
+# Сгенерированные JAR и WAR файлы
+*.jar
+*.war
+*.ear
+
+# Секция для Spring Boot
+### Spring Boot ###
+/*.jar
+/*.war
+*.pid
+
+# Локальные конфигурационные файлы
+application-*.yml
+application-*.yaml
+application-*.properties
+
+# Каталоги тестов
+test-output/
+
+# Каталоги для временных файлов и кэша
+/.mvn/timing.properties
+/.mvn/wrapper/maven-wrapper.jar
+
+# Файлы среды Docker
+docker-compose.override.yml
+Dockerfile
+compose.yaml
+README.Docker.md
+.dockerignore
