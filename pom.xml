@@ -8,12 +8,12 @@
         <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>by.it-minsk</groupId>
-    <artifactId>CyclingClubBackend</artifactId>
+    <groupId>com.work</groupId>
+    <artifactId>velo-club-monolith</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>CyclingClubBackend</name>
-    <description>CyclingClubBackend</description>
+    <name>velo-club-monolith</name>
+    <description>velo-club-monolith</description>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -202,7 +202,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>by.itminsk.cyclingclubbackend.CyclingClubBackendApplication</mainClass>
+                    <mainClass>com.work.veloclub.CyclingClubBackendApplication</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>
