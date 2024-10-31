@@ -1,13 +1,13 @@
-//package by.itminsk.cyclingclubbackend.controller;
+//package com.work.veloclub.controller;
 //
-//import by.itminsk.cyclingclubbackend.CyclingClubBackendApplication;
-//import by.itminsk.cyclingclubbackend.mapper.survey.SurveyMapper;
-//import by.itminsk.cyclingclubbackend.model.answer.dto.CreateAnswerRequest;
-//import by.itminsk.cyclingclubbackend.model.question.dto.CreateQuestionRequest;
-//import by.itminsk.cyclingclubbackend.model.survey.Survey;
-//import by.itminsk.cyclingclubbackend.model.survey.VisibilityLevelEnum;
-//import by.itminsk.cyclingclubbackend.model.survey.dto.CreateSurveyRequest;
-//import by.itminsk.cyclingclubbackend.repository.survey.SurveyRepository;
+//import com.work.veloclub.CyclingClubBackendApplication;
+//import com.work.veloclub.mapper.survey.SurveyMapper;
+//import com.work.veloclub.model.answer.dto.CreateAnswerRequest;
+//import com.work.veloclub.model.question.dto.CreateQuestionRequest;
+//import com.work.veloclub.model.survey.Survey;
+//import com.work.veloclub.model.survey.VisibilityLevelEnum;
+//import com.work.veloclub.model.survey.dto.CreateSurveyRequest;
+//import com.work.veloclub.repository.survey.SurveyRepository;
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,4 +1,4 @@
-//package by.itminsk.cyclingclubbackend.service.vote;
+//package com.work.veloclub.service.vote;
 //
 //public interface VoteService {
 //

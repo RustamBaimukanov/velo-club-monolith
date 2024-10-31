@@ -4,7 +4,7 @@ import com.work.veloclub.model.event.*;
 import com.work.veloclub.model.event_result.EventBlockDTO;
 import com.work.veloclub.model.event_result.EventResult;
 import com.work.veloclub.repository.event_result.EventResultsRepository;
-import by.itminsk.cyclingclubbackend.model.event.*;
+import com.work.veloclub.model.event.*;
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.repository.city.CityRepository;
 import com.work.veloclub.service.city.CityService;

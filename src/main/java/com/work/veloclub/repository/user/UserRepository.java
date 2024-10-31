@@ -2,7 +2,6 @@ package com.work.veloclub.repository.user;
 
 import com.work.veloclub.model.role.RoleDto;
 import com.work.veloclub.model.role.RoleEnum;
-import by.itminsk.cyclingclubbackend.model.user.*;
 import com.work.veloclub.model.user.*;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,10 +47,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByEmailAndPassword(String email, String password);
 
-    @Query("select new by.itminsk.cyclingclubbackend.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u where u.id = ?1")
+    @Query("select new com.work.veloclub.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u where u.id = ?1")
     Optional<UserGetDto> findUserDtoById(Long id);
 
-    @Query("select new by.itminsk.cyclingclubbackend.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u")
+    @Query("select new com.work.veloclub.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u")
     List<UserGetDto> findAllUserDto();
 
     List<UserGetDto> findAllByRoleName(RoleEnum role);
@@ -63,10 +62,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByIdIn(Set<Long> ids);
 
-    @Query("select new by.itminsk.cyclingclubbackend.model.role.RoleDto(u.role.id, u.role.name, u.role.qualification) from User u where u.id = ?1")
+    @Query("select new com.work.veloclub.model.role.RoleDto(u.role.id, u.role.name, u.role.qualification) from User u where u.id = ?1")
     RoleDto findRoleByUserId(Long id);
 
-    @Query("select new by.itminsk.cyclingclubbackend.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u where u.team.id = ?1")
+    @Query("select new com.work.veloclub.model.user.UserGetDto(u.id, u.email, u.firstName, u.lastName) from User u where u.team.id = ?1")
     List<UserGetDto> findUsersByTeamId(Long id);
 
 }

@@ -1,7 +1,7 @@
 package com.work.veloclub.service.user;
 
 import com.work.veloclub.model.role.RolesEnum;
-import by.itminsk.cyclingclubbackend.model.user.*;
+import com.work.veloclub.model.user.*;
 import com.work.veloclub.model.role.Role;
 import com.work.veloclub.model.user.*;
 import jakarta.validation.Valid;

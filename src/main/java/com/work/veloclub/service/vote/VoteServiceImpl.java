@@ -1,9 +1,9 @@
-//package by.itminsk.cyclingclubbackend.service.vote;
+//package com.work.veloclub.service.vote;
 //
-//import by.itminsk.cyclingclubbackend.model.answer.Answer;
-//import by.itminsk.cyclingclubbackend.model.survey_result.Vote;
-//import by.itminsk.cyclingclubbackend.model.user.User;
-//import by.itminsk.cyclingclubbackend.repository.survey_result.SurveyResultRepository;
+//import com.work.veloclub.model.answer.Answer;
+//import com.work.veloclub.model.survey_result.Vote;
+//import com.work.veloclub.model.user.User;
+//import com.work.veloclub.repository.survey_result.SurveyResultRepository;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;
 //
