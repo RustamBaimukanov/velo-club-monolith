@@ -6,6 +6,7 @@ import by.itminsk.cyclingclubbackend.model.social_network.SocialNetworkDTO;
 import by.itminsk.cyclingclubbackend.model.team.Team;
 import by.itminsk.cyclingclubbackend.model.trophy.Trophy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ public class UserInfoDTO {
 
     byte[] photo;
 
+    String photoFormat;
+
     Set<SocialNetworkDTO> socialNetworks;
 
     @JsonIgnore
@@ -48,8 +51,12 @@ public class UserInfoDTO {
 
     String qualification;
 
+    private Double height;
 
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, LocalDate birthDate, GenderEnum sex, byte[] photo , Team team, City city) {
+    private Double weight;
+
+
+    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, LocalDate birthDate, GenderEnum sex, byte[] photo , String photoFormat, Team team, City city, Double height, Double weight) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -60,6 +67,9 @@ public class UserInfoDTO {
         this.photo = photo;
         this.team = team;
         this.city = city;
+        this.photoFormat = photoFormat;
+        this.height = height;
+        this.weight = weight;
     }
 
     //Set<EventResult> eventResults;

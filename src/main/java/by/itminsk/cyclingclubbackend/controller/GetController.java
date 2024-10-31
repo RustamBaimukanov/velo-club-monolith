@@ -55,7 +55,7 @@ public class GetController {
     @GetMapping("/user-img")
     public ResponseEntity<byte[]> getFile(@RequestBody LoginDto loginDto) {
 
-        User user = userService.getUser(loginDto.getTel());
+        User user = userService.getUser(loginDto.getPhoneNumber());
         String filename = "";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(user.getPhotoFormat()));

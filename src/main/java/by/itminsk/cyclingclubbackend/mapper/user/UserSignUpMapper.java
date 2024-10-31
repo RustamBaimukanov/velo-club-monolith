@@ -50,9 +50,7 @@ public interface UserSignUpMapper {
 
     }
 
-    @Mapping(target = "phoneNumber", source = "tel")
-    @Mapping(target = "birthDate", source = "birth")
-    @Mapping(target = "password", ignore = true)
+
     @Mapping(target = "city.id", source = "city")
     @Mapping(target = "sex", source = "gender")
     @Mapping(target = "role.id", constant = "3L")

@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class LoginDto {
 
-    private String tel;
+    private String phoneNumber;
 
     private String password;
 

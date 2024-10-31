@@ -110,15 +110,6 @@ public class User implements Serializable, UserDetails {
     @ManyToMany(mappedBy = "users")
     Set<Answer> answers = new HashSet<>();
 
-
-//    public void addTrophy(Trophy trophy) {
-//        this.trophies.add(trophy);
-//    }
-//
-//    public void addSocialNetwork(SocialNetwork socialNetwork) {
-//        this.socialNetworks.add(socialNetwork);
-//    }
-
     public User addAnswer(Answer answer) {
         answers.add(answer);
         answer.getUsers().add(this);
@@ -162,8 +153,5 @@ public class User implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-
 
 }

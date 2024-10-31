@@ -32,7 +32,7 @@ public class SpringSecurityConfig {
                 // ...
                 .cors(cors -> cors.configurationSource(request -> {
                     var cr = new CorsConfiguration();
-                    cr.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080", "http://localhost:8082", "http://localhost:80", "http://172.19.10.207:80",
+                    cr.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:3000", "http://localhost:8080", "http://localhost:8082", "http://localhost:80", "http://172.19.10.207:80",
                             "http://172.19.10.207:4200", "http://172.19.10.207:8080", "http://172.19.10.207:8082"
                     ));
                     cr.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -47,9 +47,10 @@ public class SpringSecurityConfig {
                 // "/api/signup-complete",  "/api/verify",  "/api/get/**", "/api/get/qualifications", "/api/get/cities",
                 // "/api/get/teams", "/api/get/event","/api/check-tel-restore", "/api/check-tel-signup",
                 // "/api/restore/restore-password").permitAll()
-                .requestMatchers("/api/auth/**", "/api/sms/**", "/api/get/**").permitAll()
+                .requestMatchers("/api/auth/**", "/api/sms/**").permitAll()
                 .requestMatchers("/api/race").authenticated()
-                .requestMatchers("/api/user/**").authenticated()
+                .requestMatchers("/api/user/**").authenticated() // Deprecated
+                .requestMatchers("/api/users/**").authenticated()
                 .requestMatchers("/api/team/**").authenticated()
                 .requestMatchers("/api/news/**").authenticated()
                 .requestMatchers("/api/event/**").authenticated()

@@ -1,5 +1,8 @@
 server:
-  port: '8080'
+  port: '8082'
+hibernate:
+  jdbc:
+    use_streams_for_binary: 'false'
 spring:
   jpa:
     database: postgresql
@@ -18,15 +21,11 @@ spring:
   datasource:
     password: '123456'
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    url: jdbc:postgresql://172.19.25.10:5432/cyclingclub
+    username: suneclipse
+    url: jdbc:postgresql://172.19.10.207:5433/cyclingclub
   sql:
     init:
       mode: always
-hibernate:
-  jdbc:
-    use_streams_for_binary: 'false'
-
 logging:
   level:
     org:
@@ -45,4 +44,3 @@ springdoc:
 jwt:
   secret: 2b44b0b00fd822d8ce753e54dac3dc4e06c2725f7db930f3b9924468b53194dbccdbe23d7baa5ef5fbc414ca4b2e64700bad60c5a7c45eaba56880985582fba4
   expiration: '36000000'
-

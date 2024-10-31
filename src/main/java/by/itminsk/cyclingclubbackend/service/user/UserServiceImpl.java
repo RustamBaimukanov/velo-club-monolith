@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String phoneNumber) {
-        return iUserRepository.findUserByPhoneNumber(phoneNumber).orElse(new User());
+        return iUserRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ObjectNotFound("Пользователь не найден"));
     }
 
     @Override
@@ -430,7 +430,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> authenticate(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getTel(),
+                        loginDto.getPhoneNumber(),
                         loginDto.getPassword()
                 )
         );
@@ -441,7 +441,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> restorePassword(LoginDto loginDto) {
-        User user = iUserRepository.findUserByPhoneNumber(loginDto.getTel()).orElseThrow(() -> new RestoreUserNotFound("Такой пользователь не существует"));
+        User user = iUserRepository.findUserByPhoneNumber(loginDto.getPhoneNumber()).orElseThrow(() -> new RestoreUserNotFound("Такой пользователь не существует"));
         user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
         iUserRepository.save(user);
 

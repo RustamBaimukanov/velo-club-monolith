@@ -35,8 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtUtilities.getToken(request);
         if (token != null){
             try {
-                jwtUtilities.validateToken(new String(Base64.getMimeDecoder().decode(token)));
-                String phoneNumber = jwtUtilities.extractUsername(new String(Base64.getMimeDecoder().decode(token)));
+                jwtUtilities.validateToken(token);
+                String phoneNumber = jwtUtilities.extractUsername(token);
 
                 UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
                 if (userDetails != null) {

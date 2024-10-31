@@ -11,12 +11,12 @@ import java.util.Map;
 
 public record RegisterDto(String firstName,
                           String lastName,
-                          String tel,
+                          String phoneNumber,
                           String email,
                           String password,
                           String confirmPassword,
-                          Boolean acceptTerms,
-                          LocalDate birth,
+                          Boolean termsAccepted,
+                          LocalDate birthDate,
                           GenderEnum gender,
                           Long city) {
 

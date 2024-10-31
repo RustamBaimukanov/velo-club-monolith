@@ -35,7 +35,7 @@ public class AuthController {
     )
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody RegisterDto registerDto) {
-        userService.uniqueUserValidator(registerDto.tel(), registerDto.email());
+        userService.uniqueUserValidator(registerDto.phoneNumber(), registerDto.email());
         cityService.cityExistenceValidator(registerDto.city());
         return userService.register(userMapper.signUpDtoToUser(registerDto));
 //        return userService.register(registerDto);
@@ -45,7 +45,7 @@ public class AuthController {
             summary = "Авторизация пользователя",
             description = "API авторизации пользователя."
     )
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginDto loginDto) {
         return userService.authenticate(loginDto);
     }
