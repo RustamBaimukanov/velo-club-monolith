@@ -1,8 +1,7 @@
 package com.work.veloclub.service.event;
 
-import com.work.veloclub.model.event_result.EventBlockDTO;
+import com.work.veloclub.model.event.EventCreateDTO;
 import com.work.veloclub.model.event.EventCalendarDto;
-import com.work.veloclub.model.event.EventPostDto;
 import com.work.veloclub.model.event.Event;
 import jakarta.validation.Valid;
 
@@ -11,7 +10,15 @@ import java.util.List;
 
 public interface EventService {
 
-    EventBlockDTO getEvent(Long id);
+    Event createEvent(EventCreateDTO eventPostDto);
+
+    List<Event> createEventGenerate(List<EventCreateDTO> eventPostDto);
+
+
+    Event updateEvent(Long id, EventCreateDTO eventPostDto);
+
+
+//    EventBlockDTO getEvent(Long id);
 
     List<Event> getEventsByDay(LocalDate date);
 
@@ -22,12 +29,10 @@ public interface EventService {
     Event getById(Long id);
 
 
-    void createEvent(@Valid Event event);
-
-    void updateEvent(@Valid EventPostDto eventPostDto);
 
 
-    void validateCreateEventContent(EventPostDto eventPostDto);
+
+    void validateCreateEventContent(EventCreateDTO eventPostDto);
 
     void eventExistenceValidator(Long id);
 

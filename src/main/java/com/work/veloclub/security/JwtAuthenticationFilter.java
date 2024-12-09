@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UserDetails userDetails = customerUserDetailsService.loadUserByUsername(phoneNumber);
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails.getUsername() ,null , userDetails.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(userDetails ,null , userDetails.getAuthorities());
                     log.info("Пользователь {} вошел в систему", phoneNumber);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -1,20 +1,17 @@
 package com.work.veloclub.mapper.race;
 
 import com.work.veloclub.model.race.Race;
-import com.work.veloclub.model.race.RaceDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
+import com.work.veloclub.model.race.RaceResponse;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface RaceMapper {
+public class RaceMapper {
 
-    RaceDto toRaceDto(Race race);
+    public static RaceResponse mapToRaceResponse(Race race) {
+        return new RaceResponse(race.getId(), race.getName(), race.getRouteStartPoint(), race.getRouteEndPoint(), race.getDistance(), race.getAverageSpeed(), race.getCalories());
+    }
 
-    List<RaceDto> toRaceDtoList(List<Race> races);
-
-    Race fromRaceDto(RaceDto raceDto);
-
-    List<Race> fromRaceDtoList(List<RaceDto> races);
+    public static List<RaceResponse> mapToRaceResponse(List<Race> races){
+        return races.stream().map(RaceMapper::mapToRaceResponse).toList();
+    }
 }

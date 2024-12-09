@@ -1,32 +1,34 @@
 package com.work.veloclub.service.event;
 
-import com.work.veloclub.model.event.*;
-import com.work.veloclub.model.event_result.EventBlockDTO;
-import com.work.veloclub.model.event_result.EventResult;
-import com.work.veloclub.repository.event_result.EventResultsRepository;
-import com.work.veloclub.model.event.*;
 import com.work.veloclub.model.city.City;
-import com.work.veloclub.repository.city.CityRepository;
-import com.work.veloclub.service.city.CityService;
+import com.work.veloclub.model.event.*;
 import com.work.veloclub.model.race.Race;
-import com.work.veloclub.service.race.RaceService;
+import com.work.veloclub.model.role.RoleEnum;
+import com.work.veloclub.model.role.RolesEnum;
+import com.work.veloclub.model.user.User;
+import com.work.veloclub.model.user_profile.UserProfile;
+import com.work.veloclub.repository.city.CityRepository;
 import com.work.veloclub.repository.event.EventRepository;
 import com.work.veloclub.repository.role.RoleRepository;
-import com.work.veloclub.model.user.User;
+import com.work.veloclub.service.city.CityService;
 import com.work.veloclub.service.user.UserService;
 import com.work.veloclub.util.exception_handler.ObjectNotFound;
+import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
@@ -37,15 +39,11 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @Slf4j
 public class EventServiceImpl implements EventService {
 
-    private final RaceService raceService;
-
     private final CityService cityService;
 
     private final UserService userService;
 
     private final EventRepository eventRepository;
-
-    private final EventResultsRepository eventResultsRepository;
 
     private final RoleRepository roleRepository;
 
@@ -53,26 +51,147 @@ public class EventServiceImpl implements EventService {
     private final CityRepository cityRepository;
 
     @Override
-    public EventBlockDTO getEvent(Long id) {
-        Map<String, Integer> rating = new HashMap<>();
-        for (EventResult result :
-                eventResultsRepository.findAllByEventId(id)) {
-            rating.put(result.getUser().getFirstName() + " " + result.getUser().getLastName(), result.getPlace());
+    @Transactional
+    public Event createEvent(EventCreateDTO eventCreateDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Event event = new Event();
+        event.setName(eventCreateDTO.name());
+        event.setDescription(eventCreateDTO.description());
+        event.setBirthDateFrom(eventCreateDTO.birthDateFrom());
+        event.setBirthDateTo(eventCreateDTO.birthDateTo());
+        event.setStartDate(eventCreateDTO.startDate());
+        event.setEndDate(eventCreateDTO.endDate());
+        event.setRace(Race.builder().id(eventCreateDTO.bestRoute()).build());
+        event.setCity(City.builder().id(eventCreateDTO.city()).build());
+        event.setAvailableGender(eventCreateDTO.gender());
+        event.setCreatedUser(user.getUserProfile());
+
+        Set<RoleEnum> roleEnumSet = new HashSet<>();
+        switch (eventCreateDTO.participantsCategory()) {
+            case ANY -> {
+                roleEnumSet.add(RoleEnum.SPORTSMAN);
+                roleEnumSet.add(RoleEnum.DABBLER);
+            }
+            case SPORTSMAN -> roleEnumSet.add(RoleEnum.SPORTSMAN);
+            case DABBLER -> roleEnumSet.add(RoleEnum.DABBLER);
         }
-        EventBlockDTO eventBlockDTO = eventRepository.findEventById(id);
-        eventBlockDTO.setRating(rating);
-        return eventBlockDTO;
+
+        event.setAvailableRoles(roleRepository.findRolesByNameIn(roleEnumSet));
+
+        if (eventCreateDTO.participantsCategory() != RolesEnum.ANY && eventCreateDTO.participants() != null && !eventCreateDTO.participants().isEmpty()) {
+            for (Long userProfileId :
+                    eventCreateDTO.participants()) {
+                event.addProfile(UserProfile.builder().id(userProfileId).build());
+            }
+        }
+        eventRepository.save(event);
+        return event;
     }
 
     @Override
+    public List<Event> createEventGenerate(List<EventCreateDTO> eventCreateDTOList) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Event> events = eventCreateDTOList.stream()
+                .map(eventCreateDTO -> {
+                    Event event = new Event();
+                    event.setName(eventCreateDTO.name());
+                    event.setDescription(eventCreateDTO.description());
+                    event.setBirthDateFrom(eventCreateDTO.birthDateFrom());
+                    event.setBirthDateTo(eventCreateDTO.birthDateTo());
+                    event.setStartDate(eventCreateDTO.startDate());
+                    event.setEndDate(eventCreateDTO.endDate());
+                    event.setRace(Race.builder().id(eventCreateDTO.bestRoute()).build());
+                    event.setCity(City.builder().id(eventCreateDTO.city()).build());
+                    event.setAvailableGender(eventCreateDTO.gender());
+                    event.setCreatedUser(user.getUserProfile());
+
+                    Set<RoleEnum> roleEnumSet = new HashSet<>();
+                    switch (eventCreateDTO.participantsCategory()) {
+                        case ANY -> {
+                            roleEnumSet.add(RoleEnum.SPORTSMAN);
+                            roleEnumSet.add(RoleEnum.DABBLER);
+                        }
+                        case SPORTSMAN -> roleEnumSet.add(RoleEnum.SPORTSMAN);
+                        case DABBLER -> roleEnumSet.add(RoleEnum.DABBLER);
+                    }
+
+                    event.setAvailableRoles(roleRepository.findRolesByNameIn(roleEnumSet));
+
+                    if (eventCreateDTO.participantsCategory() != RolesEnum.ANY && eventCreateDTO.participants() != null && !eventCreateDTO.participants().isEmpty()) {
+                        for (Long userProfileId :
+                                eventCreateDTO.participants()) {
+                            event.addProfile(UserProfile.builder().id(userProfileId).build());
+                        }
+                    }
+                    return event;
+                }).toList();
+
+        eventRepository.saveAll(events);
+        return events;
+    }
+
+    @Override
+    @Transactional
+    public Event updateEvent(Long id, EventCreateDTO eventCreateDTO) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Event event = eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound(ErrorMessages.EventErrors.NOT_FOUND));
+        event.setName(eventCreateDTO.name());
+        event.setDescription(eventCreateDTO.description());
+        event.setBirthDateFrom(eventCreateDTO.birthDateFrom());
+        event.setBirthDateTo(eventCreateDTO.birthDateTo());
+        event.setStartDate(eventCreateDTO.startDate());
+        event.setEndDate(eventCreateDTO.endDate());
+        event.setRace(Race.builder().id(eventCreateDTO.bestRoute()).build());
+        event.setCity(City.builder().id(eventCreateDTO.city()).build());
+        event.setAvailableGender(eventCreateDTO.gender());
+        event.setCreatedUser(user.getUserProfile());
+
+        Set<RoleEnum> roleEnumSet = new HashSet<>();
+        switch (eventCreateDTO.participantsCategory()) {
+            case ANY -> {
+                roleEnumSet.add(RoleEnum.SPORTSMAN);
+                roleEnumSet.add(RoleEnum.DABBLER);
+            }
+            case SPORTSMAN -> roleEnumSet.add(RoleEnum.SPORTSMAN);
+            case DABBLER -> roleEnumSet.add(RoleEnum.DABBLER);
+        }
+
+        event.setAvailableRoles(roleRepository.findRolesByNameIn(roleEnumSet));
+
+        if (eventCreateDTO.participantsCategory() != RolesEnum.ANY && eventCreateDTO.participants() != null && !eventCreateDTO.participants().isEmpty()) {
+            for (Long userProfileId :
+                    eventCreateDTO.participants()) {
+                event.addProfile(UserProfile.builder().id(userProfileId).build());
+            }
+        }
+        return event;
+    }
+
+//    @Override
+//    public EventBlockDTO getEvent(Long id) {
+//        Map<String, Integer> rating = new HashMap<>();
+//        for (EventResult result :
+//                eventResultsRepository.findAllByEventId(id)) {
+//            rating.put(result.getUser().getFirstName() + " " + result.getUser().getLastName(), result.getPlace());
+//        }
+//        EventBlockDTO eventBlockDTO = eventRepository.findEventById(id);
+//        eventBlockDTO.setRating(rating);
+//        return eventBlockDTO;
+//    }
+
+    @Override
     public List<Event> getEventsByDay(LocalDate date) {
-        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0,0), date.atTime(0,0));
+        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0, 0), date.atTime(0, 0));
 
     }
 
     @Override
     public List<Event> getEventsByMonth(LocalDate date) {
-        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.with(lastDayOfMonth()).atTime(0,0), date.with(firstDayOfMonth()).atTime(0,0));
+        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.with(lastDayOfMonth()).atTime(0, 0), date.with(firstDayOfMonth()).atTime(0, 0));
     }
 
     @Override
@@ -89,8 +208,8 @@ public class EventServiceImpl implements EventService {
         firstOfMonth.datesUntil(firstOfFollowingMonth).forEach(calendarDate -> {
                     LocalDateTime calendarDateTime = calendarDate.atTime(0, 0);
                     if (events.stream()
-                            .anyMatch(event -> (event.getStartDate().isBefore(calendarDateTime) || event.getStartDate().isEqual(calendarDateTime))
-                                    && (event.getEndDate().isAfter(calendarDateTime) || event.getEndDate().isEqual(calendarDateTime))))
+                            .anyMatch(event -> (event.startDate().isBefore(calendarDateTime) || event.startDate().isEqual(calendarDateTime))
+                                    && (event.endDate().isAfter(calendarDateTime) || event.endDate().isEqual(calendarDateTime))))
                         eventCalendarList.add(new EventCalendarDto(calendarDate, EventCalendarStatusEnum.EXIST));
                     else {
                         eventCalendarList.add(new EventCalendarDto(calendarDate, EventCalendarStatusEnum.NOT_EXIST));
@@ -105,48 +224,14 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Мероприятие не найдено."));
     }
 
-    @Override
-    public void createEvent(Event event) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        event.setCreatedUser(userService.findUserByPhoneNumber(currentPrincipalName));
-        event.setAvailableRoles(roleRepository.findRolesByNameIn(event.getParticipantsCategory().getRoleEnumSet()));
-        eventRepository.save(event);
-    }
 
     @Override
-    public void updateEvent(EventPostDto eventPostDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-
-        Event event = getById(eventPostDto.getId()).toBuilder()
-                .name(eventPostDto.getEventName())
-                .note(eventPostDto.getEventDescription())
-                .availableBirthDateFrom(eventPostDto.getBirthDateFrom())
-                .availableBirthDateTo(eventPostDto.getBirthDateTo())
-                .startDate(eventPostDto.getStartDate())
-                .endDate(eventPostDto.getEndDate())
-                .availableGender(eventPostDto.getGender())
-                .race(Race.builder().id(eventPostDto.getBestRoute()).build())
-                .availableRoles(roleRepository.findRolesByNameIn(eventPostDto.getParticipantsCategory().getRoleEnumSet()))
-                .availableUsers(eventPostDto.getAddParticipants() != null ? eventPostDto.getAddParticipants()
-                        .stream().map(participant -> User.builder().id(participant).build()).collect(Collectors.toSet()) : null)
-                .city(City.builder().id(eventPostDto.getRegion()).build())
-                .availableGender(eventPostDto.getGender())
-                .date(new Date())
-                .build();
-        userService.sameUserValidator(event.getCreatedUser().getId(), currentPrincipalName);
-
-        eventRepository.save(event);
-    }
-
-    @Override
-    public void validateCreateEventContent(EventPostDto eventPostDto) {
+    public void validateCreateEventContent(EventCreateDTO eventPostDto) {
         //TODO пока не ясно как обработать роли, найти решение при возникновении прецедента
-        raceService.raceExistenceValidator(eventPostDto.getBestRoute());
-        cityService.cityExistenceValidator(eventPostDto.getRegion());
-        if (eventPostDto.getAddParticipants() != null && !eventPostDto.getAddParticipants().isEmpty())
-            userService.userExistValidator(new HashSet<>(eventPostDto.getAddParticipants()));
+//        raceService.raceExistenceValidator(eventPostDto.getBestRoute());
+//        cityService.cityExistenceValidator(eventPostDto.getRegion());
+//        if (eventPostDto.getAddParticipants() != null && !eventPostDto.getAddParticipants().isEmpty())
+//            userService.userExistValidator(new HashSet<>(eventPostDto.getAddParticipants()));
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.work.veloclub.model.event_result;
 
+import com.work.veloclub.model.BaseEntity;
 import com.work.veloclub.model.event.Event;
-import com.work.veloclub.model.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,8 +15,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public class EventResult {
+public class EventResult extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -25,19 +25,22 @@ public class EventResult {
     @Column(name = "place")
     private Integer place;
 
-    @ManyToOne
+
+    @Column(name = "points")
+    private Integer points;
+
+    //В миллисекундах
+    @Column(name = "race_time")
+    private Double raceTime;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    @JsonIgnore
     private Event event;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_profile_id")
+    private UserProfile userProfile;
 
-    @Transient
-    private Date date;
-
-    @Transient
-    private String name;
 }

@@ -1,92 +1,109 @@
 package com.work.veloclub.service.user;
 
-import com.work.veloclub.model.role.RolesEnum;
 import com.work.veloclub.model.user.*;
-import com.work.veloclub.model.role.Role;
-import com.work.veloclub.model.user.*;
-import jakarta.validation.Valid;
+import com.work.veloclub.model.user.dto.UpdateUserDTO;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Set;
 
 public interface UserService {
 
-    void create(User user);
+//    void create(User user);
 
-    List<User> getAll();
+//    List<User> getAll();
 
-    User get(long id);
+//    User get(long id);
 
-    boolean update(User user, long id);
+//    boolean update(User user, long id);
 
-    boolean delete(long id);
+//    boolean delete(long id);
 
 
-    void createAdmin();
+//    void createAdmin();
 
     //LoginStatus authorize(LoginDTO loginDTO);
 
-    ResponseEntity<?> authenticate(LoginDto loginDto);
+    ResponseEntity<BearerToken> authenticate(LoginDto loginDto);
 
-    ResponseEntity<?> restorePassword(LoginDto loginDto);
-
-
-    ResponseEntity<?> register (@Valid User user);
-
-    void registerByAdmin(@Valid User user);
-
-    Boolean confirmPassword (String password, String confirmPassword);
-
-    ResponseEntity<?> changePhoneNumber(String oldPhoneNumber, String newPhoneNumber);
+//    ResponseEntity<?> restorePassword(LoginDto loginDto);
 
 
-    Role saveRole(Role role);
+    ResponseEntity<BearerToken> register (RegisterDto registerDto);
 
-    User saverUser (User user);
-
-    Boolean existByPhoneNumber(String phoneNumber);
-
-    Boolean existByEmail(String email);
+    ResponseEntity<?> register (RegisterByAdminDto registerDto);
 
 
-    User getUser(String phoneNumber);
+    //    void registerByAdmin(@Valid User user);
+//
+//    Boolean confirmPassword (String password, String confirmPassword);
+//
+//    ResponseEntity<?> changePhoneNumber(String oldPhoneNumber, String newPhoneNumber);
+//
+//
+//    Role saveRole(Role role);
+//
+//    User saverUser (User user);
+//
+      Boolean existsByPhoneNumber(String phoneNumber);
+//
+//    Boolean existByEmail(String email);
 
-    UserInfoDTO getUserInfo(String phoneNumber);
 
-    EditUserDTO getEditableUser(String phoneNumber);
+//    User getUser(String phoneNumber);
 
-    UserMenuDTO getUserMenu(String phoneNumber);
+    void updateMe(UpdateUserDTO updateUserDTO);
 
-    ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO);
-
-    ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO);
+    void updateUser(Long id, UpdateUserDTO updateUserDTO);
 
 
-    Long getIdFromPhoneNumber(String phoneNumber);
+    User getMe();
 
-    UserGetDto getUser(Long id);
+    User getUser(Long id);
 
-    List<UserGetDto> getUser();
 
-    List<UserGetDto> getUsersExceptRole(RolesEnum role);
+//    EditUserDTO getEditableUser(String phoneNumber);
 
-    void sameUserValidator(Long userId, String phoneNumber);
+//    UserMenuDTO getUserMenu(String phoneNumber);
 
-    void userExistValidator(Long id);
+//    ResponseEntity<?> editUser(UpdateUserDTO updateUserDTO);
+//
+//    ResponseEntity<?> editUserByAdmin(Long id, UpdateUserDTO updateUserDTO);
 
-    void userExistValidator(Set<Long> ids);
+
+//    Long getIdFromPhoneNumber(String phoneNumber);
+//
+//    UserGetDto getUser(Long id);
+
+//    List<UserGetDto> getUser();
+
+//    List<UserGetDto> getUsersExceptRole(RolesEnum role);
+
+//    void sameUserValidator(Long userId, String phoneNumber);
+//
+//    void userExistValidator(Long id);
+//
+//    void userExistValidator(Set<Long> ids);
+
+    void uniqueEmailValidator(Long userId, String email);
+
 
     void uniqueUserValidator(String phoneNumber, String email);
 
-    void voteFor(Long answerId);
 
-    void cancelVoteFor(Long answerId);
+//    void voteFor(Long answerId);
+//
+//    void cancelVoteFor(Long answerId);
+
+    User findUserById(Long id);
 
 
     User findUserByPhoneNumber(String phoneNumber);
 
+    void banUser();
 
-    UserInfoDTO getUserProfile(Long id);
+    void banUser(Long id);
+
+    void activateUser(Long id);
+
+
+//    UserInfoDTO getUserProfile(Long id);
 
 }

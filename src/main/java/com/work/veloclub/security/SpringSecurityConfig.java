@@ -1,10 +1,14 @@
 package com.work.veloclub.security;
 
+import com.work.veloclub.util.exception_handler.security_custom_handler.CustomAccessDeniedHandler;
+import com.work.veloclub.util.exception_handler.security_custom_handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -20,12 +24,14 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailsServiceImpl customerUserDetailsService;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -48,12 +54,12 @@ public class SpringSecurityConfig {
                 // "/api/get/teams", "/api/get/event","/api/check-tel-restore", "/api/check-tel-signup",
                 // "/api/restore/restore-password").permitAll()
                 .requestMatchers("/api/auth/**", "/api/sms/**").permitAll()
-                .requestMatchers("/api/race").authenticated()
+                .requestMatchers("/api/race/**").authenticated()
                 .requestMatchers("/api/user/**").authenticated() // Deprecated
                 .requestMatchers("/api/users/**").authenticated()
-                .requestMatchers("/api/team/**").authenticated()
+                .requestMatchers("/api/teams/**").authenticated()
                 .requestMatchers("/api/news/**").authenticated()
-                .requestMatchers("/api/event/**").authenticated()
+                .requestMatchers("/api/events/**").authenticated()
                 .requestMatchers("/api/survey/**").authenticated()
 
                 .requestMatchers("/api/private/**").hasAuthority("ADMIN")
@@ -62,7 +68,10 @@ public class SpringSecurityConfig {
 //            .requestMatchers(HttpMethod.OPTIONS, "/api/**", "/v2/**", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler);
 
         return http.build();
     }

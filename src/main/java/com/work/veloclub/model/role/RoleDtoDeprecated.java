@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-public class RoleDto {
+public class RoleDtoDeprecated {
 
     private Long id;
 
@@ -13,7 +13,7 @@ public class RoleDto {
     private String qualification;
 
 
-    public RoleDto(Long id, RoleEnum name, String qualification) {
+    public RoleDtoDeprecated(Long id, RoleEnum name, String qualification) {
         this.id = id;
         this.name = name;
         this.qualification = qualification;

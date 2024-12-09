@@ -1,27 +1,17 @@
 package com.work.veloclub.model.news;
 
-import lombok.*;
+import lombok.Builder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@Getter
-@Setter
 @Builder
-@NoArgsConstructor
-public class NewsDTO {
+public record NewsDTO( Long id,
 
-    private Long id;
+         String title,
 
-    private String title;
+         String content,
 
-    private String content;
+         LocalDate createdAt) {
 
-    private Date creationDate;
 
-    public NewsDTO(Long id, String title, String content, Date creationDate) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.creationDate = creationDate;
-    }
 }

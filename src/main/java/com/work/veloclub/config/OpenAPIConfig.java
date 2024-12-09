@@ -26,8 +26,8 @@ public class OpenAPIConfig {
                 .components(new Components().addSecuritySchemes
                         ("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("Велоклуб")
-                        .description("API велоклуба.")
-                        .version("1.0").contact(new Contact().name("Команда джавистов")
+                        .description("API велоклуба. Часть функционала полетела.")
+                        .version("1.1").contact(new Contact().name("Маэстро")
                                 .email("").url(""))
                         .license(new License().name("License of API")
                                 .url("API license URL")));

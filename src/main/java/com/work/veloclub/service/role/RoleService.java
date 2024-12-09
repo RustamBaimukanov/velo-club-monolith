@@ -1,15 +1,15 @@
 package com.work.veloclub.service.role;
 
-import com.work.veloclub.model.role.RoleDto;
+import com.work.veloclub.model.role.RoleDtoDeprecated;
 
 import java.util.List;
 
 public interface RoleService {
 
-    List<RoleDto> getRoles();
+    List<RoleDtoDeprecated> getRoles();
 
 
-    List<RoleDto> getQualifications();
+    List<RoleDtoDeprecated> getQualifications();
 
     String getQualificationByUserId(Long userId);
 }

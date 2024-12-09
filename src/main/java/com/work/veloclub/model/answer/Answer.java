@@ -2,6 +2,7 @@ package com.work.veloclub.model.answer;
 
 import com.work.veloclub.model.question.Question;
 import com.work.veloclub.model.user.User;
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -43,10 +44,10 @@ public class Answer {
             name = "votes",
             joinColumns = @JoinColumn(name = "answer_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<User> users = new HashSet<>();
+    Set<UserProfile> users = new HashSet<>();
 
 
-    public Answer addUser(User user) {
+    public Answer addUser(UserProfile user) {
         users.add(user);
         user.getAnswers().add(this);
         return this;

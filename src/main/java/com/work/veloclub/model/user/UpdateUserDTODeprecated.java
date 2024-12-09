@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateUserDTO {
+public class UpdateUserDTODeprecated {
 
     private String email;
 

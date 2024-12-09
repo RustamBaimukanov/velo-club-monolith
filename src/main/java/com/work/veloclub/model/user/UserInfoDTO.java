@@ -1,78 +1,44 @@
 package com.work.veloclub.model.user;
 
-import com.work.veloclub.model.city.City;
-import com.work.veloclub.model.event_result.EventResult;
+import com.work.veloclub.model.city.CityDTO;
+import com.work.veloclub.model.role.RoleDTO;
 import com.work.veloclub.model.social_network.SocialNetworkDTO;
-import com.work.veloclub.model.team.Team;
-import com.work.veloclub.model.trophy.Trophy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import com.work.veloclub.model.team.TeamDTO;
+import com.work.veloclub.model.trophy.TrophyDTO;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 
-@Getter
-@Setter
-@EqualsAndHashCode
-public class UserInfoDTO {
+public record UserInfoDTO(Long id,
 
-    Long id;
+                          String email,
 
-    String email;
+                          String phoneNumber,
 
-    String phoneNumber;
+                          String firstName,
 
-    String firstName;
+                          String lastName,
 
-    String lastName;
+                          LocalDate birthDate,
 
-    LocalDate birthDate;
+                          GenderEnum gender,
 
-    GenderEnum sex;
+                          byte[] photo,
 
-    byte[] photo;
+                          String photoFormat,
 
-    String photoFormat;
+                          Double height,
 
-    Set<SocialNetworkDTO> socialNetworks;
+                          Double weight,
 
-    @JsonIgnore
-    Set<EventResult> eventResults;
+                          RoleDTO role,
 
-    Set<Trophy> trophies;
+                          CityDTO city,
 
-    Team team;
+                          TeamDTO team,
 
-    City city;
+                          List<TrophyDTO> achievements,
 
-    Map<Integer, List<EventResult>> event;
-
-    String qualification;
-
-    private Double height;
-
-    private Double weight;
-
-
-    public UserInfoDTO(Long id, String email, String phoneNumber, String firstName, String lastName, LocalDate birthDate, GenderEnum sex, byte[] photo , String photoFormat, Team team, City city, Double height, Double weight) {
-        this.id = id;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.sex = sex;
-        this.photo = photo;
-        this.team = team;
-        this.city = city;
-        this.photoFormat = photoFormat;
-        this.height = height;
-        this.weight = weight;
-    }
-
-    //Set<EventResult> eventResults;
-
-
-
-}
+                          List<SocialNetworkDTO> socialNetworks
+                          ) {}

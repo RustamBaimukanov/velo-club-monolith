@@ -6,12 +6,4 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class EventCalendarDto {
-
-    private LocalDate date;
-
-    private EventCalendarStatusEnum status;
-}
+public record EventCalendarDto(LocalDate date, EventCalendarStatusEnum status){}

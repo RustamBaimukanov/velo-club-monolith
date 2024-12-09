@@ -1,0 +1,11 @@
+version: '3'
+services:
+  velo-club-monolith:
+    build: .
+    ports:
+      - "8080:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://172.19.10.207:5433/cyclingclub
+      SPRING_DATASOURCE_USERNAME: suneclipse
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_PROFILES_ACTIVE: development

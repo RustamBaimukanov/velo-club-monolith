@@ -1,12 +1,16 @@
 package com.work.veloclub.model.event;
 
+import com.work.veloclub.model.BaseEntity;
 import com.work.veloclub.model.city.City;
+import com.work.veloclub.model.event_profile.EventUserProfile;
+import com.work.veloclub.model.event_result.EventResult;
 import com.work.veloclub.model.race.Race;
 import com.work.veloclub.model.role.Role;
 import com.work.veloclub.model.role.RolesEnum;
 import com.work.veloclub.model.user.User;
 import com.work.veloclub.model.user.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +19,7 @@ import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -26,33 +31,24 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @JsonIgnore
     private Long id;
 
-    @NotBlank(message = "Название мероприятия не может быть пустым")
-    @Size(max = 255,message = "Название мероприятия не может превышать 255 символов")
     @Column(name = "name")
     private String name;
 
-    @Size(max = 4000, message = "Описание мероприятия не может превышать N символов")
-    @Column(name = "note")
-    private String note;
+    @Column(name = "description")
+    private String description;
 
-    //Дата создания
-    @Column(name = "date")
-    private Date date;
+    @Column(name = "birth_date_from")
+    private LocalDate birthDateFrom;
 
-    @Column(name = "available_birth_date_from")
-    private Date availableBirthDateFrom;
-
-    @Column(name = "available_birth_date_to")
-    private Date availableBirthDateTo;
+    @Column(name = "birth_date_to")
+    private LocalDate birthDateTo;
 
     //Время проведения мероприятия от
     @Column(name = "start_date")
@@ -67,64 +63,40 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "available_gender")
-    @NotNull(message = "Не выбрано ограничение по полу")
     private GenderEnum availableGender;
 
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "race_id")
-    @NotNull(message = "Не выбран маршрут")
     private Race race;
 
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
-    @NotNull(message = "Не указано местоположение для мероприятия")
     private City city;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "created_user_id")
-    private User createdUser;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_user_profile_id")
+    private UserProfile createdUser;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "events_roles",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Role> availableRoles = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "events_users",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> availableUsers = new HashSet<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventUserProfile> additionalUsers = new HashSet<>();
 
-    @Transient
-    private RolesEnum participantsCategory;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventResult> eventResults = new HashSet<>();
 
-    public RolesEnum getCategory() {
-        if (this.availableRoles.size() > 1) {
-            return RolesEnum.ANY;
-        }
-        switch (this.availableRoles.stream().toList().get(0).getName()) {
-            case ADMIN -> {
-                return RolesEnum.ADMIN;
-            }
-            case DABBLER -> {
-                return RolesEnum.DABBLER;
-            }
-            case SPORTSMAN -> {
-                return RolesEnum.SPORTSMAN;
-            }
-        }
-        return RolesEnum.ANY;
-    }
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventCategory> eventCategories = new HashSet<>();
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "events_users",
+//            joinColumns = @JoinColumn(name = "event_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_profile_id")
+//    )
+//    private Set<UserProfile> additionalUsers = new HashSet<>();
+
 
     @Override
     public boolean equals(Object o) {
@@ -138,5 +110,20 @@ public class Event {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
+    }
+
+    public Event addProfile(UserProfile profile) {
+        EventUserProfile eventUserProfile = new EventUserProfile(this, profile);
+        additionalUsers.add(eventUserProfile);
+        profile.getEvents().add(eventUserProfile);
+        return this;
+    }
+
+    public void removeProfile(UserProfile profile) {
+        EventUserProfile eventUserProfile = new EventUserProfile(this, profile);
+        profile.getEvents().remove(eventUserProfile);
+        additionalUsers.remove(eventUserProfile);
+        eventUserProfile.setEvent(null);
+        eventUserProfile.setUserProfile(null);
     }
 }

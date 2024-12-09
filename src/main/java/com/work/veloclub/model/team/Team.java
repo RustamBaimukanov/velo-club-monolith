@@ -1,7 +1,12 @@
 package com.work.veloclub.model.team;
 
+import com.work.veloclub.model.BaseEntity;
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "team")
@@ -10,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Team {
+public class Team extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -20,8 +25,11 @@ public class Team {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany
-//    @JoinColumn(name = "team_id")
-//    private Set<User> users = new HashSet<>();
+    private byte[] photo;
+    private String photoFormat;
+
+
+    @OneToMany(mappedBy = "team")
+    private Set<UserProfile> userProfiles = new HashSet<>();
 
 }

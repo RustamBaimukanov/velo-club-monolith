@@ -1,6 +1,6 @@
 package com.work.veloclub.repository.role;
 
-import com.work.veloclub.model.role.RoleDto;
+import com.work.veloclub.model.role.RoleDtoDeprecated;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.role.Role;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -19,7 +19,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Set<Role> findRolesByNameIn(Set<RoleEnum> names);
 
-    List<RoleDto> findAllByIdIsNot(Long id);
+    List<RoleDtoDeprecated> findAllByIdIsNot(Long id);
 
     List<Role> findAllByNameNot(RoleEnum roleEnum);
 

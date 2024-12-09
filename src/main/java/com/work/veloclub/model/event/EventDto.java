@@ -1,24 +1,20 @@
 package com.work.veloclub.model.event;
 
 import com.work.veloclub.model.role.RolesEnum;
-import lombok.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Builder
-@AllArgsConstructor
-public class EventDto {
+public record EventDto(String name,
 
-    private String eventName;
+                       //Время проведения мероприятия от
+                       LocalDateTime startDate,
 
-    //Время проведения мероприятия от
-    private LocalDateTime startDate;
+                       //Время проведения мероприятия до
+                       LocalDateTime endDate,
 
-    //Время проведения мероприятия до
-    private LocalDateTime endDate;
+                       RolesEnum participantsCategory) {
 
-    private RolesEnum participantsCategory;
+
 }

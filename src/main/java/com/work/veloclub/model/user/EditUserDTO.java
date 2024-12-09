@@ -1,7 +1,7 @@
 package com.work.veloclub.model.user;
 
 import com.work.veloclub.model.city.City;
-import com.work.veloclub.model.role.RoleDto;
+import com.work.veloclub.model.role.RoleDtoDeprecated;
 import com.work.veloclub.model.social_network.SocialNetworkDTO;
 import com.work.veloclub.model.team.Team;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +41,7 @@ public class EditUserDTO {
 
     City city;
 
-    RoleDto qualification;
+    RoleDtoDeprecated qualification;
 
     Double height;
 

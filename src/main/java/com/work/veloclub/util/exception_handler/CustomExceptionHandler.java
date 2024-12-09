@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,16 +18,23 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CustomExceptionHandler {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = {UsernameNotFoundException.class})
     protected ErrorResponse handleNotFound(final UsernameNotFoundException ex) {
         log.error(ex.getMessage());
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = {AuthenticationException.class})
     protected ErrorResponse handleAuthenticationException(final AuthenticationException ex) {
+        log.error(ex.getMessage());
+        return new ErrorResponse(new ErrorContent("", ex.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    protected ErrorResponse handleAccessDeniedException(final AccessDeniedException ex) {
         log.error(ex.getMessage());
         return new ErrorResponse(new ErrorContent("", ex.getMessage()));
     }

@@ -1,7 +1,13 @@
 package com.work.veloclub.model.race;
 
+import com.work.veloclub.model.BaseEntity;
+import com.work.veloclub.model.event.Event;
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "race")
@@ -10,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Race {
+public class Race extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -27,8 +33,11 @@ public class Race {
     private String routeEndPoint;
 
     //В метрах
-    @Column(name = "distance")
+    @Column(name = "distance", scale = 2)
     private Double distance;
+
+    @Column(name = "average_speed", scale = 2)
+    private Double averageSpeed;
 
     //В миллисекундах
     @Column(name = "race_time")
@@ -36,6 +45,9 @@ public class Race {
 
     @Column(name = "calories")
     private Double calories;
+
+    @OneToMany(mappedBy = "race")
+    private Set<Event> events = new HashSet<>();
 
     //TODO количество оценок от пользователей
 }

@@ -4,6 +4,7 @@ import com.work.veloclub.model.trophy_group.TrophyGroup;
 import com.work.veloclub.model.trophy_type.TrophyType;
 import com.work.veloclub.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,16 +24,15 @@ public class Trophy {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_profile_id")
+    private UserProfile userProfile;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id")
     private TrophyType trophyType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private TrophyGroup trophyGroup;
 

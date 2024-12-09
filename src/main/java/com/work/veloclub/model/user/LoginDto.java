@@ -1,16 +1,14 @@
 package com.work.veloclub.model.user;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class LoginDto {
+public record LoginDto(
+        @Pattern(regexp = "^[+\\d](?:.*\\d)?$", message = "Формат номера телефона не верен.")
+        @Size(min = 13, max = 13, message = "Некорректная длина номера телефона.")
+        String phoneNumber,
 
-    private String phoneNumber;
+                       String password) {
 
-    private String password;
 
 }

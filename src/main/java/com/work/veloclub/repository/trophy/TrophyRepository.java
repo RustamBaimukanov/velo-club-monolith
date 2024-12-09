@@ -11,6 +11,6 @@ import java.util.Set;
 @Hidden
 public interface TrophyRepository extends JpaRepository<Trophy, Long> {
 
-    Set<Trophy> findAllByUserId(Long userId);
+//    Set<Trophy> findAllByUserId(Long userId);
 
 }
