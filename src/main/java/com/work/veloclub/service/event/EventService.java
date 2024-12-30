@@ -3,6 +3,7 @@ package com.work.veloclub.service.event;
 import com.work.veloclub.model.event.EventCreateDTO;
 import com.work.veloclub.model.event.EventCalendarDto;
 import com.work.veloclub.model.event.Event;
+import com.work.veloclub.model.event.EventGetFilter;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
@@ -26,6 +27,8 @@ public interface EventService {
 
     List<EventCalendarDto> getEventCalendar(LocalDate date);
 
+    List<Event> getEventsByFilter(EventGetFilter filter);
+
     Event getById(Long id);
 
 
@@ -36,4 +39,5 @@ public interface EventService {
 
     void eventExistenceValidator(Long id);
 
+    void script();
 }

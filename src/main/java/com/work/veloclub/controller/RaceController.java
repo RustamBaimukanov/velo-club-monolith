@@ -25,7 +25,7 @@ public class RaceController {
 
     @Operation(
             summary = "Добавление маршрута",
-            description = "API добавления маршрута(на данный момент скудный набор данных,дополнительные поля будут добавлены после обсуждения)"
+            description = "API добавления маршрута"
     )
     @PostMapping
     public ResponseEntity<?> addRace(@Valid @RequestBody RaceCreateRequest race) {
@@ -34,8 +34,8 @@ public class RaceController {
     }
 
     @Operation(
-            summary = "Добавление маршрутов(Генерация данных, будет удалено перед релизом",
-            description = "API добавления маршрута(на данный момент скудный набор данных,дополнительные поля будут добавлены после обсуждения)"
+            summary = "Добавление маршрутов(Генерация данных, будет удалено перед релизом)",
+            description = "API добавления маршрута"
     )
     @PostMapping("/generate")
     public ResponseEntity<?> addRaceMany(@RequestBody List<RaceCreateRequest> race) {
@@ -45,7 +45,7 @@ public class RaceController {
 
     @Operation(
             summary = "Редактирование существующего маршрута",
-            description = "API редактирования существующего маршрута(на данный момент скудный набор данных,дополнительные поля будут добавлены после обсуждения, к тому же нужно будет предусмотреть следующий случай-что делать с редактирование маршрута если есть активное событие привязанное к этому маршруту)"
+            description = "API редактирования существующего маршрута"
     )
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRace(

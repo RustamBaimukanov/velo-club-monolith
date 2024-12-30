@@ -2,13 +2,17 @@ package com.work.veloclub.service.event;
 
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.model.event.*;
+import com.work.veloclub.model.event.category.Category;
+import com.work.veloclub.model.event.category.EventRaceType;
 import com.work.veloclub.model.race.Race;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.role.RolesEnum;
 import com.work.veloclub.model.user.User;
 import com.work.veloclub.model.user_profile.UserProfile;
 import com.work.veloclub.repository.city.CityRepository;
+import com.work.veloclub.repository.event.CategoryRepository;
 import com.work.veloclub.repository.event.EventRepository;
+import com.work.veloclub.repository.event.EventSpecification;
 import com.work.veloclub.repository.role.RoleRepository;
 import com.work.veloclub.service.city.CityService;
 import com.work.veloclub.service.user.UserService;
@@ -16,6 +20,7 @@ import com.work.veloclub.util.exception_handler.ObjectNotFound;
 import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,10 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
@@ -46,6 +48,8 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
 
     private final RoleRepository roleRepository;
+
+    private final CategoryRepository categoryRepository;
 
 
     private final CityRepository cityRepository;
@@ -220,6 +224,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getEventsByFilter(EventGetFilter filter) {
+        return Event.filterByAgeRange(eventRepository.findAll(EventSpecification.filterByEventRequest(filter), Sort.by("startDate").descending()), filter.birthDateFrom(), filter.birthDateTo());
+    }
+
+    @Override
     public Event getById(Long id) {
         return eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Мероприятие не найдено."));
     }
@@ -237,6 +246,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public void eventExistenceValidator(Long id) {
         if (!eventRepository.existsById(id)) throw new ObjectNotFound("Мероприятие не найдено.");
+    }
+
+    @Override
+    public void script() {
+        List<Event> events = eventRepository.findAll();
+        events.stream().forEach(event -> event.setCategory(categoryRepository.findById(7L).get()));
     }
 
 }

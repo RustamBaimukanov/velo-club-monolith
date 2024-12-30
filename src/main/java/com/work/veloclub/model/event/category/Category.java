@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "categories")
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
@@ -18,7 +19,17 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private EventRaceType type;
+
+    @Column(name = "category_name")
     private String name;
+
+    @Column(name = "property_numeric")
+    private String numericProperty;
+
+    @Column(name = "property_description")
+    private String descriptionProperty;
 
 }

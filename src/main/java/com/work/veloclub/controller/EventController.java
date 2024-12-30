@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.EventFilter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,16 @@ public class EventController {
     private final EventService eventService;
 
     private final EventResultService eventResultService;
+
+    @Operation(
+            summary = "Script",
+            description = "Не использовать(наполнение данных)."
+    )
+    @PostMapping("/script")
+    public ResponseEntity<?> ta() {
+        eventService.script();
+        return ResponseEntity.ok(null);
+    }
 
     @Operation(
             summary = "Добавление мероприятия",
@@ -78,10 +89,20 @@ public class EventController {
     }
 
     @Operation(
-            summary = "Получение мероприятии по текущей дате",
+            summary = "Получение списка мероприятии",
             description = ""
     )
     @GetMapping
+    public ResponseEntity<?> getEvent(EventGetFilter filter) {
+        List<Event> events = eventService.getEventsByFilter(filter);
+        return ResponseEntity.ok(EventMapper.mapToEventListDto(events));
+    }
+
+    @Operation(
+            summary = "Получение мероприятии по текущей дате",
+            description = ""
+    )
+    @GetMapping("/date")
     public ResponseEntity<?> getEventByCalendar(@RequestParam
                                              LocalDate date) {
         Function<Set<RoleEnum>, RolesEnum> convert = x -> x.contains(RoleEnum.SPORTSMAN)

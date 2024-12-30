@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/teams")
 @RequiredArgsConstructor
-@Tag(name = "Команды", description = "Операции связанные с командами(на данный момент тут нету добавления/редактирования команды, отвлекают собаки...)")
+@Tag(name = "Команды", description = "Операции связанные с командами")
 public class TeamController {
 
     private final TeamService teamService;

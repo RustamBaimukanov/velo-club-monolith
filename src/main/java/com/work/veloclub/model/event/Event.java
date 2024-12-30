@@ -2,6 +2,7 @@ package com.work.veloclub.model.event;
 
 import com.work.veloclub.model.BaseEntity;
 import com.work.veloclub.model.city.City;
+import com.work.veloclub.model.event.category.Category;
 import com.work.veloclub.model.event_profile.EventUserProfile;
 import com.work.veloclub.model.event_result.EventResult;
 import com.work.veloclub.model.race.Race;
@@ -21,9 +22,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "events")
@@ -86,8 +90,31 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EventResult> eventResults = new HashSet<>();
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<EventCategory> eventCategories = new HashSet<>();
+    @ManyToOne
+    private Category category;
+
+    // Метод для вычисления возраста
+    private int calculateAge(LocalDate birthDate) {
+        if (birthDate == null) return 0;
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
+
+    // Фильтрация по возрасту
+    public static List<Event> filterByAgeRange(List<Event> events, Integer ageFrom, Integer ageTo) {
+        return events.stream()
+                .filter(event -> {
+                    int ageFromValid = ageFrom == null ? Integer.MIN_VALUE : ageFrom;
+                    int ageToValid = ageTo == null ? Integer.MAX_VALUE : ageTo;
+
+                    // Проверка возраста, если обе границы возрастных диапазонов заданы
+                    int ageFromCalculated = event.calculateAge(event.getBirthDateFrom());
+                    int ageToCalculated = event.calculateAge(event.getBirthDateTo());
+
+                    return ageFromCalculated >= ageFromValid && ageToCalculated <= ageToValid;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 //    @ManyToMany
 //    @JoinTable(
@@ -126,4 +153,5 @@ public class Event extends BaseEntity {
         eventUserProfile.setEvent(null);
         eventUserProfile.setUserProfile(null);
     }
+
 }
