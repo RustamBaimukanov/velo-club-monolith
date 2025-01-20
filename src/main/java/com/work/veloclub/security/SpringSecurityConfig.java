@@ -60,6 +60,7 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/teams/**").authenticated()
                 .requestMatchers("/api/news/**").authenticated()
                 .requestMatchers("/api/events/**").authenticated()
+                .requestMatchers("/api/categories/**").authenticated()
                 .requestMatchers("/api/survey/**").authenticated()
 
                 .requestMatchers("/api/private/**").hasAuthority("ADMIN")
