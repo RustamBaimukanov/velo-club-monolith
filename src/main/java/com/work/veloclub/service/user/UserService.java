@@ -23,6 +23,14 @@ public interface UserService {
 
     //LoginStatus authorize(LoginDTO loginDTO);
 
+    /**
+     * Авторизует пользователя в системе
+     * Если пользователь ввел верные данные, дарует ему access token
+     * Если пользователь ввел неверный номер или пароль, инициирует ответ с кодом 401
+     * Если пользователь ввел невалидные данные(например кривой номер телефона), инициирует ответ с кодом 400
+     * @param loginDto - объект с номером телефона и паролем
+     * @return возвращает access токен
+     */
     ResponseEntity<BearerToken> authenticate(LoginDto loginDto);
 
 //    ResponseEntity<?> restorePassword(LoginDto loginDto);
@@ -90,7 +98,12 @@ public interface UserService {
 
     void uniqueEmailValidator(Long userId, String email);
 
-
+    /**
+     * Проверка введенного пользователем телефона и почты на уникальность(перед регистрацией)
+     * Если проверка не проходит, инициирует ответ с кодом 400
+     * @param phoneNumber номер телефона
+     * @param email почта
+     */
     void uniqueUserValidator(String phoneNumber, String email);
 
 

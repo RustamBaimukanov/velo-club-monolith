@@ -14,6 +14,11 @@ public interface CityService {
 
     City getCityById(Long id);
 
+    /**
+     * Проверяет существование города по введенному пользователем id
+     * Если проверка не проходит, инициирует ответ с кодом 400
+     * @param id - id города
+     */
     void cityExistenceValidator(Long id);
 
 

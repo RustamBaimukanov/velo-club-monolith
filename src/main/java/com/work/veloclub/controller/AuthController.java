@@ -64,8 +64,6 @@ public class AuthController {
     )
     @PostMapping("/signup")
     public ResponseEntity<BearerToken> signup(@RequestBody @Valid RegisterDto registerDto) {
-        userService.uniqueUserValidator(registerDto.phoneNumber(), registerDto.email());
-        cityService.cityExistenceValidator(registerDto.city());
         return userService.register(registerDto);
     }
 

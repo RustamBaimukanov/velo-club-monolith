@@ -8,7 +8,7 @@ public record LoginDto(
         @Size(min = 13, max = 13, message = "Некорректная длина номера телефона.")
         String phoneNumber,
 
-                       String password) {
+        String password) {
 
 
 }
