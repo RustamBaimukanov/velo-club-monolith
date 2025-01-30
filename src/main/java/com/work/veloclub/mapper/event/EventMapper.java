@@ -54,4 +54,5 @@ public class EventMapper {
     public static List<EventListDTO> mapToEventListDto(List<Event> events) {
         return events.stream().map(EventMapper::mapToEventListDto).toList();
     }
+
 }

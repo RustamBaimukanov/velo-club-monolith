@@ -1,4 +1,4 @@
 package com.work.veloclub.model.team;
 
-public record TeamDTO(Long id, String name) {
+public record TeamDTO(Long id, String name, byte[] photo, String format) {
 }

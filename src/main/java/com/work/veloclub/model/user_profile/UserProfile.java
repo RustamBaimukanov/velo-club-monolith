@@ -43,6 +43,8 @@ public class UserProfile {
 
     private String lastName;
 
+    private String surname;
+
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)

@@ -11,6 +11,8 @@ import com.work.veloclub.model.team.Team;
 import com.work.veloclub.model.user.*;
 import com.work.veloclub.model.user_profile.UserProfile;
 
+import java.util.Base64;
+
 public class UserMapper {
 
     public static User mapToUser(RegisterDto registerDto) {
@@ -43,6 +45,7 @@ public class UserMapper {
         UserProfile userProfile = new UserProfile();
         userProfile.setFirstName(registerDto.firstName());
         userProfile.setLastName(registerDto.lastName());
+        userProfile.setSurname(registerDto.surname());
         userProfile.setEmail(registerDto.email());
         userProfile.setBirthDate(registerDto.birthDate());
         userProfile.setGender(registerDto.gender());
@@ -59,11 +62,13 @@ public class UserMapper {
         UserProfile userProfile = new UserProfile();
         userProfile.setFirstName(registerDto.firstName());
         userProfile.setLastName(registerDto.lastName());
+        userProfile.setSurname(registerDto.surname());
         userProfile.setEmail(registerDto.email());
         userProfile.setBirthDate(registerDto.birthDate());
         userProfile.setGender(registerDto.gender());
         userProfile.setHeight(registerDto.height());
         userProfile.setWeight(registerDto.weight());
+        userProfile.setPhoto(registerDto.avatar() != null ? Base64.getDecoder().decode(registerDto.avatar()) : null);
         if (registerDto.team() != null) userProfile.setTeam(Team.builder().id(registerDto.team()).build());
         City city = new City();
         city.setId(registerDto.city());
@@ -71,8 +76,8 @@ public class UserMapper {
         return userProfile;
     }
 
-    public static UserInfoDTO mapToUserInfo(User user){
-        if (user == null){
+    public static UserInfoDTO mapToUserInfo(User user) {
+        if (user == null) {
             return null;
         }
         return new UserInfoDTO(user.getId(),
@@ -80,9 +85,10 @@ public class UserMapper {
                 user.getPhoneNumber(),
                 user.getUserProfile().getFirstName(),
                 user.getUserProfile().getLastName(),
+                user.getUserProfile().getSurname(),
                 user.getUserProfile().getBirthDate(),
                 user.getUserProfile().getGender(),
-                user.getUserProfile().getPhoto(),
+                user.getUserProfile().getPhoto() != null ? Base64.getEncoder().encodeToString(user.getUserProfile().getPhoto()) : null,
                 user.getUserProfile().getPhotoFormat(),
                 user.getUserProfile().getHeight(),
                 user.getUserProfile().getWeight(),
@@ -91,6 +97,6 @@ public class UserMapper {
                 TeamMapper.mapToTeamDto(user.getUserProfile().getTeam()),
                 TrophyMapper.mapToTrophyDtoList(user.getUserProfile().getTrophies()),
                 SocialNetworkMapper.mapToSocialNetworkDtoList(user.getUserProfile().getSocialNetworks())
-                );
+        );
     }
 }

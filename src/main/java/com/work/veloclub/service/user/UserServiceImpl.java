@@ -5,6 +5,8 @@ import com.work.veloclub.mapper.user.UserMapper;
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.model.role.Role;
 import com.work.veloclub.model.role.RoleEnum;
+import com.work.veloclub.model.sms.ResetPasswordDto;
+import com.work.veloclub.model.sms.ResetPhoneDto;
 import com.work.veloclub.model.social_network.SocialNetwork;
 import com.work.veloclub.model.team.Team;
 import com.work.veloclub.model.user.*;
@@ -40,8 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -327,6 +329,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserWithRoleById(Long id) {
+        return userRepository.findUserWithRoleById(id).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+    }
+
+    @Override
     @Transactional
     public void banUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -410,6 +417,36 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<?> changePassword(ResetPasswordDto resetPasswordDto) {
+        User user = userRepository.findUserByPhoneNumber(resetPasswordDto.phoneNumber()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        user.setPassword(passwordEncoder.encode(resetPasswordDto.newPassword()));
+        return ResponseEntity.ok("Пароль изменен");
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> changePassword(UserPasswordDto userPasswordDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        if (passwordEncoder.matches(userPasswordDto.oldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userPasswordDto.newPassword()));
+        } else return ResponseEntity.ok("Пароль не изменен");
+        return ResponseEntity.ok("Пароль изменен");
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> changePhoneNumber(ResetPhoneDto resetPhoneDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserWithRoleByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        user.setPhoneNumber(resetPhoneDto.phoneNumber());
+
+        String token = jwtUtilities.generateToken(user.getPhoneNumber(), Collections.singletonList(user.getRole().getName().name()));
+        return new ResponseEntity<>(new BearerToken(token, "Bearer "), HttpStatus.OK);
+    }
+
 //    @Override
 //    public void registerByAdmin(User user) {
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -462,11 +499,12 @@ public class UserServiceImpl implements UserService {
         userProfile.setBirthDate(updateUserDTO.birthDate());
         userProfile.setFirstName(updateUserDTO.firstName());
         userProfile.setLastName(updateUserDTO.lastName());
+        userProfile.setSurname(updateUserDTO.surname());
         if (updateUserDTO.cityId() != null) userProfile.setCity(City.builder().id(updateUserDTO.cityId()).build());
         if (updateUserDTO.teamId() != null) userProfile.setTeam(Team.builder().id(updateUserDTO.teamId()).build());
         userProfile.setWeight(updateUserDTO.weight());
         userProfile.setHeight(updateUserDTO.height());
-        if (updateUserDTO.socialNetworks() != null){
+        if (updateUserDTO.socialNetworks() != null) {
             updateUserDTO.socialNetworks()
                     .forEach(socialNetworkDTO -> {
                         SocialNetwork socialNetwork = new SocialNetwork();
@@ -476,12 +514,7 @@ public class UserServiceImpl implements UserService {
                         userProfile.addSocialNetwork(socialNetwork);
                     });
         }
-
-        try {
-            userProfile.setPhoto(updateUserDTO.avatar() != null ? updateUserDTO.avatar().getBytes() : null);
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла аватара", e);
-        }
+        userProfile.setPhoto(updateUserDTO.avatar() != null ? Base64.getDecoder().decode(updateUserDTO.avatar()) : null);
         userRepository.save(user);
     }
 
@@ -503,12 +536,13 @@ public class UserServiceImpl implements UserService {
         userProfile.setBirthDate(updateUserDTO.birthDate());
         userProfile.setFirstName(updateUserDTO.firstName());
         userProfile.setLastName(updateUserDTO.lastName());
+        userProfile.setSurname(updateUserDTO.surname());
         if (updateUserDTO.cityId() != null) userProfile.setCity(City.builder().id(updateUserDTO.cityId()).build());
         if (updateUserDTO.teamId() != null) userProfile.setTeam(Team.builder().id(updateUserDTO.teamId()).build());
         userProfile.setWeight(updateUserDTO.weight());
         userProfile.setHeight(updateUserDTO.height());
 
-        if (updateUserDTO.socialNetworks() != null){
+        if (updateUserDTO.socialNetworks() != null) {
             updateUserDTO.socialNetworks()
                     .forEach(socialNetworkDTO -> {
                         SocialNetwork socialNetwork = new SocialNetwork();
@@ -519,11 +553,8 @@ public class UserServiceImpl implements UserService {
                     });
         }
 
-        try {
-            userProfile.setPhoto(updateUserDTO.avatar() != null ? updateUserDTO.avatar().getBytes() : null);
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка при чтении файла аватара", e);
-        }
+        userProfile.setPhoto(updateUserDTO.avatar() != null ? Base64.getDecoder().decode(updateUserDTO.avatar()) : null);
+
         //TODO поидее должно работать без save
         userRepository.save(user);
     }

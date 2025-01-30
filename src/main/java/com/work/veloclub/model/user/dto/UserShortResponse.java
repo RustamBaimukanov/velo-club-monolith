@@ -16,6 +16,7 @@ public record UserShortResponse(Long id,
                                 String firstName,
 
                                 String lastName,
+                                String surname,
 
                                 LocalDate birthDate,
 

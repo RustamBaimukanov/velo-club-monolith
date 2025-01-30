@@ -20,11 +20,13 @@ public record UserInfoDTO(Long id,
 
                           String lastName,
 
+                          String surname,
+
                           LocalDate birthDate,
 
                           GenderEnum gender,
 
-                          byte[] photo,
+                          String photo,
 
                           String photoFormat,
 

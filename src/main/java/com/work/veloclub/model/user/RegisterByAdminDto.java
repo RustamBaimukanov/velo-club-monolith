@@ -13,6 +13,8 @@ public record RegisterByAdminDto
                 String firstName,
                 @Size(max = 255, message = "Длина фамилии слишком велика.")
                 String lastName,
+                @Size(max = 255, message = "Длина отчества слишком велика.")
+                String surname,
                 @Pattern(regexp = "^[+\\d](?:.*\\d)?$", message = "Формат номера телефона не верен.")
                 @Size(min = 13, max = 13, message = "Некорректная длина номера телефона.")
                 String phoneNumber,
@@ -33,7 +35,7 @@ public record RegisterByAdminDto
                 @NotNull(message = "Город обязателен для заполнения.")
                 Long city,
                 Long team,
-                MultipartFile avatar,
+                String avatar,
                 @NotNull(message = "Роль обязательна для заполнения.")
                 RoleEnum role) {
 }

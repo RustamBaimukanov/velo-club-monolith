@@ -2,8 +2,6 @@ package com.work.veloclub.service.event;
 
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.model.event.*;
-import com.work.veloclub.model.event.category.Category;
-import com.work.veloclub.model.event.category.EventRaceType;
 import com.work.veloclub.model.race.Race;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.role.RolesEnum;
@@ -20,6 +18,8 @@ import com.work.veloclub.util.exception_handler.ObjectNotFound;
 import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -226,6 +226,20 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getEventsByFilter(EventGetFilter filter) {
         return Event.filterByAgeRange(eventRepository.findAll(EventSpecification.filterByEventRequest(filter), Sort.by("startDate").descending()), filter.birthDateFrom(), filter.birthDateTo());
+    }
+
+    @Override
+    public List<Event> getEventsByUserIdAndYear(Long id, Integer year) {
+        User user = userService.getUserWithRoleById(id);
+        return eventRepository.findAll(EventSpecification.filterByUserIdAndYearAndRole(id, year, user.getRole().getName()), Sort.by("startDate").descending());
+    }
+
+    @Override
+    public List<Event> getEventsByUserIdAndYear(Long id, Integer year, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("startDate").descending());
+        User user = userService.getUserWithRoleById(id);
+
+        return eventRepository.findAll(EventSpecification.filterByUserIdAndYearAndRole(id, year, user.getRole().getName()), pageable).getContent();
     }
 
     @Override

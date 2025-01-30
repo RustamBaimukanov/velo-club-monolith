@@ -22,6 +22,7 @@ public class EventResultMapper {
                         eventResult.getUserProfile().getId(),
                         eventResult.getUserProfile().getFirstName(),
                         eventResult.getUserProfile().getLastName(),
+                        eventResult.getUserProfile().getSurname(),
                         eventResult.getUserProfile().getBirthDate(),
                         eventResult.getUserProfile().getGender(),
                         team,

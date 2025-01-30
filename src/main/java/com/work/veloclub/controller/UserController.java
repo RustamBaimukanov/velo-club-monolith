@@ -1,9 +1,11 @@
 package com.work.veloclub.controller;
 
+import com.work.veloclub.mapper.event.EventMapper;
 import com.work.veloclub.mapper.user.UserMapper;
 import com.work.veloclub.model.user.User;
 import com.work.veloclub.model.user.UserInfoDTO;
 import com.work.veloclub.model.user.dto.UpdateUserDTO;
+import com.work.veloclub.service.event.EventService;
 import com.work.veloclub.service.user.UserService;
 import com.work.veloclub.util.exception_handler.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,9 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,6 +31,7 @@ public class UserController {
 
     private final UserService userService;
 
+    private final EventService eventService;
 
     @PutMapping("/me")
     @Operation(
@@ -47,7 +47,6 @@ public class UserController {
             }
     )
     public ResponseEntity<UserInfoDTO> updateUserInfo(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-
         userService.updateMe(updateUserDTO);
         return ResponseEntity.ok(UserMapper.mapToUserInfo(userService.getMe()));
     }
@@ -113,6 +112,47 @@ public class UserController {
         // TODO: Реализация сервиса
         User user = userService.getUser(id);
         return ResponseEntity.ok(UserMapper.mapToUserInfo(user));
+    }
+
+    @GetMapping("/{id}/events-infinity")
+    @Operation(
+            summary = "Получить информацию о мероприятиях по пользователю",
+            description = "Список мероприятии в которых пользователь потенциально может принять участие, или уже принял участие",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Информация о мероприятиях успешно получена",
+                            content = @Content(schema = @Schema(implementation = UserInfoDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Доступ запрещен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
+    )
+    public ResponseEntity<?> getUserEventsById(@PathVariable Long id, @RequestParam Integer year) {
+        // TODO: Реализация сервиса
+        return ResponseEntity.ok(EventMapper.mapToEventListDto(eventService.getEventsByUserIdAndYear(id, year)));
+    }
+
+    @GetMapping("/{id}/events-pages")
+    @Operation(
+            summary = "Получить информацию о мероприятиях по пользователю постранично",
+            description = "Список мероприятии в которых пользователь потенциально может принять участие, или уже принял участие",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Информация о мероприятиях успешно получена",
+                            content = @Content(schema = @Schema(implementation = UserInfoDTO.class))),
+                    @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Доступ запрещен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "404", description = "Пользователь не найден",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
+    )
+    public ResponseEntity<?> getUserEventsById(@PathVariable Long id, @RequestParam Integer year, @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
+        // TODO: Реализация сервиса
+        return ResponseEntity.ok(EventMapper.mapToEventListDto(eventService.getEventsByUserIdAndYear(id, year, page, size)));
     }
 
     @GetMapping

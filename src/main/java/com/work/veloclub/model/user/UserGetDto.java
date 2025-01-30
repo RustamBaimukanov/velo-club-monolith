@@ -7,5 +7,12 @@ public record UserGetDto(
 
         String firstName,
 
-        String lastName
-) { }
+        String lastName,
+
+        String surname,
+
+        byte[] avatar,
+
+        String format
+) {
+}

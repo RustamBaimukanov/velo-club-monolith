@@ -6,6 +6,7 @@ import com.work.veloclub.model.team.TeamUpdateRequest;
 import com.work.veloclub.model.user.UserGetDto;
 import com.work.veloclub.repository.team.TeamRepository;
 import com.work.veloclub.repository.user_profile.UserProfileRepository;
+import com.work.veloclub.util.CustomMultipartFile;
 import com.work.veloclub.util.exception_handler.ObjectNotFound;
 import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,16 @@ public class TeamServiceImpl implements TeamService {
                                 userProfile.getId(),
                                 userProfile.getEmail(),
                                 userProfile.getFirstName(),
-                                userProfile.getLastName())
+                                userProfile.getLastName(),
+                                userProfile.getSurname(),
+                                userProfile.getPhoto(),
+                                userProfile.getPhotoFormat())
                 ).toList();
+    }
+
+    @Override
+    public List<Team> getTeamWithUsers() {
+        return teamRepository.findAllWithUsers();
     }
 
     @Override

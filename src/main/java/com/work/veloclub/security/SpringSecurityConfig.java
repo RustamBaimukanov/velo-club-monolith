@@ -56,6 +56,8 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/auth/**", "/api/sms/**").permitAll()
                 .requestMatchers("/api/race/**").authenticated()
                 .requestMatchers("/api/user/**").authenticated() // Deprecated
+                .requestMatchers("/api/users/forgot-password").permitAll()
+                .requestMatchers("/api/users/reset-password").permitAll()
                 .requestMatchers("/api/users/**").authenticated()
                 .requestMatchers("/api/teams/**").authenticated()
                 .requestMatchers("/api/news/**").authenticated()

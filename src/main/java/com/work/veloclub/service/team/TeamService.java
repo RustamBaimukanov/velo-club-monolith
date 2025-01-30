@@ -14,6 +14,8 @@ public interface TeamService {
 
     List<UserGetDto> getTeamUsers(Long id);
 
+    List<Team> getTeamWithUsers();
+
     void teamExistenceValidator(Long id);
 
     Team createTeam(TeamCreateRequest teamDTO);

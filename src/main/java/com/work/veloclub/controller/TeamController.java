@@ -71,8 +71,11 @@ public class TeamController {
     }
 
     @GetMapping
-    public List<TeamDTO> getTeams(){
-        return TeamMapper.mapToTeamDtoList(teamService.getTeam());
+    public ResponseEntity<?> getTeams(@RequestParam(value = "withMembers", required = false) Boolean withMembers){
+        if (withMembers == null){
+            return ResponseEntity.ok(TeamMapper.mapToTeamDtoList(teamService.getTeam()));
+        }
+        return ResponseEntity.ok(TeamMapper.mapToTeamWithUsersDtoList(teamService.getTeamWithUsers()));
     }
 
     @Operation(

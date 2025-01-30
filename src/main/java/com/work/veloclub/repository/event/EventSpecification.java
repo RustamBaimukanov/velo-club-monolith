@@ -8,6 +8,7 @@ import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.survey.Survey;
 import com.work.veloclub.model.survey.SurveyFilter;
 import com.work.veloclub.model.user.GenderEnum;
+import com.work.veloclub.model.user.User;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -61,6 +62,37 @@ public class EventSpecification {
             if (filter.categories() != null && !filter.categories().isEmpty() && (filter.role() == null || filter.role() != RoleEnum.DABBLER)) {
                 predicate = criteriaBuilder.and(predicate,
                         categoryJoin.get("id").in(filter.categories()));
+            }
+
+            return predicate;
+        };
+    }
+
+
+    public static Specification<Event> filterByUserIdAndYearAndRole(Long id, Integer year, RoleEnum role) {
+        return (root, query, criteriaBuilder) -> {
+            // Предикаты для хранения условий
+            Predicate predicate = criteriaBuilder.conjunction();
+            Join<Event, Role> roleJoin = root.join("availableRoles", JoinType.INNER);
+            Join<Event, User> userJoin = root.join("additionalUsers", JoinType.LEFT);
+            // Фильтр по роли
+            if (role != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(roleJoin.get("name"), role));
+            }
+            // Фильтр по году
+            if (year != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(criteriaBuilder.function(
+                                "TO_CHAR", String.class, root.get("startDate"), criteriaBuilder.literal("YYYY")
+                        ), year.toString()));
+            }
+
+            //TODO тут неправильное условие
+            //TODO что нужно сделать? - Нужно добавить в выборку мероприятия, где есть пользователи-исключения, если они есть
+            if (role == null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(userJoin.get("id"), id));
             }
 
             return predicate;

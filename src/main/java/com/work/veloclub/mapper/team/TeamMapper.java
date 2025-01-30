@@ -1,30 +1,56 @@
 package com.work.veloclub.mapper.team;
 
-import com.work.veloclub.model.city.City;
-import com.work.veloclub.model.city.CityDTO;
 import com.work.veloclub.model.team.Team;
 import com.work.veloclub.model.team.TeamDTO;
 import com.work.veloclub.model.team.TeamResponse;
+import com.work.veloclub.model.team.TeamWithUsersDTO;
+import com.work.veloclub.model.user.UserGetDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TeamMapper {
 
-    public static TeamDTO mapToTeamDto(Team team){
-        if (team == null){
+    public static TeamDTO mapToTeamDto(Team team) {
+        if (team == null) {
             return null;
         }
 
-        return new TeamDTO(team.getId(), team.getName());
+        return new TeamDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat());
     }
 
-    public static List<TeamDTO> mapToTeamDtoList(List<Team> teams){
-        if (teams.isEmpty()){
+    public static TeamWithUsersDTO mapToTeamWithUsersDto(Team team) {
+        if (team == null) {
+            return null;
+        }
+        if (team.getUserProfiles() == null)
+            return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat(), null);
+        return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat(), team.getUserProfiles().stream()                .map(userProfile ->
+                new UserGetDto(
+                        userProfile.getId(),
+                        userProfile.getEmail(),
+                        userProfile.getFirstName(),
+                        userProfile.getLastName(),
+                        userProfile.getSurname(),
+                        userProfile.getPhoto(),
+                        userProfile.getPhotoFormat())
+        ).toList());
+    }
+
+    public static List<TeamDTO> mapToTeamDtoList(List<Team> teams) {
+        if (teams.isEmpty()) {
             return null;
         }
 
         return teams.stream().map(TeamMapper::mapToTeamDto).collect(Collectors.toList());
+    }
+
+    public static List<TeamWithUsersDTO> mapToTeamWithUsersDtoList(List<Team> teams) {
+        if (teams.isEmpty()) {
+            return null;
+        }
+
+        return teams.stream().map(TeamMapper::mapToTeamWithUsersDto).collect(Collectors.toList());
     }
 
     public static TeamResponse mapToTeamResponse(Team team) {

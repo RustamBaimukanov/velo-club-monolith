@@ -1,5 +1,7 @@
 package com.work.veloclub.service.user;
 
+import com.work.veloclub.model.sms.ResetPasswordDto;
+import com.work.veloclub.model.sms.ResetPhoneDto;
 import com.work.veloclub.model.user.*;
 import com.work.veloclub.model.user.dto.UpdateUserDTO;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,10 @@ public interface UserService {
     ResponseEntity<BearerToken> register (RegisterDto registerDto);
 
     ResponseEntity<?> register (RegisterByAdminDto registerDto);
+
+    ResponseEntity<?> changePassword (ResetPasswordDto resetPasswordDto);
+    ResponseEntity<?> changePassword (UserPasswordDto userPasswordDto);
+    ResponseEntity<?> changePhoneNumber (ResetPhoneDto resetPhoneDto);
 
 
     //    void registerByAdmin(@Valid User user);
@@ -96,6 +102,8 @@ public interface UserService {
 
 
     User findUserByPhoneNumber(String phoneNumber);
+
+    User getUserWithRoleById(Long id);
 
     void banUser();
 

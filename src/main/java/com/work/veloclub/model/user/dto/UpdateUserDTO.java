@@ -20,11 +20,14 @@ public record UpdateUserDTO(
         String firstName,
         @Size(max = 255, message = "Длина фамилии слишком велика.")
         String lastName,
+
+        @Size(max = 255, message = "Длина отчества слишком велика.")
+        String surname,
         @Past(message = "Дата рождения не может быть в будущем.")
         LocalDate birthDate,
         @NotNull(message = "Пол обязателен для заполнения.")
         GenderEnum gender,
-        MultipartFile avatar,
+        String avatar,
         Long teamId,
         Long cityId,
         RoleEnum role,
