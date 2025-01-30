@@ -320,17 +320,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(Long id) {
-        return userRepository.findUserById(id).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        return userRepository.findUserById(id).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
     }
 
     @Override
     public User findUserByPhoneNumber(String phoneNumber) {
-        return userRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        return userRepository.findUserByPhoneNumber(phoneNumber).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
     }
 
     @Override
     public User getUserWithRoleById(Long id) {
-        return userRepository.findUserWithRoleById(id).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        return userRepository.findUserWithRoleById(id).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
     }
 
     @Override
@@ -420,7 +420,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> changePassword(ResetPasswordDto resetPasswordDto) {
-        User user = userRepository.findUserByPhoneNumber(resetPasswordDto.phoneNumber()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        User user = userRepository.findUserByPhoneNumber(resetPasswordDto.phoneNumber()).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
         user.setPassword(passwordEncoder.encode(resetPasswordDto.newPassword()));
         return ResponseEntity.ok("Пароль изменен");
     }
@@ -429,7 +429,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<?> changePassword(UserPasswordDto userPasswordDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        User user = userRepository.findUserByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
         if (passwordEncoder.matches(userPasswordDto.oldPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(userPasswordDto.newPassword()));
         } else return ResponseEntity.ok("Пароль не изменен");
@@ -440,7 +440,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<?> changePhoneNumber(ResetPhoneDto resetPhoneDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserWithRoleByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound("Пользователь не найден."));
+        User user = userRepository.findUserWithRoleByPhoneNumber(authentication.getName()).orElseThrow(() -> new ObjectNotFound(ErrorMessages.UserErrors.NOT_FOUND));
         user.setPhoneNumber(resetPhoneDto.phoneNumber());
 
         String token = jwtUtilities.generateToken(user.getPhoneNumber(), Collections.singletonList(user.getRole().getName().name()));

@@ -16,6 +16,11 @@ public interface TeamService {
 
     List<Team> getTeamWithUsers();
 
+    /**
+     * Проверяет существование команды по введенному пользователем id
+     * Если проверка не проходит, инициирует ответ с кодом 400
+     * @param id - id команды
+     */
     void teamExistenceValidator(Long id);
 
     Team createTeam(TeamCreateRequest teamDTO);

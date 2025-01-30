@@ -31,8 +31,21 @@ public interface EventService {
 
     List<Event> getEventsByFilter(EventGetFilter filter);
 
+    /**
+     * Отдает список мероприятии по id пользователя и году
+     * @param id - id пользователя
+     * @param year - год
+     * @return возвращает список мероприятии в которых пользователь принял, принимает или может принять участие
+     * @warning список сплошной, для мобилки, надо будет разделить на чанки для оптимизации
+     */
     List<Event> getEventsByUserIdAndYear(Long id, Integer year);
 
+    /**
+     * Отдает список мероприятии по id пользователя и году
+     * @param id - id пользователя
+     * @param year - год
+     * @return возвращает список мероприятии разделенный на страницы в которых пользователь принял, принимает или может принять участие
+     */
     List<Event> getEventsByUserIdAndYear(Long id, Integer year, Integer page, Integer size);
 
 

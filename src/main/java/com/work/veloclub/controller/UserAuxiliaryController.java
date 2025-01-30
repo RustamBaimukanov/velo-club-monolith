@@ -31,7 +31,14 @@ public class UserAuxiliaryController {
     @PostMapping("/forgot-password")
     @Operation(
             summary = "Забыли пароль",
-            description = "Пользователь отправляет запрос на смену пароля, получает код по которому он сможет поменять пароль в api/users/reset-password"
+            description = "Пользователь отправляет запрос на смену пароля, получает код по которому он сможет поменять пароль в api/users/reset-password",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил код на телефон(по крайней мере сервер так думает, дальше зависит от оператора"),
+                    @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Доступ запрещен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
     )
     public ResponseEntity<?> forgotPassword(@RequestParam String phoneNumber) {
 
@@ -45,10 +52,13 @@ public class UserAuxiliaryController {
     @PostMapping("/reset-password")
     @Operation(
             summary = "Изменение пароля(через алгоритм с смс подтверждением)",
-            description = "Пользователь меняет пароль не входя в систему с помощью смс подтверждения."
+            description = "Пользователь меняет пароль не входя в систему с помощью смс подтверждения.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь поменял пароль")
+            }
     )
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
-        //Проверка временного кода ===>
+        //TODO - это костыль пока нет смс сервиса
         if (!resetPasswordDto.code().equals("1111")) return ResponseEntity.ok("Неверный код");
         return userService.changePassword(resetPasswordDto);
     }
@@ -56,11 +66,16 @@ public class UserAuxiliaryController {
     @PostMapping("/change-password")
     @Operation(
             summary = "Изменение пароля(напрямую когда пользователь находится в системе(вероятно находится в окне редактирования профиля)",
-            description = "Пользователь меняет пароль."
+            description = "Пользователь меняет пароль.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь поменял пароль"),
+                    @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+                    @ApiResponse(responseCode = "403", description = "Доступ запрещен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
     )
     public ResponseEntity<?> change(@RequestBody UserPasswordDto userPasswordDto) {
-        //Проверка временного кода ===>
-
         return userService.changePassword(userPasswordDto);
     }
 

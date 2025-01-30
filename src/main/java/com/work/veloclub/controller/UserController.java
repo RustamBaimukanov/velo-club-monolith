@@ -5,7 +5,9 @@ import com.work.veloclub.mapper.user.UserMapper;
 import com.work.veloclub.model.user.User;
 import com.work.veloclub.model.user.UserInfoDTO;
 import com.work.veloclub.model.user.dto.UpdateUserDTO;
+import com.work.veloclub.service.city.CityService;
 import com.work.veloclub.service.event.EventService;
+import com.work.veloclub.service.team.TeamService;
 import com.work.veloclub.service.user.UserService;
 import com.work.veloclub.util.exception_handler.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +35,10 @@ public class UserController {
 
     private final EventService eventService;
 
+    private final CityService cityService;
+
+    private final TeamService teamService;
+
     @PutMapping("/me")
     @Operation(
             summary = "Редактировать информацию о себе",
@@ -47,6 +53,9 @@ public class UserController {
             }
     )
     public ResponseEntity<UserInfoDTO> updateUserInfo(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        //TODO city или team null это осознанное решение пользователя
+        if (updateUserDTO.cityId() != null) cityService.cityExistenceValidator(updateUserDTO.cityId());
+        if (updateUserDTO.teamId() != null) teamService.teamExistenceValidator(updateUserDTO.teamId());
         userService.updateMe(updateUserDTO);
         return ResponseEntity.ok(UserMapper.mapToUserInfo(userService.getMe()));
     }
@@ -88,7 +97,8 @@ public class UserController {
             }
     )
     public ResponseEntity<UserInfoDTO> updateUserById(@PathVariable Long id, @RequestBody UpdateUserDTO updateUserDTO) {
-        // TODO: Реализация сервиса
+        if (updateUserDTO.cityId() != null) cityService.cityExistenceValidator(updateUserDTO.cityId());
+        if (updateUserDTO.teamId() != null) teamService.teamExistenceValidator(updateUserDTO.teamId());
         userService.updateUser(id, updateUserDTO);
         return ResponseEntity.ok(UserMapper.mapToUserInfo(userService.getMe()));
     }
@@ -109,7 +119,6 @@ public class UserController {
             }
     )
     public ResponseEntity<UserInfoDTO> getUserById(@PathVariable Long id) {
-        // TODO: Реализация сервиса
         User user = userService.getUser(id);
         return ResponseEntity.ok(UserMapper.mapToUserInfo(user));
     }
@@ -130,7 +139,6 @@ public class UserController {
             }
     )
     public ResponseEntity<?> getUserEventsById(@PathVariable Long id, @RequestParam Integer year) {
-        // TODO: Реализация сервиса
         return ResponseEntity.ok(EventMapper.mapToEventListDto(eventService.getEventsByUserIdAndYear(id, year)));
     }
 
@@ -192,7 +200,6 @@ public class UserController {
             }
     )
     public ResponseEntity<Void> banUser(@PathVariable Long id) {
-        // TODO: Реализация сервиса
         userService.banUser(id);
         return ResponseEntity.ok().build();
     }
@@ -213,7 +220,6 @@ public class UserController {
             }
     )
     public ResponseEntity<Void> unbanUser(@PathVariable Long id) {
-        // TODO: Реализация сервиса
         userService.activateUser(id);
         return ResponseEntity.ok().build();
     }
@@ -233,7 +239,6 @@ public class UserController {
             }
     )
     public ResponseEntity<Void> remove() {
-        // TODO: Реализация сервиса
         userService.banUser();
         return ResponseEntity.ok().build();
     }

@@ -49,8 +49,26 @@ public interface UserService {
      */
     ResponseEntity<?> register (RegisterByAdminDto registerDto);
 
+    /**
+     * Смена пароля без проверки старого пароля
+     * @param resetPasswordDto
+     * @return возвращает ответ с кодом 200
+     */
     ResponseEntity<?> changePassword (ResetPasswordDto resetPasswordDto);
+
+    /**
+     * Смена пароля с проверкой старого пароля
+     * @param userPasswordDto
+     * @return возвращает ответ с кодом 200
+     */
     ResponseEntity<?> changePassword (UserPasswordDto userPasswordDto);
+
+    /**
+     * Пользователь меняет номер телефона
+     * @param resetPhoneDto
+     * @return возвращает новый токен
+     * @warning когда меняется номер телефона, клиенту необходимо поменять старый токен на тот что возвращает этот метод
+     */
     ResponseEntity<?> changePhoneNumber (ResetPhoneDto resetPhoneDto);
 
 
@@ -73,16 +91,38 @@ public interface UserService {
 //    User getUser(String phoneNumber);
 
     /**
-     *
-     * @param updateUserDTO
+     * Редактирует данные профиля пользователя
+     * @see com.work.veloclub.repository.user.UserRepository#findUserWithProfileAndSocialNetworksByPhoneNumber
+     * @param updateUserDTO - объект с данными о профиле пользователе
+     * @warning внутри метода отсутствуют проверки, но они есть во внешнем слое(валидация, проверка id регионов и команд. Потенциально возможны ошибки 500)
+     * @warning что если пользователь решит поменять команду во время мероприятия, или после командного соревнования?
+     * @bug сохранение соцсетей
      */
     void updateMe(UpdateUserDTO updateUserDTO);
 
+    /**
+     * Админ редактирует данные профиля пользователя по id
+     * @see com.work.veloclub.repository.user.UserRepository#findUserWithProfileAndSocialNetworksById
+     * @param id - id пользователя
+     * @param updateUserDTO - объект с данными о профиле пользователе
+     * @warning внутри метода отсутствуют проверки, но они есть во внешнем слое(валидация, проверка id регионов и команд. Потенциально возможны ошибки 500)
+     * @warning что если админ решит поменять команду пользователю во время мероприятия, или после командного соревнования?
+     * @bug сохранение соцсетей
+     */
     void updateUser(Long id, UpdateUserDTO updateUserDTO);
 
-
+    /**
+     * По токену отдает информацию о пользователе
+     * @see com.work.veloclub.repository.user.UserRepository#findUserWithProfileByPhoneNumber
+     * @return возвращает пользователя вместе с профилем по токену
+     */
     User getMe();
 
+    /**
+     * По id отдает информацию о пользователе
+     * @see com.work.veloclub.repository.user.UserRepository#findUserWithProfileById
+     * @return возвращает пользователя вместе с профилем по токену
+     */
     User getUser(Long id);
 
 
@@ -126,15 +166,31 @@ public interface UserService {
 
     User findUserById(Long id);
 
-
+    /**
+     * Отдает User по номеру телефона
+     * Если пользователь не найден инициирует ответ с кодом 400
+     * @param phoneNumber - номер телефона
+     * @return возвращает объект User
+     */
     User findUserByPhoneNumber(String phoneNumber);
 
     User getUserWithRoleById(Long id);
 
+    /**
+     * Блокирует пользователя по токену(имитация функционала удаления профиля)
+     */
     void banUser();
 
+    /**
+     * Блокирует пользователя по id
+     * @param id - id пользователя
+     */
     void banUser(Long id);
 
+    /**
+     * Активирует пользователя по id
+     * @param id - id пользователя
+     */
     void activateUser(Long id);
 
 
