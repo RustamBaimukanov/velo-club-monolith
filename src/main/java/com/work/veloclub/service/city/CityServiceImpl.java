@@ -3,6 +3,7 @@ package com.work.veloclub.service.city;
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.repository.city.CityRepository;
 import com.work.veloclub.util.exception_handler.ObjectNotFound;
+import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class CityServiceImpl implements CityService{
 
     @Override
     public void cityExistenceValidator(Long id) {
-        if (!cityRepository.existsById(id)) throw new ObjectNotFound("Регион не найден.");
+        if (!cityRepository.existsById(id)) throw new ObjectNotFound(ErrorMessages.CityErrors.NOT_FOUND);
 
     }
 }

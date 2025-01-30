@@ -35,9 +35,18 @@ public interface UserService {
 
 //    ResponseEntity<?> restorePassword(LoginDto loginDto);
 
-
+    /**
+     * Регистрирует пользователя в системе
+     * @param registerDto - объект с первичными данными для регистрации велолюбителя.
+     * @return возвращает access token
+     */
     ResponseEntity<BearerToken> register (RegisterDto registerDto);
 
+    /**
+     * Регистрирует пользователя в системе от имени администратора.
+     * @param registerDto - объект с данными для регистрации пользователя.
+     * @return возвращает ответ с кодом 200
+     */
     ResponseEntity<?> register (RegisterByAdminDto registerDto);
 
     ResponseEntity<?> changePassword (ResetPasswordDto resetPasswordDto);
@@ -63,6 +72,10 @@ public interface UserService {
 
 //    User getUser(String phoneNumber);
 
+    /**
+     *
+     * @param updateUserDTO
+     */
     void updateMe(UpdateUserDTO updateUserDTO);
 
     void updateUser(Long id, UpdateUserDTO updateUserDTO);

@@ -3,6 +3,7 @@ package com.work.veloclub.util.custom_validator;
 import com.work.veloclub.repository.user.UserRepository;
 import com.work.veloclub.repository.user_profile.UserProfileRepository;
 import com.work.veloclub.util.exception_handler.UniqueObjectExistException;
+import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class UniqueUserValidator {
         boolean emailExists = email != null && userProfileRepository.existsByEmailAndNotId(userId, email);
 
         if (emailExists) {
-            throw new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
+            throw new UniqueObjectExistException(ErrorMessages.UserErrors.UNIQUE_EMAIL_EXISTS);
         }
     }
 
@@ -26,11 +27,11 @@ public class UniqueUserValidator {
         boolean emailExists = email != null && userProfileRepository.existsByEmail(email);
 
         if (phoneExists && emailExists) {
-            throw new UniqueObjectExistException("Пользователь с таким телефоном и почтой уже зарегистрирован!");
+            throw new UniqueObjectExistException(ErrorMessages.UserErrors.UNIQUE_CREDENTIALS_EXISTS);
         } else if (emailExists) {
-            throw new UniqueObjectExistException("Пользователь с данным email уже зарегистрирован!");
+            throw new UniqueObjectExistException(ErrorMessages.UserErrors.UNIQUE_EMAIL_EXISTS);
         } else if (phoneExists) {
-            throw new UniqueObjectExistException("Пользователь с таким телефоном уже зарегистрирован!");
+            throw new UniqueObjectExistException(ErrorMessages.UserErrors.UNIQUE_PHONE_NUMBER_EXISTS);
         }
     }
 
