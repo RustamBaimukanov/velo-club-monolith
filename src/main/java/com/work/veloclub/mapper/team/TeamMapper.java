@@ -6,6 +6,7 @@ import com.work.veloclub.model.team.TeamResponse;
 import com.work.veloclub.model.team.TeamWithUsersDTO;
 import com.work.veloclub.model.user.UserGetDto;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,7 @@ public class TeamMapper {
         if (team == null) {
             return null;
         }
-
-        return new TeamDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat());
+        return new TeamDTO(team.getId(), team.getName(), team.getPhoto() != null ? Base64.getEncoder().encodeToString(team.getPhoto()) : null);
     }
 
     public static TeamWithUsersDTO mapToTeamWithUsersDto(Team team) {
@@ -24,15 +24,15 @@ public class TeamMapper {
             return null;
         }
         if (team.getUserProfiles() == null)
-            return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat(), null);
-        return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat(), team.getUserProfiles().stream()                .map(userProfile ->
+            return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto() != null ? Base64.getEncoder().encodeToString(team.getPhoto()) : null, null);
+        return new TeamWithUsersDTO(team.getId(), team.getName(), team.getPhoto() != null ? Base64.getEncoder().encodeToString(team.getPhoto()) : null, team.getUserProfiles().stream().map(userProfile ->
                 new UserGetDto(
                         userProfile.getId(),
                         userProfile.getEmail(),
                         userProfile.getFirstName(),
                         userProfile.getLastName(),
                         userProfile.getSurname(),
-                        userProfile.getPhoto(),
+                        userProfile.getPhoto() != null ? Base64.getEncoder().encodeToString(userProfile.getPhoto()) : null,
                         userProfile.getPhotoFormat())
         ).toList());
     }
@@ -54,7 +54,7 @@ public class TeamMapper {
     }
 
     public static TeamResponse mapToTeamResponse(Team team) {
-        return new TeamResponse(team.getId(), team.getName(), team.getPhoto(), team.getPhotoFormat());
+        return new TeamResponse(team.getId(), team.getName(), team.getPhoto() != null ? Base64.getEncoder().encodeToString(team.getPhoto()) : null);
     }
 
     public static List<TeamResponse> mapToTeamResponse(List<Team> teams) {

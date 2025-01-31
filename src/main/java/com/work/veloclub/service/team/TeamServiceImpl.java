@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -43,7 +44,7 @@ public class TeamServiceImpl implements TeamService {
                                 userProfile.getFirstName(),
                                 userProfile.getLastName(),
                                 userProfile.getSurname(),
-                                userProfile.getPhoto(),
+                                userProfile.getPhoto() != null ? Base64.getEncoder().encodeToString(userProfile.getPhoto()) : null,
                                 userProfile.getPhotoFormat())
                 ).toList();
     }
@@ -64,6 +65,7 @@ public class TeamServiceImpl implements TeamService {
     public Team createTeam(TeamCreateRequest teamDTO) {
         Team team = new Team();
         team.setName(teamDTO.name());
+        team.setPhoto(teamDTO.photo() != null ? Base64.getDecoder().decode(teamDTO.photo()) : null);
         teamRepository.save(team);
         return team;
     }
@@ -73,6 +75,7 @@ public class TeamServiceImpl implements TeamService {
     public Team update(Long id, TeamUpdateRequest teamDTO) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new ObjectNotFound(ErrorMessages.TeamErrors.NOT_FOUND));
         team.setName(teamDTO.name());
+        team.setPhoto(teamDTO.photo() != null ? Base64.getDecoder().decode(teamDTO.photo()) : null);
         return team;
     }
 

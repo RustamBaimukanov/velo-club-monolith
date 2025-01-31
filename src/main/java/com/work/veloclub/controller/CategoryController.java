@@ -24,7 +24,7 @@ public class CategoryController {
 
     @Operation(
             summary = "Получение списка категории мероприятия",
-            description = ""
+            description = "Получение списка категории мероприятия по типу или сразу все(эти категории константны, в базе содержатся в виде справочника)"
     )
     @GetMapping
     public ResponseEntity<?> getCategory(@RequestParam(required = false) EventRaceType type) {

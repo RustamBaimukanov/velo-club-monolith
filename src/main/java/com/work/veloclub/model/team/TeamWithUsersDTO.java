@@ -4,5 +4,5 @@ import com.work.veloclub.model.user.UserGetDto;
 
 import java.util.List;
 
-public record TeamWithUsersDTO(Long id, String name, byte[] photo, String format, List<UserGetDto> users) {
+public record TeamWithUsersDTO(Long id, String name,String photo, List<UserGetDto> users) {
 }

@@ -1,4 +1,7 @@
 package com.work.veloclub.model.team;
 
-public record TeamCreateRequest(String name) {
+import jakarta.validation.constraints.Size;
+
+public record TeamCreateRequest(@Size(max = 255, message = "Длина названия слишком велика.")
+                                String name, String photo) {
 }

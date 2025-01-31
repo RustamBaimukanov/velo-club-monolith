@@ -11,7 +11,7 @@ public record UserGetDto(
 
         String surname,
 
-        byte[] avatar,
+        String avatar,
 
         String format
 ) {
