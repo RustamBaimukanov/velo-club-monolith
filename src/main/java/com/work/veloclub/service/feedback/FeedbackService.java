@@ -5,6 +5,9 @@ import com.work.veloclub.model.feedback.FeedbackDto;
 
 import java.util.List;
 
+/**
+ * Написать/получить отзывы.
+ */
 public interface FeedbackService {
 
     void createFeedback(FeedbackDto feedbackDto);

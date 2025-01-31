@@ -187,7 +187,8 @@ public class EventController {
                     @ApiResponse(responseCode = "200", description = "Пользователь обновил результат мероприятия(будет ли нужен вообще такой функционал?)"),
                     @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
                             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            })    @PutMapping("/{id}/results")
+            })
+    @PutMapping("/{id}/results")
     public ResponseEntity<?> updateEventResult(@PathVariable Long id, @RequestBody @Valid EventResultUpdateRequest eventResult) {
         EventResult result = eventResultService.updateEventResult(id, eventResult);
         return ResponseEntity.ok(EventResultMapper.mapToEventResultResponse(eventResultService.getEventResultsById(result.getId())));
