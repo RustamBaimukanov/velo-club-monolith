@@ -13,22 +13,48 @@ import java.util.List;
 
 public interface EventService {
 
+    /**
+     * Создает мероприятие
+     * Если классификация мероприятия не существует, инициирует ответ с кодом 400
+     * @param eventPostDto данные для сохранения мероприятия
+     * @return возвращает созданное мероприятие
+     */
     Event createEvent(EventCreateDTO eventPostDto);
 
     List<Event> createEventGenerate(List<EventCreateDTO> eventPostDto);
 
-
+    /**
+     * Редактирует мероприятие
+     * Если классификация мероприятия не существует, инициирует ответ с кодом 400
+     * @param eventPostDto данные для редактирования мероприятия
+     * @return возвращает отредактированное мероприятие
+     */
     Event updateEvent(Long id, EventCreateDTO eventPostDto);
 
 
 //    EventBlockDTO getEvent(Long id);
 
+    /**
+     * Список мероприятии по определенной дате со связанным маршрутом
+     * @param date дата
+     * @return список мероприятии по определенной дате со связанным маршрутом
+     */
     List<Event> getEventsByDay(LocalDate date);
 
     List<Event> getEventsByMonth(LocalDate date);
 
+    /**
+     * По дате определяет месяц, затем выводит список по дням, есть или нет по этой дате мероприятия(чтобы фронтенд в календаре подсвечивал даты)
+     * @param date дата
+     * @return
+     */
     List<EventCalendarDto> getEventCalendar(LocalDate date);
 
+    /**
+     * Получение списка мероприятии по фильтру
+     * @param filter объект-фильтр
+     * @return список мероприятии отфильтрованный
+     */
     List<Event> getEventsByFilter(EventGetFilter filter);
 
     /**

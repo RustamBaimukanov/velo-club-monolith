@@ -24,4 +24,10 @@ public interface CategoryService {
      * @return возвращает список категории по типу
      */
     List<Category> findAllByType(EventRaceType eventRaceType);
+
+    /**
+     * Проверяет наличие классификации по id(сделано на всякий случай)
+     * @param id - id классификации
+     */
+    void categoryExistenceValidator(Long id);
 }

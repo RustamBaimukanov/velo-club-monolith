@@ -37,6 +37,9 @@ public record EventCreateDTO(@NotBlank(message = "Название меропр�
                              @NotNull(message = "Не указано местоположение для мероприятия")
                              Long city,
 
+                             @NotNull(message = "Не указана классификация")
+                             Long categoryId,
+
                              @NotNull(message = "Не выбрано ограничение по полу")
                              GenderEnum gender,
 

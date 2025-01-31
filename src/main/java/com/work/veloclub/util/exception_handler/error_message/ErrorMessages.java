@@ -33,4 +33,8 @@ public class ErrorMessages {
     public static class CityErrors {
         public static final String NOT_FOUND = "Регион не найден.";
     }
+
+    public static class CategoryErrors {
+        public static final String NOT_FOUND = "Классификация не найдена.";
+    }
 }

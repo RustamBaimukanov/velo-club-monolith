@@ -2,6 +2,7 @@ package com.work.veloclub.service.event;
 
 import com.work.veloclub.model.city.City;
 import com.work.veloclub.model.event.*;
+import com.work.veloclub.model.event.category.Category;
 import com.work.veloclub.model.race.Race;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.role.RolesEnum;
@@ -70,6 +71,7 @@ public class EventServiceImpl implements EventService {
         event.setCity(City.builder().id(eventCreateDTO.city()).build());
         event.setAvailableGender(eventCreateDTO.gender());
         event.setCreatedUser(user.getUserProfile());
+        event.setCategory(Category.builder().id(eventCreateDTO.categoryId()).build());
 
         Set<RoleEnum> roleEnumSet = new HashSet<>();
         switch (eventCreateDTO.participantsCategory()) {
@@ -153,6 +155,7 @@ public class EventServiceImpl implements EventService {
         event.setCity(City.builder().id(eventCreateDTO.city()).build());
         event.setAvailableGender(eventCreateDTO.gender());
         event.setCreatedUser(user.getUserProfile());
+        event.setCategory(Category.builder().id(eventCreateDTO.categoryId()).build());
 
         Set<RoleEnum> roleEnumSet = new HashSet<>();
         switch (eventCreateDTO.participantsCategory()) {
