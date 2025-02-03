@@ -1,5 +1,6 @@
 package com.work.veloclub.model.news;
 
+import com.work.veloclub.model.BaseEntity;
 import com.work.veloclub.model.event.Event;
 import com.work.veloclub.model.event_profile.EventUserProfile;
 import com.work.veloclub.model.news_metainfo.NewsMetaInfo;
@@ -23,7 +24,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class News {
+public class News extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -35,9 +36,6 @@ public class News {
 
     @Column(name = "content", length = 4000)
     private String content;
-
-    @Column(name = "creation_date")
-    private LocalDate createdAt;
 
     @OneToMany
     @JoinColumn(name = "news_id")

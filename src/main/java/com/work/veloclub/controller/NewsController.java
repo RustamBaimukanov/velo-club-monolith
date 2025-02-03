@@ -3,7 +3,11 @@ package com.work.veloclub.controller;
 import com.work.veloclub.mapper.news.NewsMapper;
 import com.work.veloclub.model.news.NewsPostDTO;
 import com.work.veloclub.service.news.NewsService;
+import com.work.veloclub.util.exception_handler.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +24,12 @@ public class NewsController {
 
     @Operation(
             summary = "Добавление новости",
-            description = "API добавления новости."
+            description = "API добавления новости.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь создал новость"),
+                    @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            }
     )
     @PostMapping
     public ResponseEntity<?> addNews(@RequestBody @Valid NewsPostDTO news) {
@@ -30,12 +39,29 @@ public class NewsController {
 
     @Operation(
             summary = "Получение новости",
-            description = "API получения новости в одиночном варианте через id, либо все новости с учетом доступности для роли пользователя или конкретного пользователя отсортированном в порядке указанном в ТЗ(без пагинации, пока, следует обсудить)"
+            description = "Получение новостей постранично",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил список новостей"),
+                    @ApiResponse(responseCode = "500", description = "???")
+            }
     )
-    @GetMapping
+    @GetMapping("/pages")
     public ResponseEntity<?> getNews(@RequestParam(defaultValue = "0", value = "page") int page,
                                      @RequestParam(defaultValue = "10", value = "size") int size) {
         return ResponseEntity.ok(NewsMapper.mapToNewsResponse(newsService.getNews(page, size)));
+    }
+
+    @Operation(
+            summary = "Получение новости",
+            description = "Получение новостей чанками(для мобильной версии)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил список новостей"),
+                    @ApiResponse(responseCode = "500", description = "???")
+            }
+    )
+    @GetMapping("/infinity")
+    public ResponseEntity<?> getNews() {
+        return ResponseEntity.ok(NewsMapper.mapToNewsResponse(newsService.getNews()));
     }
 
 }

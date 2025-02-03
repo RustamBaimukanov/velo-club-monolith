@@ -1,17 +1,23 @@
 package com.work.veloclub.model.news;
 
+import com.work.veloclub.model.news_metainfo.NewsMetaInfoResponse;
 import lombok.Builder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
-public record NewsDTO( Long id,
+public record NewsDTO(Long id,
 
-         String title,
+                      String title,
 
-         String content,
+                      String content,
 
-         LocalDate createdAt) {
+                      LocalDateTime createdDate,
+
+                      LocalDateTime updatedDate,
+
+                      List<NewsMetaInfoResponse> metaInfoResponses) {
 
 
 }

@@ -17,6 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/get")
 @RequiredArgsConstructor
+/**
+ * Контроллер для получения некоторых справочных данных без доступа по токенам(пригодится для фронтенда)
+ */
 public class GetController {
 
     private final UserService userService;
@@ -27,10 +30,6 @@ public class GetController {
 
     private final RoleService roleService;
 
-    @GetMapping("/cities")
-    public List<City> getCities(){
-        return cityService.getCities();
-    }
 
     @GetMapping("/teams")
     public List<TeamDTO> getTeams(){

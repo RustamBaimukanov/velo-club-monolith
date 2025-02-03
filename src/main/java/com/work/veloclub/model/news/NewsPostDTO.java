@@ -1,10 +1,12 @@
 package com.work.veloclub.model.news;
 
+import com.work.veloclub.model.news_metainfo.NewsMetaInfoCreateRequest;
 import com.work.veloclub.model.role.RolesEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Base64;
 import java.util.List;
 
 public record NewsPostDTO(
@@ -13,7 +15,9 @@ public record NewsPostDTO(
         String title,
         @Size(max = 4000, message = "Описание новости не может превышать N символов")
         String content,
-        @NotNull(message = "Не выбрана категория получателей")
+        @NotNull(message = "Не выбрана роль получателей")
         RolesEnum recipientCategory,
-        List<Long> recipients
+        List<Long> recipients,
+
+        List<NewsMetaInfoCreateRequest> newsMetaInfoCreateRequests
 ) {}

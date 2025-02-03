@@ -3,27 +3,27 @@ package com.work.veloclub.service.news;
 import com.work.veloclub.model.news.News;
 import com.work.veloclub.model.news.NewsDTO;
 import com.work.veloclub.model.news.NewsPostDTO;
+import com.work.veloclub.model.news.NewsUpdateRequest;
+import com.work.veloclub.model.news_metainfo.NewsMetaInfo;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.role.RolesEnum;
-import com.work.veloclub.model.user.User;
 import com.work.veloclub.model.user_profile.UserProfile;
 import com.work.veloclub.repository.news.NewsRepository;
 import com.work.veloclub.repository.role.RoleRepository;
 import com.work.veloclub.service.user.UserService;
+import com.work.veloclub.util.Base64Util;
+import com.work.veloclub.util.ContentUtil;
 import com.work.veloclub.util.exception_handler.ObjectNotFound;
+import com.work.veloclub.util.exception_handler.error_message.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +59,11 @@ public class NewsServiceImpl implements NewsService {
                 .title(newsPostDTO.title())
                 .content(newsPostDTO.content())
                 .availableRoles(roleRepository.findRolesByNameIn(roleEnumSet))
-                .createdAt(LocalDate.now())
+                .metaInfo(newsPostDTO.newsMetaInfoCreateRequests() != null ? newsPostDTO.newsMetaInfoCreateRequests()
+                        .stream()
+                        .map(newsMetaInfoCreateRequest -> new NewsMetaInfo(null, newsMetaInfoCreateRequest.name(),
+                                Base64Util.decoder(newsMetaInfoCreateRequest.file()),
+                                newsMetaInfoCreateRequest.isCore())).collect(Collectors.toSet()) : null)
                 .build();
         if (newsPostDTO.recipientCategory() != RolesEnum.ANY && !newsPostDTO.recipients().isEmpty()) {
             for (Long userProfileId :
@@ -67,32 +71,59 @@ public class NewsServiceImpl implements NewsService {
                 news.addProfile(UserProfile.builder().id(userProfileId).build());
             }
         }
+        newsRepository.save(news);
+        return news;
+    }
+
+    @Override
+    public News updateNews(NewsUpdateRequest newsUpdateRequest) {
+        Set<RoleEnum> roleEnumSet = new HashSet<>();
+        switch (newsUpdateRequest.recipientCategory()) {
+            case ANY -> {
+                roleEnumSet.add(RoleEnum.SPORTSMAN);
+                roleEnumSet.add(RoleEnum.DABBLER);
+            }
+            case SPORTSMAN -> roleEnumSet.add(RoleEnum.SPORTSMAN);
+            case DABBLER -> roleEnumSet.add(RoleEnum.DABBLER);
+        }
+
+
+        News news = News.builder()
+                .title(newsUpdateRequest.title())
+                .content(newsUpdateRequest.content())
+                .availableRoles(roleRepository.findRolesByNameIn(roleEnumSet))
+                .metaInfo(newsUpdateRequest.newsMetaInfoUpdateRequests() != null ? newsUpdateRequest.newsMetaInfoUpdateRequests()
+                        .stream()
+                        .map(newsMetaInfoUpdateRequest -> new NewsMetaInfo(null, newsMetaInfoUpdateRequest.name(),
+                                Base64Util.decoder(newsMetaInfoUpdateRequest.file()),
+                                newsMetaInfoUpdateRequest.isCore())).collect(Collectors.toSet()) : null)
+                .build();
+        if (newsUpdateRequest.recipientCategory() != RolesEnum.ANY && !newsUpdateRequest.recipients().isEmpty()) {
+            for (Long userProfileId :
+                    newsUpdateRequest.recipients()) {
+                news.addProfile(UserProfile.builder().id(userProfileId).build());
+            }
+        }
+        newsRepository.save(news);
         return news;
     }
 
     @Override
     public NewsDTO getNews(Long id) {
-        News news = newsRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Новость не найдена."));
-        return NewsDTO.builder().id(news.getId()).title(news.getTitle()).content(news.getContent()).createdAt(news.getCreatedAt()).build();
+        News news = newsRepository.findById(id).orElseThrow(() -> new ObjectNotFound(ErrorMessages.NewsErrors.NOT_FOUND));
+        return NewsDTO.builder().id(news.getId()).title(news.getTitle()).content(news.getContent()).createdDate(news.getCreatedDate()).updatedDate(news.getUpdatedDate()).build();
     }
 
     @Override
-    public List<NewsDTO> getNews(Integer page) {
-        return null;
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String currentPrincipalName = authentication.getName();
-//        User user = userService.findUserByPhoneNumber(currentPrincipalName);
-//        Pageable pageable = PageRequest.of(page, 10);
-//        return newsRepository.findAllByRoleOrUser(user.getRole().getId(), user.getId(), pageable).stream()
-//                .peek(news -> news.setContent(String.join(" ", List.of(StringUtils.split(news.getContent(), " ")).subList(0, 20))))
-//                .collect(Collectors.toList());
+    public List<News> getNews() {
+        return newsRepository.findAllWithMetaInfo(Sort.by("createdDate").descending()).stream().peek(n -> n.setContent(ContentUtil.getPreview(n.getContent()))).toList();
     }
 
     @Override
     public List<News> getNews(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<News> news = newsRepository.findAllWithMetaInfo(pageable);
-        return news.getContent();
+        return news.getContent().stream().peek(n -> n.setContent(ContentUtil.getPreview(n.getContent()))).toList();
     }
 
     @Override
