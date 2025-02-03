@@ -37,4 +37,8 @@ public class ErrorMessages {
     public static class CategoryErrors {
         public static final String NOT_FOUND = "Классификация не найдена.";
     }
+
+    public static class NewsErrors {
+        public static final String NOT_FOUND = "Новость не найдена.";
+    }
 }
