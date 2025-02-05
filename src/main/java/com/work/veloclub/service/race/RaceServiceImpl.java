@@ -80,6 +80,11 @@ public class RaceServiceImpl implements RaceService {
     }
 
     @Override
+    public List<Race> getRace() {
+        return raceRepository.findAll();
+    }
+
+    @Override
     public List<Race> getRace(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Race> race = raceRepository.findAll(pageable);
@@ -93,6 +98,6 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public void raceExistenceValidator(Long id) {
-        if (!raceRepository.existsById(id)) throw new ObjectNotFound("Маршрут не найден.");
+        if (id != null && !raceRepository.existsById(id)) throw new ObjectNotFound("Маршрут не найден.");
     }
 }

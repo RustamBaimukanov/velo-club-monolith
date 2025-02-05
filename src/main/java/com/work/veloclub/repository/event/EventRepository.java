@@ -4,6 +4,7 @@ package com.work.veloclub.repository.event;
 import com.work.veloclub.model.event.Event;
 import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.survey.Survey;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
 //    EventBlockDTO findEventById(Long id);
 
     List<Event> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDateTime data1, LocalDateTime date2);
+
 
 
 }

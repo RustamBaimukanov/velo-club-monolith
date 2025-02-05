@@ -37,7 +37,7 @@ public class CityServiceImpl implements CityService{
 
     @Override
     public void cityExistenceValidator(Long id) {
-        if (!cityRepository.existsById(id)) throw new ObjectNotFound(ErrorMessages.CityErrors.NOT_FOUND);
+        if (id != null && !cityRepository.existsById(id)) throw new ObjectNotFound(ErrorMessages.CityErrors.NOT_FOUND);
 
     }
 }

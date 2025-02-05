@@ -5,6 +5,7 @@ import com.work.veloclub.model.race.RaceCreateRequest;
 import com.work.veloclub.model.race.RaceUpdateRequest;
 import com.work.veloclub.service.race.RaceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,11 @@ public class RaceController {
 
     @Operation(
             summary = "Добавление маршрута",
-            description = "API добавления маршрута"
+            description = "API добавления маршрута",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь добавил маршрут"),
+                    @ApiResponse(responseCode = "400", description = "Маршрут не прошел валидацию"),
+            }
     )
     @PostMapping
     public ResponseEntity<?> addRace(@Valid @RequestBody RaceCreateRequest race) {
@@ -45,7 +50,11 @@ public class RaceController {
 
     @Operation(
             summary = "Редактирование существующего маршрута",
-            description = "API редактирования существующего маршрута"
+            description = "API редактирования существующего маршрута",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь обновил маршрут"),
+                    @ApiResponse(responseCode = "400", description = "Маршрут не прошел валидацию"),
+            }
     )
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRace(
@@ -56,14 +65,30 @@ public class RaceController {
     }
 
     @Operation(
-            summary = "Получение маршрута/маршрутов",
-            description = "API получения маршрута/маршрутов, дополнительный параметр id определяет, получать обычный список маршрутов или только лучшие, отсюда следует-какие критерии определяют преимущества 'лучших' маршрутов перед другими? Количество использовании в событиях, рейтинги, оценки?"
+            summary = "Получение маршрутов",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил постраничный список маршрутов")
+            }
     )
-    @GetMapping
+    @GetMapping("/pages")
     public ResponseEntity<?> getRace(
             @RequestParam(defaultValue = "0", value = "page") int page,
             @RequestParam(defaultValue = "10", value = "size") int size) {
 
         return ResponseEntity.ok(RaceMapper.mapToRaceResponse(raceService.getRace(page, size)));
+    }
+
+    @Operation(
+            summary = "Получение маршрутов",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил постраничный список маршрутов")
+            }
+    )
+    @GetMapping("/infinity")
+    public ResponseEntity<?> getRaceInfinity() {
+
+        return ResponseEntity.ok(RaceMapper.mapToRaceResponse(raceService.getRace()));
     }
 }

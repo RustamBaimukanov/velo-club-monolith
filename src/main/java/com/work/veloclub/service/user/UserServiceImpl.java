@@ -387,6 +387,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<BearerToken> register(RegisterDto registerDto) {
+        if (registerDto.gender() == GenderEnum.ANY) throw new UnacceptableDataException("");
         User user = UserMapper.mapToUser(registerDto);
         UserProfile userProfile = UserMapper.mapToUserProfile(registerDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -402,6 +403,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<?> register(RegisterByAdminDto registerDto) {
+        if (registerDto.gender() == GenderEnum.ANY) throw new UnacceptableDataException("");
         User user = UserMapper.mapToUser(registerDto);
         UserProfile userProfile = UserMapper.mapToUserProfile(registerDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

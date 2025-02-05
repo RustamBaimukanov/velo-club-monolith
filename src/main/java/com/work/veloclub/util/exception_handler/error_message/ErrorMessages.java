@@ -27,7 +27,7 @@ public class ErrorMessages {
     }
 
     public static class TeamErrors {
-        public static final String NOT_FOUND = "Команда не найден.";
+        public static final String NOT_FOUND = "Команда не найдена.";
     }
 
     public static class CityErrors {

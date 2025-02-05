@@ -6,6 +6,7 @@ import com.work.veloclub.model.user.LoginDto;
 import com.work.veloclub.model.user.RegisterByAdminDto;
 import com.work.veloclub.model.user.RegisterDto;
 import com.work.veloclub.service.city.CityService;
+import com.work.veloclub.service.team.TeamService;
 import com.work.veloclub.service.user.UserService;
 import com.work.veloclub.util.exception_handler.RestoreUserNotFound;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,8 @@ public class AuthController {
     private final UserService userService;
 
     private final CityService cityService;
+
+    private final TeamService teamService;
 
 
     @Operation(
@@ -83,6 +86,7 @@ public class AuthController {
     public ResponseEntity<?> registerByAdmin(@RequestBody @Valid RegisterByAdminDto registerDto) {
         userService.uniqueUserValidator(registerDto.phoneNumber(), registerDto.email());
         cityService.cityExistenceValidator(registerDto.city());
+        teamService.teamExistenceValidator(registerDto.team());
         return userService.register(registerDto);
     }
 

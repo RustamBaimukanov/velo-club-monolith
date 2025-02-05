@@ -18,6 +18,8 @@ public interface RaceService {
 
     Race getRace(Long id);
 
+    List<Race> getRace();
+
     List<Race> getRace(Integer page, Integer size);
 
 

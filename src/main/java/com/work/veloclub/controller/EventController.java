@@ -133,7 +133,8 @@ public class EventController {
             }
     )
     @GetMapping("/date")
-    public ResponseEntity<?> getEventByCalendar(@RequestParam
+    public ResponseEntity<?> getEventByCalendar(@RequestParam(required = false)
+                                                    Integer size, @RequestParam
                                                 LocalDate date) {
         Function<Set<RoleEnum>, RolesEnum> convert = x -> x.contains(RoleEnum.SPORTSMAN)
                 && x.contains(RoleEnum.DABBLER)
@@ -141,7 +142,7 @@ public class EventController {
                 : x.contains(RoleEnum.SPORTSMAN)
                 ? RolesEnum.SPORTSMAN
                 : RolesEnum.DABBLER;
-        return ResponseEntity.ok(eventService.getEventsByDay(date).stream().map(event -> EventCalendarResponse.builder()
+        return ResponseEntity.ok(eventService.getEventsByDay(size, date).stream().map(event -> EventCalendarResponse.builder()
                 .id(event.getId())
                 .name(event.getName())
                 .startDate(event.getStartDate())
@@ -152,10 +153,10 @@ public class EventController {
     }
 
     @Operation(
-            summary = "Получение календаря мероприятии по дате",
+            summary = "Проверка наличия мероприятии по месяцу",
             description = "",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Пользователь получил список мероприятии по определенной дате вместе с маршрутом"),
+                    @ApiResponse(responseCode = "200", description = "Пользователь получил список по дням есть там мероприятия или нету"),
                     @ApiResponse(responseCode = "401", description = "Не авторизован – неверный токен",
                             content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             }
@@ -198,6 +199,12 @@ public class EventController {
     @GetMapping("/{id}/results")
     public ResponseEntity<?> getEventResults(@PathVariable Long id) {
         return ResponseEntity.ok(EventResultMapper.mapToEventResultResponse(eventResultService.getEventResultsByEventId(id)));
+    }
+
+    @Operation(summary = "Вывод стартового протокола")
+    @GetMapping("/{id}/startprotocol")
+    public ResponseEntity<?> getEventStartProtocol(@PathVariable Long id) {
+        return ResponseEntity.ok(EventResultMapper.mapToEventStartProtocolResponse(eventResultService.getEventResultsByEventId(id)));
     }
 
 }

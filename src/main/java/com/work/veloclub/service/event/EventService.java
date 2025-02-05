@@ -36,10 +36,11 @@ public interface EventService {
 
     /**
      * Список мероприятии по определенной дате со связанным маршрутом
+     * @param size дата
      * @param date дата
      * @return список мероприятии по определенной дате со связанным маршрутом
      */
-    List<Event> getEventsByDay(LocalDate date);
+    List<Event> getEventsByDay(Integer size, LocalDate date);
 
     List<Event> getEventsByMonth(LocalDate date);
 

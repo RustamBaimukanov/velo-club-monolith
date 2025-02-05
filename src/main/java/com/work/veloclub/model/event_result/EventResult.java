@@ -3,10 +3,12 @@ package com.work.veloclub.model.event_result;
 import com.work.veloclub.model.BaseEntity;
 import com.work.veloclub.model.event.Event;
 
+import com.work.veloclub.model.role.RoleEnum;
 import com.work.veloclub.model.user_profile.UserProfile;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -29,11 +31,20 @@ public class EventResult extends BaseEntity {
     @Column(name = "points")
     private Integer points;
 
-    //В миллисекундах
     @Column(name = "race_time")
     private Double raceTime;
 
+    @Column(name = "start_order")
+    private Integer startOrder;
 
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ParticipantsStatus name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")

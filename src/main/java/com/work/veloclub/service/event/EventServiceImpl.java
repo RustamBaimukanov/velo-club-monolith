@@ -191,8 +191,11 @@ public class EventServiceImpl implements EventService {
 //    }
 
     @Override
-    public List<Event> getEventsByDay(LocalDate date) {
-        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0, 0), date.atTime(0, 0));
+    public List<Event> getEventsByDay(Integer size, LocalDate date) {
+        if (size == null){
+            return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0, 0), date.atTime(0, 0));
+        }
+        return eventRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.atTime(0, 0), date.atTime(0, 0)).stream().limit(size).toList();
 
     }
 
@@ -262,7 +265,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void eventExistenceValidator(Long id) {
-        if (!eventRepository.existsById(id)) throw new ObjectNotFound("Мероприятие не найдено.");
+        if (id != null && !eventRepository.existsById(id)) throw new ObjectNotFound("Мероприятие не найдено.");
     }
 
     @Override

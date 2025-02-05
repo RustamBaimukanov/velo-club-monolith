@@ -41,6 +41,8 @@ public class EventResultServiceImpl implements EventResultService {
         result.setPlace(eventResult.place());
         result.setPoints(eventResult.points());
         result.setRaceTime(eventResult.raceTime());
+        result.setStartOrder(eventResult.startOrder());
+        result.setStartTime(eventResult.startTime());
         result.setEvent(eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Не найдено мероприятие по которому создаются результаты")));
         result.setUserProfile(UserProfile.builder().id(eventResult.userId()).build());
         eventResultsRepository.save(result);
@@ -54,6 +56,8 @@ public class EventResultServiceImpl implements EventResultService {
         result.setPlace(eventResult.place());
         result.setPoints(eventResult.points());
         result.setRaceTime(eventResult.raceTime());
+        result.setStartOrder(eventResult.startOrder());
+        result.setStartTime(eventResult.startTime());
         result.setEvent(eventRepository.findById(id).orElseThrow(() -> new ObjectNotFound("Не найдено мероприятие по которому создаются результаты")));
         result.setUserProfile(UserProfile.builder().id(eventResult.userId()).build());
         return result;

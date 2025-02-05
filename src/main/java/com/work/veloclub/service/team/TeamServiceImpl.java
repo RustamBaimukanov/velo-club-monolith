@@ -56,7 +56,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void teamExistenceValidator(Long id) {
-        if (!teamRepository.existsById(id)) throw new ObjectNotFound(ErrorMessages.TeamErrors.NOT_FOUND);
+        if (id != null && !teamRepository.existsById(id)) throw new ObjectNotFound(ErrorMessages.TeamErrors.NOT_FOUND);
 
     }
 
