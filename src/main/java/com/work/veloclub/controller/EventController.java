@@ -136,6 +136,10 @@ public class EventController {
     public ResponseEntity<?> getEventByCalendar(@RequestParam(required = false)
                                                     Integer size, @RequestParam
                                                 LocalDate date) {
+        /**
+         * Мероприятие может быть актуально как для одной из ролей, так и для списка ролей
+         * Если в мероприятии могут принимать участие велолюбители и спортсмены, список конвертируется в ANY
+         */
         Function<Set<RoleEnum>, RolesEnum> convert = x -> x.contains(RoleEnum.SPORTSMAN)
                 && x.contains(RoleEnum.DABBLER)
                 ? RolesEnum.ANY
@@ -195,9 +199,15 @@ public class EventController {
         return ResponseEntity.ok(EventResultMapper.mapToEventResultResponse(eventResultService.getEventResultsById(result.getId())));
     }
 
-    @Operation(summary = "Вывод результатов мероприятия по идентификатору")
+    @Operation(summary = "Вывод участников мероприятия по идентификатору мероприятия")
     @GetMapping("/{id}/results")
     public ResponseEntity<?> getEventResults(@PathVariable Long id) {
+        return ResponseEntity.ok(EventResultMapper.mapToEventResultResponse(eventResultService.getEventResultsByEventId(id)));
+    }
+
+    @Operation(summary = "Вывод обзора мероприятии", description = "Список мероприятии аналогичных текущему(Некоторые мероприятия могут быть ежегодными, Настя сказала находить аналоги по похожим названиям, но мб лучше по более однозначным признакам при создании)")
+    @GetMapping("/{id}/review")
+    public ResponseEntity<?> getReview(@PathVariable Long id) {
         return ResponseEntity.ok(EventResultMapper.mapToEventResultResponse(eventResultService.getEventResultsByEventId(id)));
     }
 
